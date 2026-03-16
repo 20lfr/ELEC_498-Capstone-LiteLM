@@ -378,6 +378,24 @@ inline bool load_compact_weights_image(const std::string &image_path,
             return false;
         }
         if (!copy_bytes_block(
+                in, ddr_mem, word_count, "LN0_BETA",
+                LN0_BETA_OFF +
+                    static_cast<uint64_t>(layer) * STRIDE_LN0_GAMMA,
+                static_cast<uint64_t>(LN0_BETA_OFF) +
+                    static_cast<uint64_t>(layer) * STRIDE_LN0_GAMMA,
+                static_cast<size_t>(STRIDE_LN0_GAMMA))) {
+            return false;
+        }
+        if (!copy_bytes_block(
+                in, ddr_mem, word_count, "LN1_BETA",
+                LN1_BETA_OFF +
+                    static_cast<uint64_t>(layer) * STRIDE_LN1_GAMMA,
+                static_cast<uint64_t>(LN1_BETA_OFF) +
+                    static_cast<uint64_t>(layer) * STRIDE_LN1_GAMMA,
+                static_cast<size_t>(STRIDE_LN1_GAMMA))) {
+            return false;
+        }
+        if (!copy_bytes_block(
                 in, ddr_mem, word_count, "LN0_EPS",
                 LN0_EPS_OFF +
                     static_cast<uint64_t>(layer) * STRIDE_LN0_EPS,
@@ -401,6 +419,12 @@ inline bool load_compact_weights_image(const std::string &image_path,
                           FINAL_NORM_GAMMA_OFF,
                           static_cast<uint64_t>(FINAL_NORM_GAMMA_OFF),
                           static_cast<size_t>(STRIDE_FINAL_NORM_GAMMA))) {
+        return false;
+    }
+    if (!copy_bytes_block(in, ddr_mem, word_count, "FINAL_NORM_BETA",
+                          FINAL_NORM_BETA_OFF,
+                          static_cast<uint64_t>(FINAL_NORM_BETA_OFF),
+                          static_cast<size_t>(MEM_FINAL_NORM_BETA))) {
         return false;
     }
     if (!copy_bytes_block(in, ddr_mem, word_count, "FINAL_NORM_EPS",

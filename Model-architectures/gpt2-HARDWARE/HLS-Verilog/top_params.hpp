@@ -220,6 +220,9 @@ struct ControlMemSpace {
     uint32_t ln0_gamma_offset = 0;
     uint32_t ln1_gamma_offset = 0;
     uint32_t final_norm_gamma_offset = 0;
+    uint32_t ln0_beta_offset = 0;
+    uint32_t ln1_beta_offset = 0;
+    uint32_t final_norm_beta_offset = 0;
     uint32_t ln0_eps_offset = 0;
     uint32_t ln1_eps_offset = 0;
     uint32_t final_norm_eps_offset = 0;
@@ -275,12 +278,50 @@ constexpr int ACCUM_MAX = max2_constexpr(
     max2_constexpr(D_TILE_W1, max2_constexpr(D_TILE_W2, D_TILE_LOGIT)));
 constexpr int MATRIX_MAX = VECTOR_MAX * ACCUM_MAX;
 
-constexpr int MAC_VEC_UNROLL = min2_constexpr(
-    VECTOR_MAX,
-    MAIN_MAC_VEC_UNROLL_TARGET); // UNROLLING by vector dimension (Columns)
-constexpr int MAC_OUT_UNROLL = min2_constexpr(
-    ACCUM_MAX,
-    MAIN_MAC_OUT_UNROLL_TARGET); // UNROLLING by accumulation dimension (Rows)
+constexpr int MAC_OP_TO_BUF_VEC_UNROLL  = min2_constexpr(VECTOR_MAX, MAC_OP_TO_BUF_VEC_UNROLL_TARGET);
+constexpr int MAC_OP_TO_BUF_OUT_UNROLL  = min2_constexpr(ACCUM_MAX,  MAC_OP_TO_BUF_OUT_UNROLL_TARGET);
+constexpr int RES_ADD_TO_BUF_VEC_UNROLL = min2_constexpr(D_MODEL,    RES_ADD_TO_BUF_VEC_UNROLL_TARGET);
+constexpr int FFN_ACT_TO_BUF_VEC_UNROLL = min2_constexpr(D_FFN,      FFN_ACT_TO_BUF_VEC_UNROLL_TARGET);
+// Aliases kept for MAC_COMPUTE_CORE parameter pragma sizing (VECTOR_MAX / ACCUM_MAX arrays)
+constexpr int MAC_VEC_UNROLL = MAC_OP_TO_BUF_VEC_UNROLL;
+constexpr int MAC_OUT_UNROLL = MAC_OP_TO_BUF_OUT_UNROLL;
+
+static_assert(VECTOR_MAX % MAC_OP_TO_BUF_VEC_UNROLL == 0,
+    "VECTOR_MAX must be divisible by MAC_OP_TO_BUF_VEC_UNROLL (check D_MODEL, D_FFN vs MAC_OP_TO_BUF_VEC_UNROLL_TARGET)");
+static_assert(ACCUM_MAX % MAC_OP_TO_BUF_OUT_UNROLL == 0,
+    "ACCUM_MAX must be divisible by MAC_OP_TO_BUF_OUT_UNROLL (check tile sizes vs MAC_OP_TO_BUF_OUT_UNROLL_TARGET)");
+static_assert(D_MODEL % RES_ADD_TO_BUF_VEC_UNROLL == 0,
+    "D_MODEL must be divisible by RES_ADD_TO_BUF_VEC_UNROLL");
+static_assert(D_FFN % FFN_ACT_TO_BUF_VEC_UNROLL == 0,
+    "D_FFN must be divisible by FFN_ACT_TO_BUF_VEC_UNROLL");
+
+// Per-type MAC dimensions — each specialized dispatch uses its own smallest arrays.
+constexpr int VECTOR_MAX_I8I8   = D_MODEL;
+constexpr int ACCUM_MAX_I8I8    = max2_constexpr(D_TILE_WO, D_TILE_W1);
+constexpr int MATRIX_MAX_I8I8   = VECTOR_MAX_I8I8 * ACCUM_MAX_I8I8;
+
+constexpr int VECTOR_MAX_I16I8  = D_FFN;
+constexpr int ACCUM_MAX_I16I8   = D_TILE_W2;
+constexpr int MATRIX_MAX_I16I8  = VECTOR_MAX_I16I8 * ACCUM_MAX_I16I8;
+
+constexpr int VECTOR_MAX_I32I8  = D_MODEL;
+constexpr int ACCUM_MAX_I32I8   = D_TILE_LOGIT;
+constexpr int MATRIX_MAX_I32I8  = VECTOR_MAX_I32I8 * ACCUM_MAX_I32I8;
+
+// Computed per-type unroll factors.
+constexpr int MAC_I8I8_VEC_UNROLL   = min2_constexpr(VECTOR_MAX_I8I8,  MAC_I8I8_VEC_UNROLL_TARGET);
+constexpr int MAC_I8I8_OUT_UNROLL   = min2_constexpr(ACCUM_MAX_I8I8,   MAC_I8I8_OUT_UNROLL_TARGET);
+constexpr int MAC_I16I8_VEC_UNROLL  = min2_constexpr(VECTOR_MAX_I16I8, MAC_I16I8_VEC_UNROLL_TARGET);
+constexpr int MAC_I16I8_OUT_UNROLL  = min2_constexpr(ACCUM_MAX_I16I8,  MAC_I16I8_OUT_UNROLL_TARGET);
+constexpr int MAC_I32I8_VEC_UNROLL  = min2_constexpr(VECTOR_MAX_I32I8, MAC_I32I8_VEC_UNROLL_TARGET);
+constexpr int MAC_I32I8_OUT_UNROLL  = min2_constexpr(ACCUM_MAX_I32I8,  MAC_I32I8_OUT_UNROLL_TARGET);
+
+static_assert(VECTOR_MAX_I8I8  % MAC_I8I8_VEC_UNROLL  == 0, "VECTOR_MAX_I8I8 must be divisible by MAC_I8I8_VEC_UNROLL");
+static_assert(ACCUM_MAX_I8I8   % MAC_I8I8_OUT_UNROLL  == 0, "ACCUM_MAX_I8I8 must be divisible by MAC_I8I8_OUT_UNROLL");
+static_assert(VECTOR_MAX_I16I8 % MAC_I16I8_VEC_UNROLL == 0, "VECTOR_MAX_I16I8 must be divisible by MAC_I16I8_VEC_UNROLL");
+static_assert(ACCUM_MAX_I16I8  % MAC_I16I8_OUT_UNROLL == 0, "ACCUM_MAX_I16I8 must be divisible by MAC_I16I8_OUT_UNROLL");
+static_assert(VECTOR_MAX_I32I8 % MAC_I32I8_VEC_UNROLL == 0, "VECTOR_MAX_I32I8 must be divisible by MAC_I32I8_VEC_UNROLL");
+static_assert(ACCUM_MAX_I32I8  % MAC_I32I8_OUT_UNROLL == 0, "ACCUM_MAX_I32I8 must be divisible by MAC_I32I8_OUT_UNROLL");
 
 namespace compute_buf {
 
@@ -310,8 +351,7 @@ namespace compute_buf {
 
 	    constexpr int FFN_W2_W_BYTES = D_FFN * D_TILE_W2;
     constexpr int FFN_W2_B_BYTES = D_TILE_W2 * 4;
-    constexpr int FFN_W2_IN_BYTES =
-        (D_FFN * 2) + FFN_W2_W_BYTES + FFN_W2_B_BYTES;
+    constexpr int FFN_W2_IN_BYTES = (D_FFN * 2) + FFN_W2_W_BYTES + FFN_W2_B_BYTES;
 
 	    constexpr int LOGITS_X_BYTES = D_MODEL * 4;
 	    constexpr int LOGITS_W_BYTES = D_MODEL * D_TILE_LOGIT;
@@ -401,16 +441,16 @@ namespace compute_buf {
         static constexpr int B = W + W_BYTES;
     };
 
-	    struct INFfnActLayout {
-	        static constexpr int GATE_BYTES = D_FFN * 2;
-	        static constexpr int UP_BYTES = 0;
-	        static constexpr int OUT_BYTES = FFN_ACT_OUT_BYTES;
-	        static constexpr int TOTAL_BYTES = FFN_ACT_IN_BYTES;
-	        static constexpr int GATE = 0;
-	        static constexpr int UP = GATE + GATE_BYTES;
-	        static constexpr int OUT = 0;
-	        static constexpr int X = 0;
-	    };
+    struct INFfnActLayout {
+        static constexpr int GATE_BYTES = D_FFN * 2;
+        static constexpr int UP_BYTES = 0;
+        static constexpr int OUT_BYTES = FFN_ACT_OUT_BYTES;
+        static constexpr int TOTAL_BYTES = FFN_ACT_IN_BYTES;
+        static constexpr int GATE = 0;
+        static constexpr int UP = GATE + GATE_BYTES;
+        static constexpr int OUT = 0;
+        static constexpr int X = 0;
+    };
 
     struct INFfnW2Layout {
         static constexpr int X_BYTES = D_FFN * 2;
@@ -576,12 +616,26 @@ constexpr int HEAD_VECTOR_MAX =
 constexpr int HEAD_ACCUM_MAX = compute_buf::max2(D_HEADS, CONTEXT_LENGTH);
 constexpr int HEAD_MATRIX_MAX = HEAD_VECTOR_MAX * HEAD_ACCUM_MAX;
 
-constexpr int HEAD_MAC_VEC_UNROLL =
-    min2_constexpr(HEAD_VECTOR_MAX, HEAD_MAC_VEC_UNROLL_TARGET);
-constexpr int HEAD_MAC_OUT_UNROLL =
-    min2_constexpr(HEAD_ACCUM_MAX, HEAD_MAC_OUT_UNROLL_TARGET);
-constexpr int CONTEXT_UNROLL =
-    min2_constexpr(CONTEXT_LENGTH, CONTEXT_UNROLL_TARGET);
+constexpr int QKV_TO_BUF_VEC_UNROLL              = min2_constexpr(HEAD_VECTOR_MAX,       QKV_TO_BUF_VEC_UNROLL_TARGET);
+constexpr int ATT_SCORES_TO_BUF_VEC_UNROLL        = min2_constexpr(HEAD_VECTOR_MAX,       ATT_SCORES_TO_BUF_VEC_UNROLL_TARGET);
+constexpr int ATT_SCORES_TO_BUF_OUT_UNROLL        = min2_constexpr(ATT_CTX_BLOCK,         ATT_SCORES_TO_BUF_OUT_UNROLL_TARGET);
+constexpr int ATT_VALUE_TO_BUF_CTX_UNROLL         = min2_constexpr(CONTEXT_LENGTH,        ATT_VALUE_TO_BUF_CTX_UNROLL_TARGET);
+constexpr int ATT_VALUE_TO_BUF_OUT_UNROLL         = min2_constexpr(D_HEAD_TILE_ATT_VALUE, ATT_VALUE_TO_BUF_OUT_UNROLL_TARGET);
+constexpr int VALUE_SCALE_CLAMP_CTX_UNROLL        = min2_constexpr(CONTEXT_LENGTH,        VALUE_SCALE_CLAMP_CTX_UNROLL_TARGET);
+constexpr int SOFTMAX_CTX_UNROLL                  = min2_constexpr(CONTEXT_LENGTH,        SOFTMAX_CTX_UNROLL_TARGET);
+constexpr int VALUE_SCALE_CLAMP_TO_BUF_CTX_UNROLL = min2_constexpr(CONTEXT_LENGTH,        VALUE_SCALE_CLAMP_TO_BUF_CTX_UNROLL_TARGET);
+// Aliases kept for QKV_TO_BUF local array sizing (accum_tile / act_local / weight_tile)
+constexpr int HEAD_MAC_VEC_UNROLL = QKV_TO_BUF_VEC_UNROLL;
+constexpr int HEAD_MAC_OUT_UNROLL = ATT_SCORES_TO_BUF_OUT_UNROLL;
+
+static_assert(D_HEADS % ATT_SCORES_TO_BUF_VEC_UNROLL == 0,
+    "D_HEADS must be divisible by ATT_SCORES_TO_BUF_VEC_UNROLL");
+static_assert(ATT_CTX_BLOCK % ATT_SCORES_TO_BUF_OUT_UNROLL == 0,
+    "ATT_CTX_BLOCK must be divisible by ATT_SCORES_TO_BUF_OUT_UNROLL");
+static_assert(D_HEAD_TILE_ATT_VALUE % ATT_VALUE_TO_BUF_OUT_UNROLL == 0,
+    "D_HEAD_TILE_ATT_VALUE must be divisible by ATT_VALUE_TO_BUF_OUT_UNROLL");
+static_assert(CONTEXT_LENGTH % ATT_VALUE_TO_BUF_CTX_UNROLL == 0,
+    "CONTEXT_LENGTH must be divisible by ATT_VALUE_TO_BUF_CTX_UNROLL");
 
 struct ComputeHeadCtx {
     ComputeState state = ComputeState::IDLE;

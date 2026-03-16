@@ -7,7 +7,6 @@
 #endif
 
 static inline int8_t requant_scalar_to_i8(const int32_t x32, const int32_t M, const int32_t n);
-static inline int16_t sigmoid_q15(int16_t x_q15);
 static inline int16_t gelu_q15(int16_t x_q15);
 
 #ifndef __SYNTHESIS__
@@ -50,41 +49,6 @@ static void print_i32_vector(const char *label, const int32_t *data, int count) 
         std::printf(" %d", data[i]);
     }
     std::printf("\n");
-}
-
-static void print_i8_matrix(const char *label,
-                            const int8_t *data,
-                            int rows,
-                            int cols,
-                            int stride) {
-    std::printf("%s[%d][%d]:\n", label, rows, cols);
-    for (int r = 0; r < rows; ++r) {
-        std::printf("  %02d:", r);
-        for (int c = 0; c < cols; ++c) {
-            std::printf(" %d", static_cast<int>(data[r * stride + c]));
-        }
-        std::printf("\n");
-    }
-}
-
-static void trace_mac_op_inputs(ComputeOp op,
-                                uint8_t layer_idx,
-                                uint16_t tile_idx,
-                                const int32_t *vectorA,
-                                int vec_count,
-                                const int8_t *matrixB,
-                                const int32_t *bias,
-                                int out_count,
-                                bool use_bias) {
-    std::printf("[COMPUTE IN] op=%s layer=%u tile=%u\n",
-                compute_op_name(op),
-                static_cast<unsigned>(layer_idx),
-                static_cast<unsigned>(tile_idx));
-    print_i32_vector("  act", vectorA, vec_count);
-    print_i8_matrix("  weight", matrixB, out_count, vec_count, VECTOR_MAX);
-    if (use_bias) {
-        print_i32_vector("  bias", bias, out_count);
-    }
 }
 
 static void trace_mac_op_outputs(ComputeOp op,
@@ -252,60 +216,250 @@ static void trace_layer_norm_buffers(ComputeOp op,
 }
 #endif
 
-static void MAC_COMPUTE_CORE(
-    const int32_t vectorA[VECTOR_MAX],
-    const int8_t matrixB[MATRIX_MAX],
-    const int32_t bias[ACCUM_MAX],
-    int32_t accum_vector[ACCUM_MAX]
+// ---------------------------------------------------------------------------
+// Specialized MAC dispatch functions (one per activation data type).
+// Each keeps its own correctly-sized, correctly-typed local arrays so HLS
+// can infer the minimum-width multiplier for that op class.
+// ---------------------------------------------------------------------------
+
+// int8 x int8 -> int32 : CMP_OUT_PROJ, CMP_FFN_W1
+static void MAC_I8I8_DISPATCH(
+    ComputeOp op,
+    uint8_t layer_idx,
+    uint16_t tile_idx,
+    const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+    uint8_t out_buf[compute_buf::OUT_BUF_BYTES]
 ) {
 #pragma HLS INLINE
-#pragma HLS ARRAY_PARTITION variable=vectorA cyclic factor=MAC_VEC_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=matrixB cyclic factor=MAC_VEC_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=bias cyclic factor=MAC_OUT_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=accum_vector cyclic factor=MAC_OUT_UNROLL dim=1
+    int8_t  vecA[VECTOR_MAX_I8I8];
+    int8_t  matB[MATRIX_MAX_I8I8];
+    int32_t bias[ACCUM_MAX_I8I8];
+    int32_t accum[ACCUM_MAX_I8I8];
+#pragma HLS ARRAY_PARTITION variable=vecA cyclic factor=MAC_I8I8_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=matB cyclic factor=MAC_I8I8_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=bias cyclic factor=MAC_I8I8_OUT_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=accum cyclic factor=MAC_I8I8_OUT_UNROLL dim=1
 
-    for (int out = 0; out < ACCUM_MAX; ++out) {
-#pragma HLS UNROLL factor=MAC_OUT_UNROLL
-        int32_t acc = bias[out];
-        for (int i = 0; i < VECTOR_MAX; ++i) {
-#pragma HLS UNROLL factor=MAC_VEC_UNROLL
-            const int8_t w = matrixB[out * VECTOR_MAX + i];
-            acc += vectorA[i] * static_cast<int32_t>(w);
-        }
-        accum_vector[out] = acc;
+    int vec_count = 0, out_count = 0, act_base = 0, w_base = 0, b_base = 0;
+    switch (op) {
+        case ComputeOp::CMP_OUT_PROJ:
+            vec_count = D_MODEL;  out_count = D_TILE_WO;
+            act_base  = compute_buf::INOutProjLayout::ACT;
+            w_base    = compute_buf::INOutProjLayout::W;
+            b_base    = compute_buf::INOutProjLayout::B;
+            break;
+        case ComputeOp::CMP_FFN_W1:
+            vec_count = D_MODEL;  out_count = D_TILE_W1;
+            act_base  = compute_buf::INFfnW1Layout::X;
+            w_base    = compute_buf::INFfnW1Layout::W;
+            b_base    = compute_buf::INFfnW1Layout::B;
+            break;
+        default: return;
     }
+
+    // Stage activations (int8)
+    for (int i = 0; i < VECTOR_MAX_I8I8; ++i) {
+#pragma HLS UNROLL factor=MAC_I8I8_VEC_UNROLL
+        vecA[i] = (i < vec_count) ? compute_buf::read_i8(in_buf, act_base + i) : int8_t(0);
+    }
+    // Stage bias (int32)
+    for (int out = 0; out < ACCUM_MAX_I8I8; ++out) {
+#pragma HLS UNROLL factor=MAC_I8I8_OUT_UNROLL
+        bias[out] = (out < out_count) ? compute_buf::read_i32(in_buf, b_base + out * 4) : 0;
+    }
+    // Stage weight matrix
+    for (int out = 0; out < ACCUM_MAX_I8I8; ++out) {
+        for (int i = 0; i < VECTOR_MAX_I8I8; ++i) {
+#pragma HLS UNROLL factor=MAC_I8I8_VEC_UNROLL
+            matB[out * VECTOR_MAX_I8I8 + i] =
+                (out < out_count && i < vec_count)
+                    ? compute_buf::read_i8(in_buf, w_base + out * vec_count + i)
+                    : int8_t(0);
+        }
+    }
+    // Compute (int8 x int8 -> int32 accumulator)
+    for (int out = 0; out < ACCUM_MAX_I8I8; ++out) {
+#pragma HLS UNROLL factor=MAC_I8I8_OUT_UNROLL
+        int32_t acc = bias[out];
+        for (int i = 0; i < VECTOR_MAX_I8I8; ++i) {
+#pragma HLS UNROLL factor=MAC_I8I8_VEC_UNROLL
+            acc += static_cast<int32_t>(vecA[i]) * static_cast<int32_t>(matB[out * VECTOR_MAX_I8I8 + i]);
+        }
+        accum[out] = acc;
+    }
+
+    int layer = static_cast<int>(layer_idx);
+    if (layer >= MODEL_LAYERS) layer = 0;
+    int32_t trace_M = 0, trace_n = 0;
+
+    // Write outputs
+    for (int out = 0; out < ACCUM_MAX_I8I8; ++out) {
+#pragma HLS UNROLL factor=MAC_I8I8_OUT_UNROLL
+        if (out >= out_count) continue;
+        switch (op) {
+            case ComputeOp::CMP_OUT_PROJ: {
+                const int32_t M = requant_params::REQUANT2_M_L[layer];
+                const int32_t n = requant_params::REQUANT2_N_L[layer];
+                trace_M = M;  trace_n = n;
+                compute_buf::write_i8(out_buf, out, requant_scalar_to_i8(accum[out], M, n));
+                break;
+            }
+            case ComputeOp::CMP_FFN_W1: {
+                const int64_t prod =
+                    static_cast<int64_t>(accum[out]) *
+                    static_cast<int64_t>(requant_scales::FFN_W1_SCALE_Q15);
+                const int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
+                int32_t scaled = static_cast<int32_t>(rounded >> 15);
+                if (scaled >  32767) scaled =  32767;
+                else if (scaled < -32768) scaled = -32768;
+                compute_buf::write_i16(out_buf, out * 2, static_cast<int16_t>(scaled));
+                break;
+            }
+            default: break;
+        }
+    }
+#ifndef __SYNTHESIS__
+    trace_mac_op_outputs(op, layer_idx, tile_idx, accum, out_count, out_buf, trace_M, trace_n);
+#endif
 }
 
-// MAC Architecture
-void MAC_ARCHITECTURE(
-    bool start,
-    bool &ready,
-    const int32_t vectorA[VECTOR_MAX],
-    const int8_t matrixB[MATRIX_MAX],
-    const int32_t bias[ACCUM_MAX],
-    bool &complete,
-    int32_t accum_vector[ACCUM_MAX]
+// int16 x int8 -> int32 : CMP_FFN_W2
+static void MAC_I16I8_DISPATCH(
+    ComputeOp op,
+    uint8_t layer_idx,
+    uint16_t tile_idx,
+    const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+    uint8_t out_buf[compute_buf::OUT_BUF_BYTES]
 ) {
 #pragma HLS INLINE
-    static bool busy = false;
-    static bool compute_done = false;
-#pragma HLS reset variable = busy
-#pragma HLS reset variable = compute_done
+    int16_t vecA[VECTOR_MAX_I16I8];
+    int8_t  matB[MATRIX_MAX_I16I8];
+    int32_t bias[ACCUM_MAX_I16I8];
+    int32_t accum[ACCUM_MAX_I16I8];
+#pragma HLS ARRAY_PARTITION variable=vecA cyclic factor=MAC_I16I8_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=matB cyclic factor=MAC_I16I8_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=bias cyclic factor=MAC_I16I8_OUT_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=accum cyclic factor=MAC_I16I8_OUT_UNROLL dim=1
 
-    ready = (!busy) && (!start);
-    complete = compute_done;
+    const int vec_count = D_FFN;
+    const int out_count = D_TILE_W2;
 
-    const bool do_compute = (!busy && start);
-
-    if (do_compute) {
-        busy = true;
-        compute_done = false;
-        MAC_COMPUTE_CORE(vectorA, matrixB, bias, accum_vector);
-        compute_done = true;
-    } else if (compute_done) {
-        compute_done = false;
-        busy = false;
+    // Stage activations (int16)
+    for (int i = 0; i < VECTOR_MAX_I16I8; ++i) {
+#pragma HLS UNROLL factor=MAC_I16I8_VEC_UNROLL
+        vecA[i] = compute_buf::read_i16(in_buf, compute_buf::INFfnW2Layout::X + i * 2);
     }
+    // Stage bias (int32)
+    for (int out = 0; out < ACCUM_MAX_I16I8; ++out) {
+#pragma HLS UNROLL factor=MAC_I16I8_OUT_UNROLL
+        bias[out] = compute_buf::read_i32(in_buf, compute_buf::INFfnW2Layout::B + out * 4);
+    }
+    // Stage weight matrix
+    for (int out = 0; out < ACCUM_MAX_I16I8; ++out) {
+        for (int i = 0; i < VECTOR_MAX_I16I8; ++i) {
+#pragma HLS UNROLL factor=MAC_I16I8_VEC_UNROLL
+            matB[out * VECTOR_MAX_I16I8 + i] =
+                compute_buf::read_i8(in_buf, compute_buf::INFfnW2Layout::W + out * vec_count + i);
+        }
+    }
+    // Compute (int16 x int8 -> int32 accumulator)
+    for (int out = 0; out < ACCUM_MAX_I16I8; ++out) {
+#pragma HLS UNROLL factor=MAC_I16I8_OUT_UNROLL
+        int32_t acc = bias[out];
+        for (int i = 0; i < VECTOR_MAX_I16I8; ++i) {
+#pragma HLS UNROLL factor=MAC_I16I8_VEC_UNROLL
+            acc += static_cast<int32_t>(vecA[i]) * static_cast<int32_t>(matB[out * VECTOR_MAX_I16I8 + i]);
+        }
+        accum[out] = acc;
+    }
+
+    int layer = static_cast<int>(layer_idx);
+    if (layer >= MODEL_LAYERS) layer = 0;
+    const int32_t M = requant_params::REQUANT4_M_L[layer];
+    const int32_t n = requant_params::REQUANT4_N_L[layer];
+
+    for (int out = 0; out < ACCUM_MAX_I16I8; ++out) {
+#pragma HLS UNROLL factor=MAC_I16I8_OUT_UNROLL
+        compute_buf::write_i8(out_buf, out, requant_scalar_to_i8(accum[out], M, n));
+    }
+#ifndef __SYNTHESIS__
+    trace_mac_op_outputs(op, layer_idx, tile_idx, accum, out_count, out_buf, M, n);
+#endif
+}
+
+// int32 x int8 -> int32 : CMP_LOGITS (argmax tracking, no bias)
+static void MAC_I32I8_DISPATCH(
+    ComputeOp op,
+    uint8_t layer_idx,
+    uint16_t tile_idx,
+    const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
+    uint8_t out_buf[compute_buf::OUT_BUF_BYTES]
+) {
+#pragma HLS INLINE
+    int32_t vecA[VECTOR_MAX_I32I8];
+    int8_t  matB[MATRIX_MAX_I32I8];
+    int32_t accum[ACCUM_MAX_I32I8];
+#pragma HLS ARRAY_PARTITION variable=vecA cyclic factor=MAC_I32I8_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=matB cyclic factor=MAC_I32I8_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=accum cyclic factor=MAC_I32I8_OUT_UNROLL dim=1
+
+    const int vec_count = D_MODEL;
+    const int out_count = D_TILE_LOGIT;
+    // Mask padded vocab rows in the final tile:
+    //   tile_base = tile_idx * D_TILE_LOGIT
+    //   valid_outs = clamp(D_VOCAB - tile_base, 0..D_TILE_LOGIT)
+    // Padding must not participate in argmax or it can win when all valid logits
+    // are negative (observed as out-of-range token IDs like 50257).
+    const int tile_base = static_cast<int>(tile_idx) * D_TILE_LOGIT;
+    int valid_outs = D_VOCAB - tile_base;
+    if (valid_outs < 0) valid_outs = 0;
+    if (valid_outs > D_TILE_LOGIT) valid_outs = D_TILE_LOGIT;
+
+    // Stage activations (int32)
+    for (int i = 0; i < VECTOR_MAX_I32I8; ++i) {
+#pragma HLS UNROLL factor=MAC_I32I8_VEC_UNROLL
+        vecA[i] = compute_buf::read_i32(in_buf, compute_buf::INLogitsLayout::X + i * 4);
+    }
+    // Stage weight matrix
+    for (int out = 0; out < ACCUM_MAX_I32I8; ++out) {
+        for (int i = 0; i < VECTOR_MAX_I32I8; ++i) {
+#pragma HLS UNROLL factor=MAC_I32I8_VEC_UNROLL
+            matB[out * VECTOR_MAX_I32I8 + i] =
+                compute_buf::read_i8(in_buf, compute_buf::INLogitsLayout::W + out * vec_count + i);
+        }
+    }
+    // Compute (int32 x int8 -> int32 accumulator, no bias)
+    // vecA is Q19.13 with real magnitude up to ~30 (raw ~245760).
+    // Without prescaling: 768 * 245760 * 127 ≈ 24B > INT32_MAX → overflow.
+    // Pre-shift vecA right by 8 before accumulating: max sum ≈ 768 * 960 * 127 ≈ 94M < INT32_MAX.
+    // Ordering is fully preserved (monotonic shift), so argmax result is identical.
+    static constexpr int LOGIT_VEC_PRESCALE_SHIFT = 8;
+    for (int out = 0; out < ACCUM_MAX_I32I8; ++out) {
+#pragma HLS UNROLL factor=MAC_I32I8_OUT_UNROLL
+        int32_t acc = 0;
+        for (int i = 0; i < VECTOR_MAX_I32I8; ++i) {
+#pragma HLS UNROLL factor=MAC_I32I8_VEC_UNROLL
+            acc += (vecA[i] >> LOGIT_VEC_PRESCALE_SHIFT) * static_cast<int32_t>(matB[out * VECTOR_MAX_I32I8 + i]);
+        }
+        accum[out] = acc;
+    }
+
+    // Argmax reduction
+    int32_t logit_best_val = INT32_MIN;
+    int32_t logit_best_local_idx = 0;
+    for (int out = 0; out < out_count; ++out) {
+#pragma HLS UNROLL factor=MAC_I32I8_OUT_UNROLL
+        const int32_t candidate = (out < valid_outs) ? accum[out] : INT32_MIN;
+        if (candidate > logit_best_val) {
+            logit_best_val = candidate;
+            logit_best_local_idx = out;
+        }
+    }
+    compute_buf::write_i32(out_buf, 0, logit_best_val);
+    compute_buf::write_i32(out_buf, 4, logit_best_local_idx);
+#ifndef __SYNTHESIS__
+    trace_mac_op_outputs(op, layer_idx, tile_idx, accum, out_count, out_buf, 0, 0);
+#endif
 }
 
 static void MAC_OP_TO_BUF(
@@ -324,15 +478,6 @@ static void MAC_OP_TO_BUF(
 #pragma HLS reset variable = busy
 #pragma HLS reset variable = compute_done
 
-    int32_t vectorA[VECTOR_MAX];
-    int8_t matrixB[MATRIX_MAX];
-    int32_t bias[ACCUM_MAX];
-    int32_t accum_vector[ACCUM_MAX];
-#pragma HLS ARRAY_PARTITION variable=vectorA cyclic factor=MAC_VEC_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=matrixB cyclic factor=MAC_VEC_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=bias cyclic factor=MAC_OUT_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=accum_vector cyclic factor=MAC_OUT_UNROLL dim=1
-
     ready = (!busy) && (!start);
     complete = compute_done;
 
@@ -340,250 +485,29 @@ static void MAC_OP_TO_BUF(
     if (do_compute) {
         busy = true;
         compute_done = false;
-
-	        int vec_count = 0;
-	        int out_count = 0;
-	        int act_byte_base = 0;
-	        int weight_byte_base = 0;
-	        int bias_byte_base = 0;
-	        bool act_is_i16 = false;
-	        bool act_is_i32 = false;
-	        bool use_bias = true;
-
         switch (op) {
-	            case ComputeOp::CMP_OUT_PROJ:
-	                vec_count = D_MODEL;
-	                out_count = D_TILE_WO;
-	                act_byte_base = compute_buf::INOutProjLayout::ACT;
-	                weight_byte_base = compute_buf::INOutProjLayout::W;
-	                bias_byte_base = compute_buf::INOutProjLayout::B;
-	                break;
-	            case ComputeOp::CMP_FFN_W1:
-	                vec_count = D_MODEL;
-	                out_count = D_TILE_W1;
-	                act_byte_base = compute_buf::INFfnW1Layout::X;
-	                weight_byte_base = compute_buf::INFfnW1Layout::W;
-	                bias_byte_base = compute_buf::INFfnW1Layout::B;
-	                break;
-	            case ComputeOp::CMP_FFN_W2:
-	                vec_count = D_FFN;
-	                out_count = D_TILE_W2;
-	                act_byte_base = compute_buf::INFfnW2Layout::X;
-	                weight_byte_base = compute_buf::INFfnW2Layout::W;
-	                bias_byte_base = compute_buf::INFfnW2Layout::B;
-	                act_is_i16 = true;
-	                break;
-	            case ComputeOp::CMP_LOGITS:
-	                vec_count = D_MODEL;
-	                out_count = D_TILE_LOGIT;
-	                act_byte_base = compute_buf::INLogitsLayout::X;
-	                weight_byte_base = compute_buf::INLogitsLayout::W;
-	                act_is_i32 = true;
-	                use_bias = false;
-	                break;
+            case ComputeOp::CMP_OUT_PROJ:
+            case ComputeOp::CMP_FFN_W1:
+                MAC_I8I8_DISPATCH(op, layer_idx, tile_idx, in_buf, out_buf);
+                break;
+            case ComputeOp::CMP_FFN_W2:
+                MAC_I16I8_DISPATCH(op, layer_idx, tile_idx, in_buf, out_buf);
+                break;
+            case ComputeOp::CMP_LOGITS:
+                MAC_I32I8_DISPATCH(op, layer_idx, tile_idx, in_buf, out_buf);
+                break;
             default:
-                compute_done = true;
                 break;
         }
-
-	        if (!compute_done) {
-	            int layer = static_cast<int>(layer_idx);
-	            if (layer >= MODEL_LAYERS) {
-	                layer = 0;
-	            }
-            int32_t trace_M = 0;
-            int32_t trace_n = 0;
-
-	            for (int i = 0; i < VECTOR_MAX; ++i) {
-#pragma HLS UNROLL factor=MAC_VEC_UNROLL
-	                if (i < vec_count) {
-                    if (act_is_i32) {
-                        const int act_addr = act_byte_base + (i * 4);
-                        vectorA[i] = compute_buf::read_i32(in_buf, act_addr);
-                    } else if (act_is_i16) {
-                        const int act_addr = act_byte_base + (i * 2);
-                        vectorA[i] = static_cast<int32_t>(compute_buf::read_i16(in_buf, act_addr));
-                    } else {
-                        const int act_addr = act_byte_base + i;
-                        vectorA[i] = static_cast<int32_t>(compute_buf::read_i8(in_buf, act_addr));
-                    }
-                } else {
-                    vectorA[i] = 0;
-                }
-            }
-
-            for (int out = 0; out < ACCUM_MAX; ++out) {
-#pragma HLS UNROLL factor=MAC_OUT_UNROLL
-                if (use_bias && out < out_count) {
-                    const int bias_addr = bias_byte_base + (out * 4);
-                    bias[out] = compute_buf::read_i32(in_buf, bias_addr);
-                } else {
-                    bias[out] = 0;
-                }
-            }
-
-	            for (int out = 0; out < ACCUM_MAX; ++out) {
-#pragma HLS UNROLL factor=MAC_OUT_UNROLL
-	                for (int i = 0; i < VECTOR_MAX; ++i) {
-#pragma HLS UNROLL factor=MAC_VEC_UNROLL
-	                    if (out < out_count && i < vec_count) {
-	                        const int w_idx = (out * vec_count) + i;
-	                        const int weight_addr = weight_byte_base + w_idx;
-	                        matrixB[out * VECTOR_MAX + i] = compute_buf::read_i8(in_buf, weight_addr);
-	                    } else {
-	                        matrixB[out * VECTOR_MAX + i] = 0;
-			                    }
-			                }
-			            }
-
-#ifndef __SYNTHESIS__
-            trace_mac_op_inputs(op, layer_idx, tile_idx, vectorA, vec_count,
-                                matrixB, bias, out_count, use_bias);
-#endif
-	            MAC_COMPUTE_CORE(vectorA, matrixB, bias, accum_vector);
-
-	            int32_t logit_best_val = INT32_MIN;
-	            int32_t logit_best_local_idx = 0;
-
-	            for (int out = 0; out < out_count; ++out) {
-#pragma HLS UNROLL factor=MAC_OUT_UNROLL
-	                switch (op) {
-	                    case ComputeOp::CMP_OUT_PROJ: {
-	                        const int32_t M = requant_params::REQUANT2_M_L[layer];
-	                        const int32_t n = requant_params::REQUANT2_N_L[layer];
-                            trace_M = M;
-                            trace_n = n;
-	                        compute_buf::write_i8(out_buf, out, requant_scalar_to_i8(accum_vector[out], M, n));
-	                        break;
-	                    }
-	                    case ComputeOp::CMP_FFN_W1: {
-                        const int64_t prod =
-                            static_cast<int64_t>(accum_vector[out]) *
-                            static_cast<int64_t>(requant_scales::FFN_W1_SCALE_Q15);
-                        const int64_t rounded =
-                            prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
-                        int32_t scaled = static_cast<int32_t>(rounded >> 15);
-                        if (scaled > 32767) scaled = 32767;
-                        else if (scaled < -32768) scaled = -32768;
-                        compute_buf::write_i16(out_buf, out * 2, static_cast<int16_t>(scaled));
-                        break;
-                    }
-	                    case ComputeOp::CMP_FFN_W2: {
-	                        const int32_t M = requant_params::REQUANT4_M_L[layer];
-	                        const int32_t n = requant_params::REQUANT4_N_L[layer];
-                            trace_M = M;
-                            trace_n = n;
-	                        compute_buf::write_i8(out_buf, out, requant_scalar_to_i8(accum_vector[out], M, n));
-	                        break;
-	                    }
-	                    case ComputeOp::CMP_LOGITS: {
-	                        if (accum_vector[out] > logit_best_val) {
-	                            logit_best_val = accum_vector[out];
-	                            logit_best_local_idx = out;
-	                        }
-                        break;
-                    }
-	                    default:
-	                        break;
-	                }
-	            }
-	            if (op == ComputeOp::CMP_LOGITS) {
-	                compute_buf::write_i32(out_buf, 0, logit_best_val);
-	                compute_buf::write_i32(out_buf, 4, logit_best_local_idx);
-	            }
-
-#ifndef __SYNTHESIS__
-            trace_mac_op_outputs(op, layer_idx, tile_idx, accum_vector, out_count,
-                                 out_buf, trace_M, trace_n);
-#endif
-	            compute_done = true;
-	        }
-	    } else if (compute_done) {
-	        compute_done = false;
+        compute_done = true;
+    } else if (compute_done) {
+        compute_done = false;
         busy = false;
     }
 }
-
 // ---------------------------------------------------------------------------
 // Compute kernels
 // ---------------------------------------------------------------------------
-void REQUANT_D_MODEL_int32_to_int8(
-    const int32_t x32[D_MODEL],   // input vector
-    const int32_t M,              // integer multiplier               (Provided by PS)
-    const int32_t n,              // right shift                      (Provided by PS)
-
-    int8_t y8[D_MODEL]      // output vector
-) {
-
-    // Original Integer Requant Formula (for each element in vector):
-    /*
-        How to calculate M and n (offline, from quantization params)
-
-        Notation:
-          S_x   = input activation scale (int8)  -> max_abs_x / 127
-          S_w   = weight scale (int8)            -> max_abs_w / 127
-          S_out = desired output activation scale (int8) from calibration
-
-        Example: weighted matmul output (int32 accum -> int8)
-          S_accum = S_x * S_w
-          real_scale = S_accum / S_out
-          M = round(real_scale * 2^n)
-          n = chosen so M fits int32 (typically 0..31)
-
-        Example: RMS/LayerNorm output requant (fixed-point -> int8)
-          S_fixed = 2^-F (e.g., Q19.13 => F=13)
-          real_scale = S_fixed / S_out
-          M = round(real_scale * 2^n)
-          n = chosen so M fits int32
-
-        Runtime formula:
-          y[t] = saturate_to_int8( (x[t] * M + 2^(n-1)) >> n )
-    */
-    for (int t = 0; t < D_MODEL; ++t) {
-// #pragma HLS UNROLL
-        int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
-        const bool do_shift = (n > 0) && (n < 63);
-        int64_t rounded = do_shift ? (1LL << (n - 1)) : 0;
-        int32_t scaled = do_shift ? static_cast<int32_t>((product + rounded) >> n)
-                                 : static_cast<int32_t>(product);
-
-        if (scaled > 127) {
-            y8[t] = 127;
-        } else if (scaled < -128) {
-            y8[t] = -128;
-        } else {
-            y8[t] = static_cast<int8_t>(scaled);
-        }
-    }   
-}
-
-void REQUANT_D_TILE_int32_to_int8(
-    const int32_t x32[ACCUM_MAX],
-    const int count,
-    const int32_t M,
-    const int32_t n,
-    int8_t y8[ACCUM_MAX]
-) {
-    for (int t = 0; t < ACCUM_MAX; ++t) {
-// #pragma HLS PIPELINE II=1
-        if (t >= count) {
-            continue;
-        }
-        const int64_t product = static_cast<int64_t>(x32[t]) * static_cast<int64_t>(M);
-        const bool do_shift = (n > 0) && (n < 63);
-        const int64_t rounded = do_shift ? (1LL << (n - 1)) : 0;
-        const int32_t scaled = do_shift ? static_cast<int32_t>((product + rounded) >> n)
-                                       : static_cast<int32_t>(product);
-        if (scaled > 127) {
-            y8[t] = 127;
-        } else if (scaled < -128) {
-            y8[t] = -128;
-        } else {
-            y8[t] = static_cast<int8_t>(scaled);
-        }
-    }
-}
-
 static inline int8_t requant_scalar_to_i8(const int32_t x32, const int32_t M, const int32_t n) {
 #pragma HLS INLINE
     const int64_t product = static_cast<int64_t>(x32) * static_cast<int64_t>(M);
@@ -601,11 +525,20 @@ static void RES_ADD_TO_BUF(ComputeOp op,
                            const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                            uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
 #pragma HLS INLINE off
+    int8_t x_local[D_MODEL];
+    int8_t r_local[D_MODEL];
+#pragma HLS ARRAY_PARTITION variable=x_local cyclic factor=RES_ADD_TO_BUF_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=r_local cyclic factor=RES_ADD_TO_BUF_VEC_UNROLL dim=1
+
     for (int i = 0; i < D_MODEL; ++i) {
-// #pragma HLS PIPELINE II=1
-        const int16_t sum =
-            static_cast<int16_t>(compute_buf::read_i8(in_buf, compute_buf::INResidLayout::X + i)) +
-            static_cast<int16_t>(compute_buf::read_i8(in_buf, compute_buf::INResidLayout::R + i));
+#pragma HLS UNROLL factor=RES_ADD_TO_BUF_VEC_UNROLL
+        x_local[i] = compute_buf::read_i8(in_buf, compute_buf::INResidLayout::X + i);
+        r_local[i] = compute_buf::read_i8(in_buf, compute_buf::INResidLayout::R + i);
+    }
+
+    for (int i = 0; i < D_MODEL; ++i) {
+#pragma HLS UNROLL factor=RES_ADD_TO_BUF_VEC_UNROLL
+        const int16_t sum = static_cast<int16_t>(x_local[i]) + static_cast<int16_t>(r_local[i]);
         int16_t sat = sum;
         if (sat > 127) sat = 127;
         else if (sat < -128) sat = -128;
@@ -621,10 +554,28 @@ static void FFN_ACT_Gelu_TO_BUF(uint8_t layer_idx,
                                 const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                                 uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
 #pragma HLS INLINE off
+    int16_t gate_local[D_FFN];
+    int16_t out_local[D_FFN];
+#pragma HLS ARRAY_PARTITION variable=gate_local cyclic factor=FFN_ACT_TO_BUF_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=out_local  cyclic factor=FFN_ACT_TO_BUF_VEC_UNROLL dim=1
+
+    // Stage 1: load from in_buf into partitioned staging array
     for (int i = 0; i < D_FFN; ++i) {
-// #pragma HLS PIPELINE II=1
-        const int16_t gate = compute_buf::read_i16(in_buf, compute_buf::INFfnActLayout::GATE + (i * 2));
-        compute_buf::write_i16(out_buf, compute_buf::OUTFfnActLayout::Y + (i * 2), gelu_q15(gate));
+#pragma HLS UNROLL factor=FFN_ACT_TO_BUF_VEC_UNROLL
+        gate_local[i] = compute_buf::read_i16(in_buf, compute_buf::INFfnActLayout::GATE + (i * 2));
+    }
+
+    // Stage 2: parallel GELU — both arrays are cyclic-partitioned so
+    // FFN_ACT_TO_BUF_VEC_UNROLL independent GELU lanes can execute simultaneously
+    for (int i = 0; i < D_FFN; ++i) {
+#pragma HLS UNROLL factor=FFN_ACT_TO_BUF_VEC_UNROLL
+        out_local[i] = gelu_q15(gate_local[i]);
+    }
+
+    // Stage 3: write results back to out_buf
+    for (int i = 0; i < D_FFN; ++i) {
+#pragma HLS UNROLL factor=FFN_ACT_TO_BUF_VEC_UNROLL
+        compute_buf::write_i16(out_buf, compute_buf::OUTFfnActLayout::Y + (i * 2), out_local[i]);
     }
 #ifndef __SYNTHESIS__
     trace_ffn_act_buffers(layer_idx, tile_idx, in_buf, out_buf);
@@ -638,15 +589,52 @@ static void ARGMAX_TO_BUF(uint8_t layer_idx,
     // Each tile wrote (max_val: i32, local_idx: i32) = 8 bytes.
     // Reconstruct global argmax: global_idx = tile * D_TILE_LOGIT + local_idx.
     int32_t best_val = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X);
-    int32_t best_global_idx = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + 4);
-    for (int tile = 1; tile < NUM_LOGIT_TILES; ++tile) {
-        const int32_t tile_val       = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + tile * 8);
-        const int32_t tile_local_idx = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + tile * 8 + 4);
-        if (tile_val > best_val) {
-            best_val = tile_val;
-            best_global_idx = tile * D_TILE_LOGIT + tile_local_idx;
+    int32_t best_local_idx = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + 4);
+    int32_t best_global_idx = best_local_idx; // tile 0 => global == local
+
+    // Defensive: if tile 0 local_idx is invalid, ignore it.
+    {
+        const int tile_base = 0;
+        int valid_outs = D_VOCAB - tile_base;
+        if (valid_outs < 0) valid_outs = 0;
+        if (valid_outs > D_TILE_LOGIT) valid_outs = D_TILE_LOGIT;
+        if (best_local_idx < 0 || best_local_idx >= valid_outs) {
+            best_val = INT32_MIN;
+            best_global_idx = 0;
         }
     }
+    for (int tile = 1; tile < NUM_LOGIT_TILES; ++tile) {
+        const int32_t tile_local_idx = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + tile * 8 + 4);
+        int32_t tile_val = compute_buf::read_i32(in_buf, compute_buf::INArgmaxLayout::X + tile * 8);
+
+        // Mask padded entries in the final logits tile (and any invalid local_idx values).
+        const int tile_base = tile * D_TILE_LOGIT;
+        int valid_outs = D_VOCAB - tile_base;
+        if (valid_outs < 0) valid_outs = 0;
+        if (valid_outs > D_TILE_LOGIT) valid_outs = D_TILE_LOGIT;
+        if (tile_local_idx < 0 || tile_local_idx >= valid_outs) {
+            tile_val = INT32_MIN;
+        }
+
+        if (tile_val > best_val) {
+            best_val = tile_val;
+            best_global_idx = tile_base + tile_local_idx;
+        }
+    }
+
+    // Final sentinel clamp: should never trigger if masks above are correct.
+#ifndef __SYNTHESIS__
+    if (best_global_idx < 0) {
+        std::printf("[ERROR] ARGMAX produced negative index=%d (clamping to 0)\n", best_global_idx);
+        best_global_idx = 0;
+    }
+    if (best_global_idx >= D_VOCAB) {
+        std::printf("[ERROR] ARGMAX produced out-of-range index=%d (D_VOCAB=%d). Clamping to %d.\n",
+                    best_global_idx, D_VOCAB, D_VOCAB - 1);
+        best_global_idx = D_VOCAB - 1;
+    }
+#endif
+
     compute_buf::write_i32(out_buf, compute_buf::OUTArgmaxLayout::Y, best_global_idx);
 #ifndef __SYNTHESIS__
     trace_argmax_buffers(layer_idx, in_buf, out_buf);
@@ -663,10 +651,12 @@ static void LAYER_NORM_TO_BUF(ComputeOp op,
 #pragma HLS INLINE off
     // LayerNorm (not RMSNorm):
     //   y = (x - mean(x)) / sqrt(var(x) + eps) * gamma
-    // Output format is Q19.13 in `scaled_bits` (raw ap_fixed bits).
+    // Output format is Q16.16 in `scaled_bits` (raw ap_fixed bits).
+    // For the final_norm=true path, scaled_bits is right-shifted by 3 before writing
+    // (Q16.16 >> 3 = Q19.13) to keep the CMP_LOGITS int32 MAC accumulator in range.
     //
     // DDR packing formats (matching test_data/test_gpt2_int8.py):
-    //   - gamma/beta are Q16.16 stored as int32
+    //   - gamma/beta are Q16.16 stored as int32 — bit-cast directly, no conversion needed
     //   - eps is Q0.32 stored as uint32, representing eps_real (e.g. 1e-5)
     //
     // Internal LN math operates directly on the int8 activation domain (no explicit /2^7),
@@ -677,7 +667,6 @@ static void LAYER_NORM_TO_BUF(ComputeOp op,
     // accumulators (e.g. `sumsq`) into fixed-point.
     using ln_acc_t = ap_fixed<48, 28>;
 
-    const ap_fixed<32, 19> q16_16_scale = ap_fixed<32, 19>(65536); // 2^16
     const ln_acc_t eps_q0_32_to_var_scale = ln_acc_t(262144);      // 2^18 (must be representable)
 
     int32_t sum = 0;
@@ -691,71 +680,53 @@ static void LAYER_NORM_TO_BUF(ComputeOp op,
 
     const int32_t epsilon = compute_buf::read_i32(in_buf, compute_buf::INLayerNormLayout::EPS);
 
-    const ap_fixed<32, 19> mean = static_cast<ap_fixed<32, 19> >(ln_acc_t(sum) / D_MODEL);
-    const ap_fixed<32, 19> ex2 = static_cast<ap_fixed<32, 19> >(ln_acc_t(sumsq) / D_MODEL);
-    ap_fixed<32, 19> var = ex2 - (mean * mean);
+    const ap_fixed<32, 16> mean = static_cast<ap_fixed<32, 16> >(ln_acc_t(sum) / D_MODEL);
+    const ap_fixed<32, 16> ex2 = static_cast<ap_fixed<32, 16> >(ln_acc_t(sumsq) / D_MODEL);
+    ap_fixed<32, 16> var = ex2 - (mean * mean);
     if (var < 0) {
         var = 0;
     }
 
-    const ln_acc_t eps_var_units =
-        ln_acc_t(static_cast<uint32_t>(epsilon)) / eps_q0_32_to_var_scale;
-    ap_fixed<32, 19> v = var + static_cast<ap_fixed<32, 19> >(eps_var_units);
+    const ln_acc_t eps_var_units = ln_acc_t(static_cast<uint32_t>(epsilon)) / eps_q0_32_to_var_scale;
+    ap_fixed<32, 16> v = var + static_cast<ap_fixed<32, 16> >(eps_var_units);
     if (v < 0) {
         v = 0;
     }
     // Guard against divide-by-zero in fixed-point sqrt() paths (CSim SIGFPE).
     // If v quantizes to 0, the normalized term is effectively 0 (x-mean is also ~0),
     // so falling back to inv_std=0 keeps output well-defined (y ~= beta).
-    ap_fixed<32, 19> inv_std = 0;
-    const ap_fixed<32, 19> stddev = hls::sqrt(v);
+    ap_fixed<32, 16> inv_std = 0;
+    const ap_fixed<32, 16> stddev = hls::sqrt(v);
 
     // safe guarding against divide-by-zero in fixed-point reciprocal paths (CSim SIGFPE)
     if (stddev != 0) {
-        inv_std = ap_fixed<32, 19>(1) / stddev;
+        inv_std = ap_fixed<32, 16>(1) / stddev;
     }
 
-    for (int base = 0; base < D_MODEL; base += MAX_CYCLIC_SIZE) {
-#pragma HLS PIPELINE off
-#pragma HLS LOOP_FLATTEN off
-        const int tile_elems =
-            ((base + MAX_CYCLIC_SIZE) < D_MODEL) ? MAX_CYCLIC_SIZE : (D_MODEL - base);
-        int8_t x_tile[MAX_CYCLIC_SIZE];
-        int32_t gamma_tile[MAX_CYCLIC_SIZE];
-        int32_t beta_tile[MAX_CYCLIC_SIZE];
-#pragma HLS ARRAY_PARTITION variable=x_tile complete dim=1
-#pragma HLS ARRAY_PARTITION variable=gamma_tile complete dim=1
-#pragma HLS ARRAY_PARTITION variable=beta_tile complete dim=1
-        for (int i = 0; i < MAX_CYCLIC_SIZE; ++i) {
-#pragma HLS PIPELINE II=1
-            if (i < tile_elems) {
-                x_tile[i] = compute_buf::read_i8(in_buf, compute_buf::INLayerNormLayout::X + base + i);
-                gamma_tile[i] =
-                    compute_buf::read_i32(in_buf, compute_buf::INLayerNormLayout::GAMMA + ((base + i) * 4));
-                beta_tile[i] =
-                    compute_buf::read_i32(in_buf, compute_buf::INLayerNormLayout::BETA + ((base + i) * 4));
-            } else {
-                x_tile[i] = 0;
-                gamma_tile[i] = 0;
-                beta_tile[i] = 0;
-            }
-        }
-        for (int i = 0; i < MAX_CYCLIC_SIZE; ++i) {
-#pragma HLS PIPELINE II=1
-            if (i >= tile_elems) {
-                continue;
-            }
-            ap_fixed<32, 19> normalized = (ap_fixed<32, 19>(x_tile[i]) - mean) * inv_std;
-            ap_fixed<32, 19> gamma_fx = ap_fixed<32, 19>(gamma_tile[i]) / q16_16_scale;
-            ap_fixed<32, 19> beta_fx = ap_fixed<32, 19>(beta_tile[i]) / q16_16_scale;
-            ap_fixed<32, 19> scaled = (normalized * gamma_fx) + beta_fx;
-            const int32_t scaled_bits = static_cast<int32_t>(scaled.range(31, 0));
-            if (final_norm) {
-                compute_buf::write_i32(out_buf, compute_buf::OUTLayerNormLayout::X + ((base + i) * 4), scaled_bits);
-            } else {
-                compute_buf::write_i8(out_buf, compute_buf::OUTRequantLayout::X + base + i,
-                                      requant_scalar_to_i8(scaled_bits, requant_M, requant_n));
-            }
+    // Simple, element-by-element LN. No tiling/unrolling: keep the datapath easy to reason about.
+    for (int i = 0; i < D_MODEL; ++i) {
+// #pragma HLS PIPELINE II=1
+        const int8_t x = compute_buf::read_i8(in_buf, compute_buf::INLayerNormLayout::X + i);
+        const int32_t gamma_bits = compute_buf::read_i32(in_buf, compute_buf::INLayerNormLayout::GAMMA + (i * 4));
+        const int32_t beta_bits = compute_buf::read_i32(in_buf, compute_buf::INLayerNormLayout::BETA + (i * 4));
+
+        // Bit-cast Q16.16 packed params into ap_fixed (no numeric conversion).
+        ap_fixed<32, 16> gamma_fx, beta_fx;
+        gamma_fx.range(31, 0) = static_cast<uint32_t>(gamma_bits);
+        beta_fx.range(31, 0)  = static_cast<uint32_t>(beta_bits);
+
+        const ap_fixed<32, 16> normalized = (ap_fixed<32, 16>(x) - mean) * inv_std;
+        const ap_fixed<32, 16> scaled = (normalized * gamma_fx) + beta_fx;
+        const int32_t scaled_bits = static_cast<int32_t>(scaled.range(31, 0)); // Q16.16 raw bits
+
+        if (final_norm) {
+            // Right-shift Q16.16 → Q19.13 to keep CMP_LOGITS int32 accumulator in range
+            const int32_t q19_13_bits = scaled_bits >> 3;
+            compute_buf::write_i32(out_buf, compute_buf::OUTLayerNormLayout::X + (i * 4), q19_13_bits);
+        } else {
+            // Requant + clamp (saturate to int8) at the very end.
+            compute_buf::write_i8(out_buf, compute_buf::OUTRequantLayout::X + i,
+                                  requant_scalar_to_i8(scaled_bits, requant_M, requant_n));
         }
     }
 #ifndef __SYNTHESIS__
@@ -764,71 +735,6 @@ static void LAYER_NORM_TO_BUF(ComputeOp op,
 #endif
 }
 
-
-// Approximate exp(x) for x in Q1.15, clamped to [-1.0, 0.0], output in Q1.15.
-static inline uint16_t exp_approx_q15(int16_t x_q15) {
-#pragma HLS INLINE
-    static const uint16_t exp_lut_q15[257] = {
-        12055, 12102, 12149, 12197, 12245, 12292, 12341, 12389,
-        12437, 12486, 12535, 12584, 12633, 12683, 12732, 12782,
-        12832, 12882, 12933, 12983, 13034, 13085, 13136, 13188,
-        13239, 13291, 13343, 13396, 13448, 13501, 13553, 13606,
-        13660, 13713, 13767, 13821, 13875, 13929, 13984, 14038,
-        14093, 14149, 14204, 14259, 14315, 14371, 14428, 14484,
-        14541, 14598, 14655, 14712, 14770, 14828, 14886, 14944,
-        15002, 15061, 15120, 15179, 15239, 15298, 15358, 15418,
-        15479, 15539, 15600, 15661, 15722, 15784, 15846, 15908,
-        15970, 16032, 16095, 16158, 16221, 16285, 16349, 16413,
-        16477, 16541, 16606, 16671, 16736, 16802, 16868, 16934,
-        17000, 17066, 17133, 17200, 17268, 17335, 17403, 17471,
-        17539, 17608, 17677, 17746, 17816, 17885, 17955, 18026,
-        18096, 18167, 18238, 18310, 18381, 18453, 18525, 18598,
-        18671, 18744, 18817, 18891, 18965, 19039, 19113, 19188,
-        19263, 19339, 19414, 19490, 19567, 19643, 19720, 19797,
-        19875, 19953, 20031, 20109, 20188, 20267, 20346, 20426,
-        20506, 20586, 20667, 20747, 20829, 20910, 20992, 21074,
-        21157, 21239, 21323, 21406, 21490, 21574, 21658, 21743,
-        21828, 21914, 21999, 22085, 22172, 22259, 22346, 22433,
-        22521, 22609, 22698, 22787, 22876, 22965, 23055, 23145,
-        23236, 23327, 23418, 23510, 23602, 23694, 23787, 23880,
-        23974, 24067, 24162, 24256, 24351, 24446, 24542, 24638,
-        24735, 24831, 24929, 25026, 25124, 25222, 25321, 25420,
-        25520, 25620, 25720, 25821, 25922, 26023, 26125, 26227,
-        26330, 26433, 26536, 26640, 26744, 26849, 26954, 27060,
-        27166, 27272, 27379, 27486, 27593, 27701, 27810, 27919,
-        28028, 28138, 28248, 28358, 28469, 28581, 28693, 28805,
-        28918, 29031, 29144, 29259, 29373, 29488, 29603, 29719,
-        29836, 29952, 30070, 30187, 30305, 30424, 30543, 30663,
-        30783, 30903, 31024, 31146, 31267, 31390, 31513, 31636,
-        31760, 31884, 32009, 32134, 32260, 32386, 32513, 32640,
-        32767
-    };
-    if (x_q15 >= 0) {
-        return 32767;
-    }
-    if (x_q15 <= -32768) {
-        return exp_lut_q15[0];
-    }
-    const uint16_t idx = static_cast<uint16_t>((static_cast<int32_t>(x_q15) - (-32768)) >> 7);
-    return exp_lut_q15[idx];
-}
-
-static inline int16_t sigmoid_q15(int16_t x_q15) {
-#pragma HLS INLINE
-    if (x_q15 >= 0) {
-        const int16_t neg = static_cast<int16_t>(-static_cast<int32_t>(x_q15));
-        const uint16_t e = exp_approx_q15(neg);
-        const uint32_t denom = static_cast<uint32_t>(e) + (1u << 15);
-        const uint32_t num = (1u << 30);
-        const uint32_t sig = (num + (denom / 2)) / denom;
-        return static_cast<int16_t>(sig > 32767 ? 32767 : sig);
-    }
-    const uint16_t e = exp_approx_q15(x_q15);
-    const uint32_t denom = static_cast<uint32_t>(e) + (1u << 15);
-    const uint32_t num = static_cast<uint32_t>(e) << 15;
-    const uint32_t sig = (num + (denom / 2)) / denom;
-    return static_cast<int16_t>(sig > 32767 ? 32767 : sig);
-}
 
 static inline int32_t mul_q15_i32(int32_t a_q15, int32_t b_q15) {
 #pragma HLS INLINE
@@ -871,53 +777,6 @@ static inline int16_t gelu_q15(int16_t x_q15) {
     if (y < -32768) return -32768;
     return static_cast<int16_t>(y);
 }
-
-void FFN_ACT_Silu(
-    const int16_t input_up[D_FFN],
-    const int16_t input_gate[D_FFN],
-    int16_t       output[D_FFN]
-) {
-    for (int i = 0; i < D_FFN; ++i) {
-// #pragma HLS PIPELINE II=1
-        const int16_t sig = sigmoid_q15(input_gate[i]);
-        const int32_t prod = static_cast<int32_t>(input_up[i]) * static_cast<int32_t>(sig);
-        int32_t scaled = prod >> 15;
-        if (scaled > 32767) {
-            scaled = 32767;
-        } else if (scaled < -32768) {
-            scaled = -32768;
-        }
-        const int16_t out = scaled;
-        output[i] = out;
-    }
-
-}
-
-void FFN_ACT_Gelu(const int16_t input_gate[D_FFN], int16_t output[D_FFN]) {
-    for (int i = 0; i < D_FFN; ++i) {
-        output[i] = gelu_q15(input_gate[i]);
-    }
-}
- 
-
-void RES_ADD(
-    const int8_t input[D_MODEL],
-    const int8_t residual[D_MODEL],
-    int8_t output[D_MODEL]
-) { 
-    for (int i = 0; i < D_MODEL; ++i) {
-// #pragma HLS UNROLL
-        const int16_t sum = static_cast<int16_t>(input[i]) + static_cast<int16_t>(residual[i]);
-        int16_t sat = sum;
-        if (sat > 127) {
-            sat = 127;
-        } else if (sat < -128) {
-            sat = -128;
-        }
-        output[i] = static_cast<int8_t>(sat);
-    }
-}
-
 
 // ---------------------------------------------------------------------------
 // Top-level compute controller

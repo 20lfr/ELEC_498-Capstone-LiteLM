@@ -142,7 +142,7 @@ constexpr uint64_t TB_DDR_IMAGE_BYTES = static_cast<uint64_t>(WEIGHTS_SIZE);
 constexpr uint64_t TB_DDR_IMAGE_WORDS       = TB_DDR_IMAGE_BYTES / AXI_GMEM_WORD_BYTES;
 constexpr uint64_t TB_KV_IMAGE_BYTES  = static_cast<uint64_t>(KV_SIZE);
 constexpr uint64_t TB_KV_IMAGE_WORDS        = TB_KV_IMAGE_BYTES / AXI_GMEM_WORD_BYTES;
-constexpr size_t   TB_CTRL_MEM_WORDS        = 25u;
+constexpr size_t   TB_CTRL_MEM_WORDS        = 28u;
 
 static ControlMemSpace g_loaded_ctrl_mem{};
 static bool g_loaded_ctrl_mem_valid = false;
@@ -192,6 +192,9 @@ static ControlMemSpace make_default_ctrl_mem() {
     ctrl_mem.ln0_gamma_offset = LN0_GAMMA_OFF;
     ctrl_mem.ln1_gamma_offset = LN1_GAMMA_OFF;
     ctrl_mem.final_norm_gamma_offset = FINAL_NORM_GAMMA_OFF;
+    ctrl_mem.ln0_beta_offset = LN0_BETA_OFF;
+    ctrl_mem.ln1_beta_offset = LN1_BETA_OFF;
+    ctrl_mem.final_norm_beta_offset = FINAL_NORM_BETA_OFF;
     ctrl_mem.ln0_eps_offset = LN0_EPS_OFF;
     ctrl_mem.ln1_eps_offset = LN1_EPS_OFF;
     ctrl_mem.final_norm_eps_offset = FINAL_NORM_EPS_OFF;
@@ -229,6 +232,9 @@ static void dump_ctrl_mem_words(const ControlMemSpace &ctrl_mem) {
         ctrl_mem.ln0_gamma_offset,
         ctrl_mem.ln1_gamma_offset,
         ctrl_mem.final_norm_gamma_offset,
+        ctrl_mem.ln0_beta_offset,
+        ctrl_mem.ln1_beta_offset,
+        ctrl_mem.final_norm_beta_offset,
         ctrl_mem.ln0_eps_offset,
         ctrl_mem.ln1_eps_offset,
         ctrl_mem.final_norm_eps_offset,
@@ -256,6 +262,9 @@ static void dump_ctrl_mem_words(const ControlMemSpace &ctrl_mem) {
         "ln0_gamma_offset",
         "ln1_gamma_offset",
         "final_norm_gamma_offset",
+        "ln0_beta_offset",
+        "ln1_beta_offset",
+        "final_norm_beta_offset",
         "ln0_eps_offset",
         "ln1_eps_offset",
         "final_norm_eps_offset",
@@ -270,10 +279,11 @@ static void dump_ctrl_mem_words(const ControlMemSpace &ctrl_mem) {
 }
 
 static bool get_shared_stream_size(size_t &bytes_total) {
+    const std::string stream_path =
 #ifdef FULL_MODEL_TEST
-    const std::string stream_path = tb_source_dir() + "/../model/stream_in.bin";
+        tb_source_dir() + "/../model/stream_in.bin";
 #else
-    const std::string stream_path = tb_source_dir() + "/test_data/stream_in.bin";
+        tb_source_dir() + "/test_data/stream_in.bin";
 #endif
     std::ifstream in(stream_path.c_str(), std::ios::binary | std::ios::ate);
     if (!in) {
@@ -287,6 +297,67 @@ static bool get_shared_stream_size(size_t &bytes_total) {
     }
     bytes_total = static_cast<size_t>(total);
     return true;
+}
+
+static bool fnv1a64_shared_stream(uint64_t &hash_out, size_t &bytes_total_out, std::string &path_out) {
+    path_out =
+#ifdef FULL_MODEL_TEST
+        tb_source_dir() + "/../model/stream_in.bin";
+#else
+        tb_source_dir() + "/test_data/stream_in.bin";
+#endif
+    std::ifstream in(path_out.c_str(), std::ios::binary | std::ios::ate);
+    if (!in) {
+        std::fprintf(stderr, "ERROR: Failed to open shared stream image '%s'\n", path_out.c_str());
+        return false;
+    }
+    const std::streamoff total = in.tellg();
+    if (total < 0) {
+        std::fprintf(stderr, "ERROR: Failed to read shared stream image '%s'\n", path_out.c_str());
+        return false;
+    }
+    bytes_total_out = static_cast<size_t>(total);
+    in.seekg(0, std::ios::beg);
+
+    uint64_t hash = 1469598103934665603ull; // FNV-1a 64 offset basis
+    char buf[4096];
+    while (in) {
+        in.read(buf, sizeof(buf));
+        const std::streamsize got = in.gcount();
+        for (std::streamsize i = 0; i < got; ++i) {
+            hash ^= static_cast<uint8_t>(buf[i]);
+            hash *= 1099511628211ull; // FNV-1a 64 prime
+        }
+    }
+    hash_out = hash;
+    return true;
+}
+
+static void print_tb_repro_info() {
+    uint64_t stream_hash = 0;
+    size_t stream_bytes = 0;
+    std::string stream_path;
+    if (!fnv1a64_shared_stream(stream_hash, stream_bytes, stream_path)) {
+        return;
+    }
+    std::printf("[TEST] Params: D_VOCAB=%d D_TILE_LOGIT=%d NUM_LOGIT_TILES=%d STREAM_IN_BUF_BYTES=%d\n",
+                static_cast<int>(D_VOCAB),
+                static_cast<int>(D_TILE_LOGIT),
+                static_cast<int>(NUM_LOGIT_TILES),
+                static_cast<int>(STREAM_IN_BUF_BYTES));
+    std::printf("[TEST] Stream: path='%s' bytes=%zu fnv1a64=0x%016llX\n",
+                stream_path.c_str(),
+                stream_bytes,
+                static_cast<unsigned long long>(stream_hash));
+}
+
+static void maybe_print_tb_repro_info() {
+    static bool printed = false;
+    if (printed) {
+        return;
+    }
+    print_tb_repro_info();
+    printed = true;
 }
 
 static bool load_shared_stream_token(uint8_t *stream_in_buf, size_t token_bytes,
@@ -646,6 +717,7 @@ static int run_top_no_debug_tb_single_token_with_mem(size_t selected_stream_toke
     int  base_assign_step = 0;
 
     ensure_default_ctrl_mem_loaded();
+    maybe_print_tb_repro_info();
     size_t total_stream_tokens = 0;
     if (!load_shared_stream_token(stream_in_buf, STREAM_IN_BUF_BYTES,
                                   selected_stream_token, total_stream_tokens)) {
@@ -897,6 +969,14 @@ static int run_top_no_debug_tb_single_token_with_mem(size_t selected_stream_toke
                     (static_cast<uint32_t>(stream_out_buf[2]) << 16) |
                     (static_cast<uint32_t>(stream_out_buf[3]) << 24));
                 std::printf("(index=%d)\n", token_id);
+                if (!TB_DEBUG_MODE && (token_id < 0 || token_id >= D_VOCAB)) {
+                    std::fprintf(stderr,
+                                 "ERROR: Stream out token index out of range: %d (expected 0..%d)\n",
+                                 token_id,
+                                 static_cast<int>(D_VOCAB - 1));
+                    aborted_on_error = true;
+                    break;
+                }
                 if (TB_DEBUG_MODE) {
                     if (token_id != expected_debug_sum) {
                         std::fprintf(stderr,
@@ -909,6 +989,9 @@ static int run_top_no_debug_tb_single_token_with_mem(size_t selected_stream_toke
                 }
                 stream_out_count = 0;
             }
+        }
+        if (aborted_on_error) {
+            break;
         }
 
         // Log status changes

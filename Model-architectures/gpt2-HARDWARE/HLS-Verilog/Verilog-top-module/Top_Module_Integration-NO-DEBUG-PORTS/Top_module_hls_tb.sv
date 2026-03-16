@@ -634,11 +634,14 @@ module top_module_hls_tb;
 	    dbg_ctrl_mem_shadow.ln0_gamma_offset        = dbg_ctrl_words[17];
 	    dbg_ctrl_mem_shadow.ln1_gamma_offset        = dbg_ctrl_words[18];
 	    dbg_ctrl_mem_shadow.final_norm_gamma_offset = dbg_ctrl_words[19];
-	    dbg_ctrl_mem_shadow.ln0_eps_offset          = dbg_ctrl_words[20];
-	    dbg_ctrl_mem_shadow.ln1_eps_offset          = dbg_ctrl_words[21];
-	    dbg_ctrl_mem_shadow.final_norm_eps_offset   = dbg_ctrl_words[22];
-	    dbg_ctrl_mem_shadow.wlogit_offset           = dbg_ctrl_words[23];
-	    dbg_ctrl_mem_shadow.token_position          = dbg_ctrl_words[24];
+	    dbg_ctrl_mem_shadow.ln0_beta_offset         = dbg_ctrl_words[20];
+	    dbg_ctrl_mem_shadow.ln1_beta_offset         = dbg_ctrl_words[21];
+	    dbg_ctrl_mem_shadow.final_norm_beta_offset  = dbg_ctrl_words[22];
+	    dbg_ctrl_mem_shadow.ln0_eps_offset          = dbg_ctrl_words[23];
+	    dbg_ctrl_mem_shadow.ln1_eps_offset          = dbg_ctrl_words[24];
+	    dbg_ctrl_mem_shadow.final_norm_eps_offset   = dbg_ctrl_words[25];
+	    dbg_ctrl_mem_shadow.wlogit_offset           = dbg_ctrl_words[26];
+	    dbg_ctrl_mem_shadow.token_position          = dbg_ctrl_words[27];
 	  end
 
   function automatic [31:0] dma_pattern_word(

@@ -43,6 +43,7 @@ int main() {
     }
 
     ensure_default_ctrl_mem_loaded();
+    maybe_print_tb_repro_info();
 
     const size_t total_stream_tokens = count_stream_tokens_from_file();
     if (total_stream_tokens == 0) {

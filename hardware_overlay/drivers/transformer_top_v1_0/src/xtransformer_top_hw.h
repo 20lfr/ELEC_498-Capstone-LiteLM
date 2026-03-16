@@ -76,23 +76,9 @@
 // 0x70 : Data signal of ctrl_mem
 //        bit 31~0 - ctrl_mem[799:768] (Read/Write)
 // 0x74 : reserved
-// 0x78 : Data signal of status_mem
-//        bit 31~0 - status_mem[31:0] (Read)
-// 0x7c : Data signal of status_mem
-//        bit 31~0 - status_mem[63:32] (Read)
-// 0x80 : Data signal of status_mem
-//        bit 31~0 - status_mem[95:64] (Read)
-// 0x84 : Data signal of status_mem
-//        bit 31~0 - status_mem[127:96] (Read)
-// 0x88 : Data signal of status_mem
-//        bit 31~0 - status_mem[159:128] (Read)
-// 0x8c : Data signal of status_mem
-//        bit 31~0 - status_mem[191:160] (Read)
-// 0x90 : Data signal of status_mem
-//        bit 31~0 - status_mem[223:192] (Read)
-// 0x94 : Control signal of status_mem
-//        bit 0  - status_mem_ap_vld (Read/COR)
-//        others - reserved
+// 0x80 ~
+// 0xff : Memory 'status_mem' (21 * 32b)
+//        Word n : bit [31:0] - status_mem[n]
 // (SC = Self Clear, COR = Clear on Read, TOW = Toggle on Write, COH = Clear on Handshake)
 
 #define XTRANSFORMER_TOP_CONTROL_ADDR_AP_CTRL         0x00
@@ -103,9 +89,10 @@
 #define XTRANSFORMER_TOP_CONTROL_BITS_CTRL_MEM_DATA   800
 #define XTRANSFORMER_TOP_CONTROL_ADDR_CTRL_MEM_DATA_  0x38
 #define XTRANSFORMER_TOP_CONTROL_BITS_CTRL_MEM_DATA   800
-#define XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_DATA 0x78
-#define XTRANSFORMER_TOP_CONTROL_BITS_STATUS_MEM_DATA 224
-#define XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_CTRL 0x94
+#define XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_BASE 0x80
+#define XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_HIGH 0xff
+#define XTRANSFORMER_TOP_CONTROL_WIDTH_STATUS_MEM     32
+#define XTRANSFORMER_TOP_CONTROL_DEPTH_STATUS_MEM     21
 
 // control_r
 // 0x00 : reserved

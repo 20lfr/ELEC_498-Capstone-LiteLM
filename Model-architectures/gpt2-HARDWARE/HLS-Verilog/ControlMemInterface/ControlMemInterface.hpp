@@ -51,6 +51,9 @@ public:
             (ctrl_mem.ln0_gamma_offset & 0x3F) != 0 ||
             (ctrl_mem.ln1_gamma_offset & 0x3F) != 0 ||
             (ctrl_mem.final_norm_gamma_offset & 0x3F) != 0 ||
+            (ctrl_mem.ln0_beta_offset & 0x3F) != 0 ||
+            (ctrl_mem.ln1_beta_offset & 0x3F) != 0 ||
+            (ctrl_mem.final_norm_beta_offset & 0x3F) != 0 ||
             (ctrl_mem.ln0_eps_offset & 0x3F) != 0 ||
             (ctrl_mem.ln1_eps_offset & 0x3F) != 0 ||
             (ctrl_mem.final_norm_eps_offset & 0x3F) != 0) {

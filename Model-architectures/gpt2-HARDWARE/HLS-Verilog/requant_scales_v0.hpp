@@ -16,7 +16,7 @@
 // - For lack of per-layer activation/output calibration in quant_scales.json,
 //   real_scale is chosen using fixed-point assumptions consistent with the
 //   current HLS datapath:
-//     REQUANT1/3 (LN Q19.13 -> int8):  real_scale = 2^-13 / 2^-7 = 2^-6
+//     REQUANT1/3 (LN Q16.16 -> int8):  real_scale = 2^-16 / 2^-7 = 2^-9
 //     REQUANT2   (out-proj -> int8):  real_scale = S_w_wo_eff
 //     REQUANT4   (ffn_w2   -> int8):  real_scale = (2^-15 * S_w_w2_eff) / 2^-7 = S_w_w2_eff * 2^-8
 //     REQUANT_Q/K/V (qkv   -> int8):  real_scale = S_w_w{q,k,v}_eff
@@ -25,8 +25,8 @@
 #include <cstdint>
 
 namespace requant_scales {
-// Fixed-point scale for Q19.13 outputs (RMSNorm/LN): 2^-13
-constexpr double S_FIXED_Q19_13 = 1.0 / 8192.0;
+// Fixed-point scale for Q16.16 LN outputs: 2^-16
+constexpr double S_FIXED_Q16_16 = 1.0 / 65536.0;
 
 // Scales from model/quant_scales.json
 constexpr double S_embed_tokens = 0.004292404264446343;
@@ -79,9 +79,9 @@ constexpr int16_t FFN_W2_SCALE_Q15 = 0x4000; // 0.5
 } // namespace requant_scales
 
 namespace requant_params {
-constexpr int32_t REQUANT1_N_L[MODEL_LAYERS] = { 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36 };
+constexpr int32_t REQUANT1_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39 };
 constexpr int32_t REQUANT2_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 38, 38 };
-constexpr int32_t REQUANT3_N_L[MODEL_LAYERS] = { 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36 };
+constexpr int32_t REQUANT3_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39 };
 constexpr int32_t REQUANT4_N_L[MODEL_LAYERS] = { 47, 47, 47, 47, 47, 47, 46, 46, 46, 46, 46, 45 };
 constexpr int32_t REQUANT_Q_N_L[MODEL_LAYERS] = { 38, 38, 38, 38, 38, 38, 39, 39, 39, 39, 39, 39 };
 constexpr int32_t REQUANT_K_N_L[MODEL_LAYERS] = { 37, 38, 38, 38, 38, 38, 38, 39, 39, 39, 39, 39 };

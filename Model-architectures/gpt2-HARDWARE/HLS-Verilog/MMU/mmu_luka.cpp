@@ -1732,7 +1732,7 @@ static bool build_dma_piece_plan(DmaSel sel,
             piece_bytes[1] = compute_buf::INLayerNormLayout::BETA_BYTES;
             piece_bytes[2] = compute_buf::INLayerNormLayout::EPS_BYTES;
             piece_addr_off[0] = 0;
-            piece_addr_off[1] = MEM_LN0_GAMMA; // beta region starts after full gamma slab
+            piece_addr_off[1] = 0; // beta addr comes from ctrl_mem.ln0_beta_offset
             piece_addr_off[2] = 0;
             piece_tag[0] = Tag::LN0_GAMMA;
             piece_tag[1] = Tag::LN0_BETA;
@@ -1745,7 +1745,7 @@ static bool build_dma_piece_plan(DmaSel sel,
             piece_bytes[1] = compute_buf::INLayerNormLayout::BETA_BYTES;
             piece_bytes[2] = compute_buf::INLayerNormLayout::EPS_BYTES;
             piece_addr_off[0] = 0;
-            piece_addr_off[1] = MEM_LN1_GAMMA; // beta region starts after full gamma slab
+            piece_addr_off[1] = 0; // beta addr comes from ctrl_mem.ln1_beta_offset
             piece_addr_off[2] = 0;
             piece_tag[0] = Tag::LN1_GAMMA;
             piece_tag[1] = Tag::LN1_BETA;
@@ -1758,7 +1758,7 @@ static bool build_dma_piece_plan(DmaSel sel,
             piece_bytes[1] = compute_buf::INLayerNormLayout::BETA_BYTES;
             piece_bytes[2] = compute_buf::INLayerNormLayout::EPS_BYTES;
             piece_addr_off[0] = 0;
-            piece_addr_off[1] = MEM_FINAL_NORM_GAMMA; // beta region starts after gamma vector
+            piece_addr_off[1] = 0; // beta addr comes from ctrl_mem.final_norm_beta_offset
             piece_addr_off[2] = 0;
             piece_tag[0] = Tag::FINAL_NORM_GAMMA;
             piece_tag[1] = Tag::FINAL_NORM_BETA;
@@ -1916,11 +1916,26 @@ static bool calc_dma_piece_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer,
         return true;
     }
 
-    // LayerNorm: piece1 = beta (from the same base slab), piece2 = eps (separate control offset).
+    // LayerNorm: piece1 = beta (explicit ctrl_mem offset), piece2 = eps (separate control offset).
     if (sel == DMASEL_LN0 || sel == DMASEL_LN1 || sel == DMASEL_FINAL_NORM) {
         if (piece_idx == 1) {
-            addr_out = dma_base_addr + piece_addr_off;
-            return true;
+            switch (sel) {
+                case DMASEL_LN0: {
+                    addr_out = static_cast<uint64_t>(ctrl_mem.ln0_beta_offset)
+                             + static_cast<uint32_t>(layer) * STRIDE_LN0_GAMMA;
+                    return true;
+                }
+                case DMASEL_LN1: {
+                    addr_out = static_cast<uint64_t>(ctrl_mem.ln1_beta_offset)
+                             + static_cast<uint32_t>(layer) * STRIDE_LN1_GAMMA;
+                    return true;
+                }
+                case DMASEL_FINAL_NORM: {
+                    addr_out = static_cast<uint64_t>(ctrl_mem.final_norm_beta_offset);
+                    return true;
+                }
+                default: break;
+            }
         }
         // piece_idx >= 2 -> treat as EPS
         switch (sel) {

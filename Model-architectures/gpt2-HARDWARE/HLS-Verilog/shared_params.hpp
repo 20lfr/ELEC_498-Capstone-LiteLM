@@ -32,10 +32,12 @@ constexpr int div_ceil_constexpr(int a, int b) { return (a + b - 1) / b; }
     constexpr int D_HEADS       = 64;
     constexpr int NUM_HEADS     = D_MODEL / D_HEADS;
     // Tile widths (primary — tile counts derived below)
-    constexpr int D_TILE_WO            = 24;  // 32 tiles over D_MODEL=768
-    constexpr int D_TILE_W1            = 24;  // 128 tiles over D_FFN=3072
-    constexpr int D_TILE_W2            = 24;  // 32 tiles over D_MODEL=768
-    constexpr int D_TILE_LOGIT         = 4;   // 12565 tiles over D_VOCAB=50257
+    // NOTE: These tile widths strongly affect compute_buf::IN_BUF_BYTES (mmu_in_buf).
+    // Chosen to minimize mmu_in_buf (driven by LOGITS_IN_BYTES vs ARGMAX_IN_BYTES tradeoff).
+    constexpr int D_TILE_WO            = 16;  // 48 tiles over D_MODEL=768
+    constexpr int D_TILE_W1            = 16;  // 192 tiles over D_FFN=3072
+    constexpr int D_TILE_W2            = 8;   // 96 tiles over D_MODEL=768; increased from 4 to unlock MAC_OP_TO_BUF_OUT_UNROLL=8
+    constexpr int D_TILE_LOGIT         = 16;  // 3142 tiles over D_VOCAB=50257 (ceil); must be divisible by MAC_OP_TO_BUF_OUT_UNROLL_TARGET
     constexpr int D_HEAD_TILE_QKV      = 4;   // 16 tiles over D_HEADS=64
     constexpr int ATT_CTX_BLOCK        = 64;
     constexpr int D_HEAD_TILE_ATT_VALUE = 4;  // 16 tiles over D_HEADS=64
@@ -67,12 +69,39 @@ constexpr int NUM_QKV_HEAD_TILES       = D_HEADS / D_HEAD_TILE_QKV;
 constexpr int NUM_ATT_VALUE_HEAD_TILES = D_HEADS / D_HEAD_TILE_ATT_VALUE;
 
 
-// Parallelism controls
-constexpr int MAIN_MAC_VEC_UNROLL_TARGET  = 8;
-constexpr int MAIN_MAC_OUT_UNROLL_TARGET  = 4;
-constexpr int HEAD_MAC_VEC_UNROLL_TARGET  = 8;
-constexpr int HEAD_MAC_OUT_UNROLL_TARGET  = 2;
-constexpr int CONTEXT_UNROLL_TARGET       = 4;
+// Per-function cyclic unroll targets — one named constant per function per parallelized dimension.
+// Naming: {FUNCTION_NAME}_{VEC|OUT|CTX}_UNROLL_TARGET
+//   VEC = inner dot-product / input dimension
+//   OUT = output tile / accumulation dimension
+//   CTX = CONTEXT_LENGTH dimension
+
+// compute_controller.cpp
+constexpr int MAC_OP_TO_BUF_VEC_UNROLL_TARGET         = 16;  // vectorA / matrixB inner dim       | D_MODEL=768%16=0, D_FFN=3072%16=0
+constexpr int MAC_OP_TO_BUF_OUT_UNROLL_TARGET         =  8;  // bias / accum_vector output tile   | ACCUM_MAX=16%8=0 (unlocked by D_TILE_W2=8, D_TILE_LOGIT=16)
+constexpr int RES_ADD_TO_BUF_VEC_UNROLL_TARGET        =  8;  // x_local / r_local over D_MODEL    | adds = LUTs not DSPs, keep at 8
+constexpr int FFN_ACT_TO_BUF_VEC_UNROLL_TARGET        = 16;  // gate_local over D_FFN             | D_FFN=3072%16=0
+
+// headed_compute_controller.cpp
+constexpr int VALUE_SCALE_CLAMP_CTX_UNROLL_TARGET         = 4;   // input / output over CONTEXT_LENGTH       | not major DSP consumer
+constexpr int SOFTMAX_CTX_UNROLL_TARGET                   = 4;   // input / exp_buf / output over CONTEXT_LENGTH | not major DSP consumer
+constexpr int VALUE_SCALE_CLAMP_TO_BUF_CTX_UNROLL_TARGET  = 4;   // x_local over CONTEXT_LENGTH              | not major DSP consumer
+constexpr int QKV_TO_BUF_VEC_UNROLL_TARGET                = 16;  // weight_tile inner dim over D_HEADS       | D_HEADS=64%16=0
+constexpr int ATT_SCORES_TO_BUF_VEC_UNROLL_TARGET         = 16;  // q_local / k_local over D_HEADS           | D_HEADS=64%16=0
+constexpr int ATT_SCORES_TO_BUF_OUT_UNROLL_TARGET         =  4;  // acc_tile over ATT_CTX_BLOCK              | ATT_CTX_BLOCK=64%4=0
+constexpr int ATT_VALUE_TO_BUF_CTX_UNROLL_TARGET          =  8;  // weight_local / v_local over CONTEXT_LENGTH | CONTEXT_LENGTH=1024%8=0
+constexpr int ATT_VALUE_TO_BUF_OUT_UNROLL_TARGET          =  4;  // acc_out over D_HEAD_TILE_ATT_VALUE        | D_HEAD_TILE_ATT_VALUE=4%4=0
+
+// Specialized MAC datapaths — per-operand-width unroll targets.
+// Each type gets its own VEC (input dim) and OUT (output tile) target.
+// int8×int8:  CMP_OUT_PROJ (D_MODEL→D_TILE_WO),  CMP_FFN_W1 (D_MODEL→D_TILE_W1)
+// int16×int8: CMP_FFN_W2   (D_FFN→D_TILE_W2)
+// int32×int8: CMP_LOGITS   (D_MODEL→D_TILE_LOGIT)
+constexpr int MAC_I8I8_VEC_UNROLL_TARGET   = 16;  // D_MODEL=768%16=0
+constexpr int MAC_I8I8_OUT_UNROLL_TARGET   =  8;  // ACCUM_MAX_I8I8=max(D_TILE_WO,D_TILE_W1)=16, 16%8=0
+constexpr int MAC_I16I8_VEC_UNROLL_TARGET  = 16;  // D_FFN=3072%16=0
+constexpr int MAC_I16I8_OUT_UNROLL_TARGET  =  8;  // ACCUM_MAX_I16I8=D_TILE_W2=8, 8%8=0
+constexpr int MAC_I32I8_VEC_UNROLL_TARGET  =  8;  // D_MODEL=768%8=0 (int32 muls are heavier, less unroll)
+constexpr int MAC_I32I8_OUT_UNROLL_TARGET  =  8;  // ACCUM_MAX_I32I8=D_TILE_LOGIT=16, 16%8=0
 
 // Non-MAC cyclic tile used by scalar/vector helper loops (legacy
 // MAX_CYCLIC_SIZE use).
@@ -90,6 +119,7 @@ constexpr int STREAM_OUT_BUF_BYTES = 4;
 static_assert((D_MODEL % D_TILE_WO) == 0,            "D_MODEL must be divisible by D_TILE_WO");
 static_assert((D_FFN   % D_TILE_W1) == 0,            "D_FFN must be divisible by D_TILE_W1");
 static_assert((D_MODEL % D_TILE_W2) == 0,            "D_MODEL must be divisible by D_TILE_W2");
+static_assert((D_MODEL % D_HEADS) == 0,              "D_MODEL must be divisible by D_HEADS");
 static_assert((D_HEADS % D_HEAD_TILE_QKV) == 0,      "D_HEADS must be divisible by D_HEAD_TILE_QKV");
 static_assert((D_HEADS % D_HEAD_TILE_ATT_VALUE) == 0, "D_HEADS must be divisible by D_HEAD_TILE_ATT_VALUE");
 static_assert((D_TILE_LOGIT > 0),                    "D_TILE_LOGIT must be positive");
@@ -176,6 +206,56 @@ constexpr uint32_t MEM_K_CACHE          = KV_CACHE_TOTAL_BYTES;
 constexpr uint32_t MEM_V_CACHE          = KV_CACHE_TOTAL_BYTES;
 
 static_assert((NUM_W1_TILES > 0), "NUM_W1_TILES must be positive");
+
+// ---- Cyclic-factor divisibility asserts ----
+// Rule: array_size % cyclic_factor == 0 for every #pragma HLS ARRAY_PARTITION cyclic.
+// When dim < TARGET, min() returns dim and dim%dim==0 — only the dim>=TARGET case needs checking.
+
+// MAC_OP_TO_BUF — vector (column) dimension
+static_assert(D_MODEL % MAC_OP_TO_BUF_VEC_UNROLL_TARGET == 0 || D_MODEL < MAC_OP_TO_BUF_VEC_UNROLL_TARGET,
+    "D_MODEL must be divisible by MAC_OP_TO_BUF_VEC_UNROLL_TARGET for cyclic partition");
+static_assert(D_FFN % MAC_OP_TO_BUF_VEC_UNROLL_TARGET == 0 || D_FFN < MAC_OP_TO_BUF_VEC_UNROLL_TARGET,
+    "D_FFN must be divisible by MAC_OP_TO_BUF_VEC_UNROLL_TARGET for cyclic partition");
+
+// MAC_OP_TO_BUF — accumulation (output tile) dimension
+static_assert(D_TILE_WO % MAC_OP_TO_BUF_OUT_UNROLL_TARGET == 0 || D_TILE_WO < MAC_OP_TO_BUF_OUT_UNROLL_TARGET,
+    "D_TILE_WO must be divisible by MAC_OP_TO_BUF_OUT_UNROLL_TARGET for cyclic partition");
+static_assert(D_TILE_W1 % MAC_OP_TO_BUF_OUT_UNROLL_TARGET == 0 || D_TILE_W1 < MAC_OP_TO_BUF_OUT_UNROLL_TARGET,
+    "D_TILE_W1 must be divisible by MAC_OP_TO_BUF_OUT_UNROLL_TARGET for cyclic partition");
+static_assert(D_TILE_W2 % MAC_OP_TO_BUF_OUT_UNROLL_TARGET == 0 || D_TILE_W2 < MAC_OP_TO_BUF_OUT_UNROLL_TARGET,
+    "D_TILE_W2 must be divisible by MAC_OP_TO_BUF_OUT_UNROLL_TARGET for cyclic partition");
+static_assert(D_TILE_LOGIT % MAC_OP_TO_BUF_OUT_UNROLL_TARGET == 0 || D_TILE_LOGIT < MAC_OP_TO_BUF_OUT_UNROLL_TARGET,
+    "D_TILE_LOGIT must be divisible by MAC_OP_TO_BUF_OUT_UNROLL_TARGET for cyclic partition");
+
+// RES_ADD_TO_BUF / FFN_ACT_TO_BUF — vector dimension
+static_assert(D_MODEL % RES_ADD_TO_BUF_VEC_UNROLL_TARGET == 0 || D_MODEL < RES_ADD_TO_BUF_VEC_UNROLL_TARGET,
+    "D_MODEL must be divisible by RES_ADD_TO_BUF_VEC_UNROLL_TARGET for cyclic partition");
+static_assert(D_FFN % FFN_ACT_TO_BUF_VEC_UNROLL_TARGET == 0 || D_FFN < FFN_ACT_TO_BUF_VEC_UNROLL_TARGET,
+    "D_FFN must be divisible by FFN_ACT_TO_BUF_VEC_UNROLL_TARGET for cyclic partition");
+
+// QKV_TO_BUF / ATT_SCORES_TO_BUF — vector (D_HEADS) dimension
+static_assert(D_HEADS % QKV_TO_BUF_VEC_UNROLL_TARGET == 0 || D_HEADS < QKV_TO_BUF_VEC_UNROLL_TARGET,
+    "D_HEADS must be divisible by QKV_TO_BUF_VEC_UNROLL_TARGET for cyclic partition");
+static_assert(D_HEADS % ATT_SCORES_TO_BUF_VEC_UNROLL_TARGET == 0 || D_HEADS < ATT_SCORES_TO_BUF_VEC_UNROLL_TARGET,
+    "D_HEADS must be divisible by ATT_SCORES_TO_BUF_VEC_UNROLL_TARGET for cyclic partition");
+
+// ATT_SCORES_TO_BUF — output (context block) dimension
+static_assert(ATT_CTX_BLOCK % ATT_SCORES_TO_BUF_OUT_UNROLL_TARGET == 0 || ATT_CTX_BLOCK < ATT_SCORES_TO_BUF_OUT_UNROLL_TARGET,
+    "ATT_CTX_BLOCK must be divisible by ATT_SCORES_TO_BUF_OUT_UNROLL_TARGET for cyclic partition");
+
+// ATT_VALUE_TO_BUF — output tile dimension
+static_assert(D_HEAD_TILE_ATT_VALUE % ATT_VALUE_TO_BUF_OUT_UNROLL_TARGET == 0 || D_HEAD_TILE_ATT_VALUE < ATT_VALUE_TO_BUF_OUT_UNROLL_TARGET,
+    "D_HEAD_TILE_ATT_VALUE must be divisible by ATT_VALUE_TO_BUF_OUT_UNROLL_TARGET for cyclic partition");
+
+// Context-dimension functions (VALUE_SCALE_CLAMP, SOFTMAX, VALUE_SCALE_CLAMP_TO_BUF, ATT_VALUE_TO_BUF)
+static_assert(CONTEXT_LENGTH % VALUE_SCALE_CLAMP_CTX_UNROLL_TARGET == 0 || CONTEXT_LENGTH < VALUE_SCALE_CLAMP_CTX_UNROLL_TARGET,
+    "CONTEXT_LENGTH must be divisible by VALUE_SCALE_CLAMP_CTX_UNROLL_TARGET for cyclic partition");
+static_assert(CONTEXT_LENGTH % SOFTMAX_CTX_UNROLL_TARGET == 0 || CONTEXT_LENGTH < SOFTMAX_CTX_UNROLL_TARGET,
+    "CONTEXT_LENGTH must be divisible by SOFTMAX_CTX_UNROLL_TARGET for cyclic partition");
+static_assert(CONTEXT_LENGTH % VALUE_SCALE_CLAMP_TO_BUF_CTX_UNROLL_TARGET == 0 || CONTEXT_LENGTH < VALUE_SCALE_CLAMP_TO_BUF_CTX_UNROLL_TARGET,
+    "CONTEXT_LENGTH must be divisible by VALUE_SCALE_CLAMP_TO_BUF_CTX_UNROLL_TARGET for cyclic partition");
+static_assert(CONTEXT_LENGTH % ATT_VALUE_TO_BUF_CTX_UNROLL_TARGET == 0 || CONTEXT_LENGTH < ATT_VALUE_TO_BUF_CTX_UNROLL_TARGET,
+    "CONTEXT_LENGTH must be divisible by ATT_VALUE_TO_BUF_CTX_UNROLL_TARGET for cyclic partition");
 
 // Strides (bytes): addr = base + layer * layer_stride + head/tile * sub_stride
 constexpr uint32_t STRIDE_WQ_LAYER      = D_MODEL * D_MODEL;

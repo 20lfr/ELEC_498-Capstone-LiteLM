@@ -6,7 +6,7 @@ import struct
 from pathlib import Path
 
 
-CTRL_MEM_WORDS = 25
+CTRL_MEM_WORDS = 28
 NUM_STREAM_TOKENS = 4
 
 # This script lives under <HLS_ROOT>/test_data, so infer HLS root locally
@@ -203,11 +203,14 @@ def build_ctrl_words(c: dict[str, int]) -> list[int]:
     words[17] = c["LN0_GAMMA_OFF"]
     words[18] = c["LN1_GAMMA_OFF"]
     words[19] = c["FINAL_NORM_GAMMA_OFF"]
-    words[20] = c["LN0_EPS_OFF"]
-    words[21] = c["LN1_EPS_OFF"]
-    words[22] = c["FINAL_NORM_EPS_OFF"]
-    words[23] = c["WLOGIT_OFF"]
-    words[24] = 0
+    words[20] = c["LN0_BETA_OFF"]
+    words[21] = c["LN1_BETA_OFF"]
+    words[22] = c["FINAL_NORM_BETA_OFF"]
+    words[23] = c["LN0_EPS_OFF"]
+    words[24] = c["LN1_EPS_OFF"]
+    words[25] = c["FINAL_NORM_EPS_OFF"]
+    words[26] = c["WLOGIT_OFF"]
+    words[27] = 0
     return words
 
 

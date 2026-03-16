@@ -214,8 +214,8 @@ void VALUE_SCALE_CLAMP(
     int16_t output[CONTEXT_LENGTH]         // Q1.15
 ) {
 #pragma HLS INLINE
-#pragma HLS ARRAY_PARTITION variable=input cyclic factor=CONTEXT_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=output cyclic factor=CONTEXT_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=input cyclic factor=VALUE_SCALE_CLAMP_CTX_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=output cyclic factor=VALUE_SCALE_CLAMP_CTX_UNROLL dim=1
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
 // #pragma HLS PIPELINE II=1
         int64_t prod = static_cast<int64_t>(input[i]) * static_cast<int64_t>(ATTN_SCALE_Q15); // Q2.30
@@ -283,8 +283,8 @@ void SOFTMAX(
     int16_t output[CONTEXT_LENGTH]        // Q1.15 probabilities (0..32767)
 ) {
 #pragma HLS INLINE
-#pragma HLS ARRAY_PARTITION variable=input cyclic factor=CONTEXT_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=output cyclic factor=CONTEXT_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=input cyclic factor=SOFTMAX_CTX_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=output cyclic factor=SOFTMAX_CTX_UNROLL dim=1
 
     const uint16_t ONE_Q15 = (1u << 15);     // 32768, ≈ 1.0
     const uint16_t MAX_Q15 = ONE_Q15 - 1;    // 32767
@@ -300,7 +300,7 @@ void SOFTMAX(
     
     // 2) Compute exp_approx and sum
     uint16_t exp_buf[CONTEXT_LENGTH];
-#pragma HLS ARRAY_PARTITION variable=exp_buf cyclic factor=CONTEXT_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=exp_buf cyclic factor=SOFTMAX_CTX_UNROLL dim=1
 
     uint32_t sum_exp = 0;
     for (int i = 0; i < CONTEXT_LENGTH; ++i) {
@@ -386,11 +386,17 @@ static void VALUE_SCALE_CLAMP_TO_BUF(
     uint8_t out_buf[head_buf::OUT_BUF_BYTES]
 ) {
 #pragma HLS INLINE
+    int32_t x_local[CONTEXT_LENGTH];
+#pragma HLS ARRAY_PARTITION variable=x_local cyclic factor=VALUE_SCALE_CLAMP_TO_BUF_CTX_UNROLL dim=1
+
     for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-// #pragma HLS PIPELINE II=1
-        int64_t prod = static_cast<int64_t>(
-                           compute_buf::read_i32(in_buf, head_buf::INValueScaleLayout::X + (t * 4))) *
-                       static_cast<int64_t>(ATTN_SCALE_Q15);
+#pragma HLS UNROLL factor=VALUE_SCALE_CLAMP_TO_BUF_CTX_UNROLL
+        x_local[t] = compute_buf::read_i32(in_buf, head_buf::INValueScaleLayout::X + (t * 4));
+    }
+
+    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+#pragma HLS UNROLL factor=VALUE_SCALE_CLAMP_TO_BUF_CTX_UNROLL
+        int64_t prod = static_cast<int64_t>(x_local[t]) * static_cast<int64_t>(ATTN_SCALE_Q15);
         int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
         int32_t scaled = static_cast<int32_t>(rounded >> 15);
         if (scaled > 32767) {
@@ -462,37 +468,40 @@ static void ATT_VALUE_TO_BUF(
     uint8_t out_buf[head_buf::OUT_BUF_BYTES]
 ) {
 #pragma HLS INLINE
-    int32_t accum_tile[HEAD_MAC_OUT_UNROLL];
-#pragma HLS ARRAY_PARTITION variable=accum_tile complete dim=1
+    int16_t weight_local[CONTEXT_LENGTH];
+    int8_t  v_local[D_HEAD_TILE_ATT_VALUE * CONTEXT_LENGTH];
+    int32_t acc_out[D_HEAD_TILE_ATT_VALUE];
+#pragma HLS ARRAY_PARTITION variable=weight_local cyclic factor=ATT_VALUE_TO_BUF_CTX_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=v_local      cyclic factor=ATT_VALUE_TO_BUF_CTX_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=acc_out      cyclic factor=ATT_VALUE_TO_BUF_OUT_UNROLL dim=1
 
-    for (int out_base = 0; out_base < D_HEAD_TILE_ATT_VALUE; out_base += HEAD_MAC_OUT_UNROLL) {
-        for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
-#pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
-            accum_tile[lane] = 0;
-        }
+    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+#pragma HLS UNROLL factor=ATT_VALUE_TO_BUF_CTX_UNROLL
+        weight_local[t] = compute_buf::read_i16(in_buf, head_buf::INAttValueLayout::WEIGHTS + (t * 2));
+    }
 
+    for (int d = 0; d < D_HEAD_TILE_ATT_VALUE; ++d) {
         for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-// #pragma HLS PIPELINE II=1
-            const int16_t weight = compute_buf::read_i16(in_buf, head_buf::INAttValueLayout::WEIGHTS + (t * 2));
-            for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
-#pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
-                const int out_idx = out_base + lane;
-                if (out_idx < D_HEAD_TILE_ATT_VALUE) {
-                    const int v_idx = (out_idx * CONTEXT_LENGTH) + t;
-                    const int8_t v = compute_buf::read_i8(in_buf, head_buf::INAttValueLayout::V_CACHE + v_idx);
-                    accum_tile[lane] += static_cast<int32_t>(weight) * static_cast<int32_t>(v);
-                }
-            }
+#pragma HLS UNROLL factor=ATT_VALUE_TO_BUF_CTX_UNROLL
+            v_local[d * CONTEXT_LENGTH + t] = compute_buf::read_i8(
+                in_buf, head_buf::INAttValueLayout::V_CACHE + (d * CONTEXT_LENGTH) + t);
         }
+    }
 
-        for (int lane = 0; lane < HEAD_MAC_OUT_UNROLL; ++lane) {
-#pragma HLS UNROLL factor=HEAD_MAC_OUT_UNROLL
-            const int out_idx = out_base + lane;
-            if (out_idx < D_HEAD_TILE_ATT_VALUE) {
-                compute_buf::write_i32(out_buf, head_buf::OUTAttValueLayout::Y + (out_idx * 4),
-                                       accum_tile[lane]);
-            }
+    for (int d = 0; d < D_HEAD_TILE_ATT_VALUE; ++d) {
+#pragma HLS UNROLL factor=ATT_VALUE_TO_BUF_OUT_UNROLL
+        int32_t acc = 0;
+        for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+#pragma HLS UNROLL factor=ATT_VALUE_TO_BUF_CTX_UNROLL
+            acc += static_cast<int32_t>(weight_local[t]) *
+                   static_cast<int32_t>(v_local[d * CONTEXT_LENGTH + t]);
         }
+        acc_out[d] = acc;
+    }
+
+    for (int d = 0; d < D_HEAD_TILE_ATT_VALUE; ++d) {
+#pragma HLS UNROLL factor=ATT_VALUE_TO_BUF_OUT_UNROLL
+        compute_buf::write_i32(out_buf, head_buf::OUTAttValueLayout::Y + (d * 4), acc_out[d]);
     }
 #ifndef __SYNTHESIS__
     trace_att_value_buffers(layer_idx, head_idx, in_buf, out_buf);
@@ -544,7 +553,7 @@ static void QKV_TO_BUF(
     int8_t  weight_tile[HEAD_MAC_OUT_UNROLL * HEAD_MAC_VEC_UNROLL];
 #pragma HLS ARRAY_PARTITION variable=accum_tile   complete dim=1
 #pragma HLS ARRAY_PARTITION variable=act_local    complete dim=1
-#pragma HLS ARRAY_PARTITION variable=weight_tile  cyclic factor=HEAD_MAC_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=weight_tile  cyclic factor=QKV_TO_BUF_VEC_UNROLL dim=1
 
     int32_t M = 1;
     int32_t n = 0;
@@ -589,7 +598,7 @@ static void QKV_TO_BUF(
                 const int out_idx = out_base + lane;
                 if (out_idx < D_HEAD_TILE_QKV) {
                     for (int k = 0; k < HEAD_MAC_VEC_UNROLL; ++k) {
-#pragma HLS UNROLL factor=HEAD_MAC_VEC_UNROLL
+#pragma HLS UNROLL factor=QKV_TO_BUF_VEC_UNROLL
                         accum_tile[lane] += static_cast<int32_t>(act_local[k])
                                           * static_cast<int32_t>(weight_tile[lane * HEAD_MAC_VEC_UNROLL + k]);
                     }
@@ -619,18 +628,40 @@ static void ATT_SCORES_TO_BUF(
     uint8_t out_buf[head_buf::OUT_BUF_BYTES]
 ) {
 #pragma HLS INLINE
+    int8_t  q_local[D_HEADS];
+    int8_t  k_local[ATT_CTX_BLOCK * D_HEADS];
+    int32_t acc_tile[ATT_CTX_BLOCK];
+#pragma HLS ARRAY_PARTITION variable=q_local  cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=k_local  cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=acc_tile cyclic factor=ATT_SCORES_TO_BUF_OUT_UNROLL dim=1
+
+    for (int d = 0; d < D_HEADS; ++d) {
+#pragma HLS UNROLL factor=ATT_SCORES_TO_BUF_VEC_UNROLL
+        q_local[d] = compute_buf::read_i8(in_buf, head_buf::INAttScoresLayout::Q + d);
+    }
 
     for (int t = 0; t < ATT_CTX_BLOCK; ++t) {
-// #pragma HLS PIPELINE II=1
+        for (int d = 0; d < D_HEADS; ++d) {
+#pragma HLS UNROLL factor=ATT_SCORES_TO_BUF_VEC_UNROLL
+            k_local[t * D_HEADS + d] = compute_buf::read_i8(
+                in_buf, head_buf::INAttScoresLayout::K_CACHE + (t * D_HEADS) + d);
+        }
+    }
+
+    for (int t = 0; t < ATT_CTX_BLOCK; ++t) {
+#pragma HLS UNROLL factor=ATT_SCORES_TO_BUF_OUT_UNROLL
         int32_t acc = 0;
         for (int d = 0; d < D_HEADS; ++d) {
-// #pragma HLS UNROLL
-            const int8_t q = compute_buf::read_i8(in_buf, head_buf::INAttScoresLayout::Q + d);
-            const int k_base = head_buf::INAttScoresLayout::K_CACHE + (t * D_HEADS) + d;
-            const int8_t k = compute_buf::read_i8(in_buf, k_base);
-            acc += static_cast<int32_t>(q) * static_cast<int32_t>(k);
+#pragma HLS UNROLL factor=ATT_SCORES_TO_BUF_VEC_UNROLL
+            acc += static_cast<int32_t>(q_local[d]) *
+                   static_cast<int32_t>(k_local[t * D_HEADS + d]);
         }
-        compute_buf::write_i32(out_buf, head_buf::OUTAttScoresLayout::X + (t * 4), acc);
+        acc_tile[t] = acc;
+    }
+
+    for (int t = 0; t < ATT_CTX_BLOCK; ++t) {
+#pragma HLS UNROLL factor=ATT_SCORES_TO_BUF_OUT_UNROLL
+        compute_buf::write_i32(out_buf, head_buf::OUTAttScoresLayout::X + (t * 4), acc_tile[t]);
     }
 #ifndef __SYNTHESIS__
     trace_att_scores_buffers(layer_idx, head_idx, tile_idx, in_buf, out_buf);
