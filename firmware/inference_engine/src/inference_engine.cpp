@@ -700,12 +700,14 @@ private:
             if (!exec->executeToken(next_input, token_position, out_token))
                 break;
 
+            std::string decoded = tokenizer->decodeToken(out_token);
+
             LOG_DEBUG("Decode [" + std::to_string(i) + "/" +
                       std::to_string(state.maxTokens) +
                       "] next_input=" + std::to_string(next_input) +
-                      " out_token=" + std::to_string(out_token));
+                      " out_token=" + std::to_string(out_token) +
+                      " out_decode=\"" + decoded + "\"");
 
-            std::string decoded = tokenizer->decodeToken(out_token);
             if (!decoded.empty())
                 print(decoded);
 
