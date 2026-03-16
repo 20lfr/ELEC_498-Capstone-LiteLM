@@ -1,0 +1,105 @@
+GPT-2 int8 per-tensor � 2026-03-13 23:31:50
+DDR MD5: c7b9af3b2ccdceee981019e7e533b792
+
+  wq              0x00000000    7,077,888 c2f19b8a5959
+  wk              0x006C0000    7,077,888 1bd2b299c3e5
+  wv              0x00D80000    7,077,888 d066f0c872a0
+  wo              0x01440000    7,077,888 d05696de0cf3
+  w1              0x01B00000   28,311,552 4cf138dc866c
+  w2              0x03600000   28,311,552 3d87b8a6015b
+  wlogit          0x05100000   38,597,376 6d41c81067e7
+  wq_bias         0x075CF300       36,864 78959076043e
+  wk_bias         0x075D8300       36,864 f69856a020a1
+  wv_bias         0x075E1300       36,864 3f94714e5109
+  wo_bias         0x075EA300       36,864 d4daf8420412
+  w1_bias         0x075F3300      147,456 5e5e906911a8
+  w2_bias         0x07617300       36,864 1b17ff6acad0
+  ln1_w           0x07620300       36,864 c9c4b9a660f5
+  ln1_b           0x07629300       36,864 c58a13140cc3
+  ln2_w           0x07632300       36,864 b4f9ca1738a5
+  ln2_b           0x0763B300       36,864 d7d5397baf62
+  fln_w           0x07644300        3,072 e3e30702c1da
+  fln_b           0x07644F00        3,072 f98ad42ca288
+  ln1_eps         0x07645B00           48 9390edf700a0
+  ln2_eps         0x07645B40           48 9390edf700a0
+  fln_eps         0x07645B80            4 2b1a9005cd81
+  pos_embed       0x07645BC0      786,432 24ecce76cd43
+
+  w_size: 124,804,032 (119.0 MB)
+
+Effective per-tensor scales:
+  embed_tokens: 0.00429240
+  layer0.w1_eff: 0.00437031
+  layer0.w2_eff: 0.00386398
+  layer0.wk_eff: 0.00821457
+  layer0.wo_eff: 0.00307834
+  layer0.wq_eff: 0.00659578
+  layer0.wv_eff: 0.00166646
+  layer1.w1_eff: 0.00362150
+  layer1.w2_eff: 0.00349371
+  layer1.wk_eff: 0.00433272
+  layer1.wo_eff: 0.00280279
+  layer1.wq_eff: 0.00440162
+  layer1.wv_eff: 0.00291053
+  layer10.w1_eff: 0.00348461
+  layer10.w2_eff: 0.00728582
+  layer10.wk_eff: 0.00355449
+  layer10.wo_eff: 0.00405016
+  layer10.wq_eff: 0.00338452
+  layer10.wv_eff: 0.00389687
+  layer11.w1_eff: 0.00357574
+  layer11.w2_eff: 0.00968553
+  layer11.wk_eff: 0.00337446
+  layer11.wo_eff: 0.00463594
+  layer11.wq_eff: 0.00323217
+  layer11.wv_eff: 0.00478423
+  layer2.w1_eff: 0.00362340
+  layer2.w2_eff: 0.00388977
+  layer2.wk_eff: 0.00520618
+  layer2.wo_eff: 0.00255038
+  layer2.wq_eff: 0.00501155
+  layer2.wv_eff: 0.00284939
+  layer3.w1_eff: 0.00344775
+  layer3.w2_eff: 0.00372833
+  layer3.wk_eff: 0.00545421
+  layer3.wo_eff: 0.00252742
+  layer3.wq_eff: 0.00445940
+  layer3.wv_eff: 0.00257899
+  layer4.w1_eff: 0.00348003
+  layer4.w2_eff: 0.00347021
+  layer4.wk_eff: 0.00549415
+  layer4.wo_eff: 0.00277292
+  layer4.wq_eff: 0.00454123
+  layer4.wv_eff: 0.00268554
+  layer5.w1_eff: 0.00336357
+  layer5.w2_eff: 0.00370625
+  layer5.wk_eff: 0.00400156
+  layer5.wo_eff: 0.00270250
+  layer5.wq_eff: 0.00391109
+  layer5.wv_eff: 0.00275704
+  layer6.w1_eff: 0.00335818
+  layer6.w2_eff: 0.00405146
+  layer6.wk_eff: 0.00392293
+  layer6.wo_eff: 0.00326470
+  layer6.wq_eff: 0.00373812
+  layer6.wv_eff: 0.00316311
+  layer7.w1_eff: 0.00334915
+  layer7.w2_eff: 0.00441271
+  layer7.wk_eff: 0.00389498
+  layer7.wo_eff: 0.00330675
+  layer7.wq_eff: 0.00380536
+  layer7.wv_eff: 0.00321248
+  layer8.w1_eff: 0.00339992
+  layer8.w2_eff: 0.00515581
+  layer8.wk_eff: 0.00372350
+  layer8.wo_eff: 0.00337100
+  layer8.wq_eff: 0.00361664
+  layer8.wv_eff: 0.00338545
+  layer9.w1_eff: 0.00342618
+  layer9.w2_eff: 0.00594569
+  layer9.wk_eff: 0.00358885
+  layer9.wo_eff: 0.00377630
+  layer9.wq_eff: 0.00346790
+  layer9.wv_eff: 0.00366474
+  lm_head_eff: 0.00447178
+  pos_embed: 0.00802953

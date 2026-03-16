@@ -1,0 +1,5 @@
+# Issues with the total structure
+1. MAC_GENERIC() needs to be split into 3three different ops. We need to start grouping by dimnesions groups. One for output_proj and W1, because they have similar dimensions. W_LOGIT has its own, and W1 has its own. And now that we have three seperate functions, we no longer need the act_offset, w_offset, b_offset, vec_len and out_tiles. except for output_proj and W1 which still need to do decoding between the two operations
+2. When decoding the in_buffer, we need to decode the activation, then the weights then the biases one after another into the local arrays that are ARRAY_PARTITIONED into cyclic factors. THEN we can do the parallel computation. So this will be a doubly nest for loop that needs to be unrolled on the outside for loop and pipelined on the insde. After accum is filled, then write to out_buf. |
+3. Remember that we cannot UNROLL any for loops that contain in_buf or out_buf. We can ONLY pipline it since in_buf and out_buf are both single read, single write access. 
+

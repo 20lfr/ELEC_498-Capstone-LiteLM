@@ -1,0 +1,242 @@
+INSTRUCTION-DRIVEN (ALWAYS-ON) PL OP MODE - CHANGE DOCUMENT
+==========================================================
+
+BACKGROUND (why change):
+  The previous “autonomous pipeline” style flow ran many stages on PL
+  and repeatedly requantized to int8 using fixed M/N. Quantization
+  error compounded through layers and produced unusable outputs.
+
+  This document defines a single, always-on PL behavior: the PL is an
+  instruction-driven operator. The PS (ARM) orchestrates the forward
+  pass by issuing many small PL calls and doing the remaining math on
+  the PS side (LN, softmax, residuals, etc.).
+
+IMPORTANT: single PL behavior only.
+  - No scheduler-path bit flip / mode-select bit.
+  - No dual-mode behavior.
+  - Every PL invocation follows the same instruction-driven protocol.
+
+
+==========================================================
+HIGH-LEVEL PROTOCOL (per operation)
+==========================================================
+
+For each operation that the PS wants the PL to perform:
+  1) PS writes a 32-bit `INSTR` over AXI-Lite.
+  2) PS streams the operation’s activation payload on AXIS (stream-in).
+     The stream-in byte count is derived from `op` (see table below).
+  3) PL decodes `INSTR` (tile/head/layer/op).
+  4) PL asks the MMU for DDR offsets (weights / K-cache / V-cache),
+     keyed by (op, layer, head, decoded tile fields), and fetches the
+     required tile(s).
+  5) PL computes ONE TILE per call (tile-indexed micro-kernel).
+  6) PL streams out the result payload on AXIS (stream-out).
+     The stream-out byte count is derived from `op` (see table below).
+  7) PL returns to idle / ready for the next `INSTR`.
+
+The PS repeats calls across tiles to build full vectors (e.g., OUT_PROJ
+uses 48 output tiles with D_TILE_WO=16 to cover 768 outputs) and across
+layers/heads/sequence positions as needed.
+
+
+==========================================================
+32-BIT INSTRUCTION FORMAT
+==========================================================
+
+`INSTR` bit layout (PS writes this over AXI-Lite):
+  [31:16] tile
+  [15:10] head
+  [9:4]   layer
+  [3:0]   op
+
+Field semantics:
+  tile:
+    - Op-specific tile index / packed sub-fields (see opcode table).
+    - Q/K/V, OUT_PROJ, W1, W2, W_VOCAB use tile to select a slice of
+      the output channels.
+    - ATTENTION_HEADS/ATTENTION_VALS use tile to select a context block,
+      and (for ATTENTION_VALS) also select a slice of the head output.
+  head:
+    - Used for Q/K/V and attention ops (selects which attention head).
+    - For ops that do not depend on head, PS should write head=0.
+  layer:
+    - Transformer layer index (0..11).
+    - For ops not layer-dependent (e.g., W_VOCAB if global), PS may
+      write layer=0 and the MMU should ignore it.
+  op:
+    - 4-bit opcode selecting the PL micro-kernel and MMU fetch type.
+    - Unused values are reserved.
+
+
+==========================================================
+OPCODE MAP + I/O CONTRACT (decision-complete)
+==========================================================
+
+Assumed core dimensions / tiling (matches `shared_params.hpp`):
+  D_MODEL = 768
+  D_FFN = 3072
+  D_HEAD = 64
+  D_VOCAB = 50257
+
+  D_TILE_WO = 16        // 48 tiles over D_MODEL=768
+  D_TILE_W1 = 16        // 192 tiles over D_FFN=3072
+  D_TILE_W2 = 8         // 96 tiles over D_MODEL=768
+  D_TILE_LOGIT = 16     // 3142 tiles over D_VOCAB=50257 (ceil)
+
+  D_HEAD_TILE_QKV = 4         // 16 tiles over D_HEAD=64 (per head)
+  D_HEAD_TILE_ATT_VALUE = 4   // 16 tiles over D_HEAD=64 (per head)
+  ATT_CTX_BLOCK = 64          // context block length for attention ops
+
+All stream-out payloads for the ops below are raw int32 accumulators.
+The PS is responsible for dequant / scaling / bias in software.
+
+Legend:
+  - “output tile” means output channels are chunked by a tile index.
+  - “ctx block” means sequence positions are chunked by ATT_CTX_BLOCK.
+  - int32 stream-out is little-endian 4-byte words (platform default).
+
+| op   | Name              | Stream-in (bytes)       | MMU fetch (keyed by)                          | Stream-out (bytes)       |
+|------|-------------------|-------------------------|----------------------------------------------|--------------------------|
+| 0x0  | Q                 | int8[D_MODEL]   = 768   | WQ output tile (layer, head, qkv_tile)        | int32[D_HEAD_TILE_QKV] = 4*4=16  |
+| 0x1  | K                 | int8[D_MODEL]   = 768   | WK output tile (layer, head, qkv_tile)        | int32[D_HEAD_TILE_QKV] = 16      |
+| 0x2  | V                 | int8[D_MODEL]   = 768   | WV output tile (layer, head, qkv_tile)        | int32[D_HEAD_TILE_QKV] = 16      |
+| 0x3  | ATTENTION_HEADS   | int8[D_HEAD]    = 64    | K_cache ctx block (layer, head, ctx_block_idx)| int32[ATT_CTX_BLOCK] = 64*4=256  |
+| 0x4  | ATTENTION_VALS    | int8[ATT_CTX_BLOCK] = 64| V_cache ctx block (layer, head, ctx_block_idx)| int32[D_HEAD_TILE_ATT_VALUE] = 4*4=16 |
+| 0x5  | OUT_PROJ          | int8[D_MODEL]   = 768   | WO “output tile” (layer, tile)                | int32[D_TILE_WO] = 16*4=64       |
+| 0x6  | W1                | int8[D_MODEL]   = 768   | W1 “output tile” (layer, tile)                | int32[D_TILE_W1] = 16*4=64       |
+| 0x7  | W2                | int8[D_FFN]    = 3072   | W2 “output tile” (layer, tile)                | int32[D_TILE_W2] = 8*4=32        |
+| 0x8  | W_VOCAB           | int8[D_MODEL]   = 768   | W_vocab “output tile” (tile)                  | int32[D_TILE_LOGIT] = 16*4=64 (*)|
+
+Tile field interpretation (op-specific):
+  Q/K/V (op=0x0/0x1/0x2):
+    - head = attention head index (e.g., 0..11).
+    - tile = head-output tile index in [0 .. (D_HEAD / D_HEAD_TILE_QKV)-1]
+      selecting 4 output channels within that head.
+
+  OUT_PROJ/W1/W2/W_VOCAB:
+    - tile = output-channel tile index using the op’s tile size
+      (D_TILE_WO / D_TILE_W1 / D_TILE_W2 / D_TILE_LOGIT).
+
+  ATTENTION_HEADS (op=0x3):
+    - tile = context block index in [0 .. ceil(seq_len / ATT_CTX_BLOCK)-1].
+
+  ATTENTION_VALS (op=0x4):
+    - tile packs two sub-fields:
+        tile[15:4] = context block index (ctx_block_idx)
+        tile[3:0]  = head-output tile index (d_tile_idx) in
+                    [0 .. (D_HEAD / D_HEAD_TILE_ATT_VALUE)-1]
+      This lets one instruction select both the context block and which
+      4-element slice of the head output to accumulate.
+
+(*) For W_VOCAB: the final output tile is padded (if vocab size is not a
+multiple of D_TILE_LOGIT). The PS must ignore padded logits.
+
+
+==========================================================
+ATTENTION OP DEFINITIONS (math-level)
+==========================================================
+
+ATTENTION_HEADS (op=0x3):
+  Goal: compute one context block of attention scores for one head.
+  - Stream-in: Q_head (int8[D_HEAD]).
+  - MMU fetch: K_cache entries for (layer, head, ctx block index).
+  - Stream-out: int32[ATT_CTX_BLOCK] score accumulators for that ctx block.
+
+  This corresponds to: scores[p] = dot(Q_head, K_head[p]) for each
+  position p within the selected ctx block.
+
+ATTENTION_VALS (op=0x4):
+  Goal: accumulate a partial weighted-sum over V for one head, for one
+  context block, for one 4-element slice of the head output.
+  - Stream-in: X (int8[ATT_CTX_BLOCK]) = softmax weights for the selected
+    ctx block (PS is responsible for producing X and tracking
+    its scale).
+  - MMU fetch: V_cache entries for (layer, head, ctx block index).
+  - Stream-out: int32[D_HEAD_TILE_ATT_VALUE] partial sum for that slice.
+
+  This corresponds to: partial[d] = sum_{p in ctx block} X[p] * V_head[p][d]
+  for the selected d-slice. The PS accumulates partial sums across ctx
+  blocks and d-slices to build the full head output, then continues with
+  the rest of attention.
+
+
+==========================================================
+TILE COUNTS (typical)
+==========================================================
+
+Q/K/V (per head):
+  D_HEAD / D_HEAD_TILE_QKV = 64/4 = 16 tiles per head
+  (Total per op across all heads = num_heads * 16, with `head` selecting the head.)
+
+OUT_PROJ:
+  D_MODEL / D_TILE_WO = 768/16 = 48 tiles
+
+W1:
+  D_FFN / D_TILE_W1 = 3072/16 = 192 tiles
+
+W2:
+  D_MODEL / D_TILE_W2 = 768/8 = 96 tiles
+
+W_VOCAB (logits):
+  ceil(D_VOCAB / D_TILE_LOGIT) = ceil(50257/16) = 3142 tiles
+
+Attention:
+  - ctx blocks per head = ceil(seq_len / ATT_CTX_BLOCK) (ATT_CTX_BLOCK=64)
+  - ATTENTION_VALS also tiles over head output:
+      D_HEAD / D_HEAD_TILE_ATT_VALUE = 64/4 = 16 d-slices per head
+
+
+==========================================================
+WHAT CHANGES (conceptually)
+==========================================================
+
+  - Control plane becomes `INSTR` decode (tile/head/layer/op).
+  - Scheduler is always op-driven (no alternate autonomous pipeline path).
+  - MMU addressing is keyed by (op, layer, head, decoded tile fields).
+  - Stream-in/out byte counts are derived from `op` (table above).
+  - PL stream-out is always raw int32 accumulators; PS handles dequant,
+    bias, scaling, residuals, LN, GELU, and softmax.
+
+
+==========================================================
+BUFFER SIZE REQUIREMENTS (single-tile streaming)
+==========================================================
+
+Stream-in buffer:
+  Max bytes needed across ops:
+    max(D_FFN, D_MODEL, D_HEAD, ATT_CTX_BLOCK) = max(3072, 768, 64, 64) = 3072
+  So STREAM_IN_BUF_BYTES should be >= 3072.
+
+Stream-out buffer:
+  Max bytes needed across ops:
+    max(int32[ATT_CTX_BLOCK], int32[D_TILE_WO], int32[D_TILE_LOGIT]) = max(64*4, 16*4, 16*4) = 256
+  So STREAM_OUT_BUF_BYTES should be >= 256.
+
+Compute output staging buffer (if used):
+  If PL emits stream-out directly from compute results, a large “full
+  vector” output buffer is not required. Only per-tile staging is needed:
+    - int32[ATT_CTX_BLOCK] (256 bytes), int32[D_TILE_WO] (64 bytes),
+      int32[D_TILE_W2] (32 bytes), or int32[D_HEAD_TILE_QKV] (16 bytes)
+
+
+==========================================================
+WHAT DOES NOT CHANGE (invariants)
+==========================================================
+
+  - Core int8 x int8 MAC datapath remains the same.
+  - DDR weight image layout can remain the same (MMU selects offsets).
+  - The PS remains responsible for the overall transformer schedule.
+
+
+==========================================================
+DOC REVIEW CHECKLIST
+==========================================================
+
+  - No mentions of mode-select bits (e.g., CTRL_MATMUL_MODE_BIT) or
+    dual-mode phrasing like “both modes coexist”.
+  - Instruction format is exactly: [31:16] tile, [15:10] head,
+    [9:4] layer, [3:0] op.
+  - Opcode table includes: Q, K, V, ATTENTION_HEADS, ATTENTION_VALS,
+    OUT_PROJ, W1, W2, W_VOCAB.
+  - Every op has unambiguous stream-in/out types and byte counts and
+    follows “single-tile per call” semantics.
