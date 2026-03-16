@@ -7,8 +7,17 @@
 #include <algorithm>
 #include <fstream>
 #include <cstdlib>
+#include <unordered_map>
+#include <cstring>
 
-static size_t count_stream_tokens_from_file() {
+// Number of autoregressive feedback steps to run after the prompt tokens.
+// Each step feeds the previous output token id back as the next input.
+static constexpr size_t NUM_FEEDBACK_TOKENS = 3;
+
+// Loads all tokens from stream_in.bin into a flat byte buffer.
+// Returns the number of complete tokens loaded, or 0 on error.
+// out_bytes is resized to (token_count * STREAM_IN_BUF_BYTES).
+static size_t load_all_stream_tokens(std::vector<uint8_t> &out_bytes) {
 #ifdef FULL_MODEL_TEST
     const std::string stream_path = tb_source_dir() + "/../model/stream_in.bin";
 #else
@@ -25,8 +34,111 @@ static size_t count_stream_tokens_from_file() {
         return 0;
     }
 
-    const size_t usable_bytes = static_cast<size_t>(total_bytes);
-    return usable_bytes / static_cast<size_t>(STREAM_IN_BUF_BYTES);
+    const size_t token_count =
+        static_cast<size_t>(total_bytes) / static_cast<size_t>(STREAM_IN_BUF_BYTES);
+    if (token_count == 0) {
+        return 0;
+    }
+
+    const size_t load_bytes = token_count * static_cast<size_t>(STREAM_IN_BUF_BYTES);
+    out_bytes.resize(load_bytes, 0);
+    in.seekg(0, std::ios::beg);
+    in.read(reinterpret_cast<char *>(out_bytes.data()),
+            static_cast<std::streamsize>(load_bytes));
+    if (static_cast<size_t>(in.gcount()) != load_bytes) {
+        std::fprintf(stderr, "ERROR: Short read from '%s'\n", stream_path.c_str());
+        return 0;
+    }
+    return token_count;
+}
+
+// Minimal JSON vocab parser — builds an id->token-string reverse map from
+// the "model": { "vocab": { "TOKEN": ID, ... } } section of tokenizer.json.
+static std::unordered_map<int32_t, std::string> load_tokenizer_vocab() {
+    std::unordered_map<int32_t, std::string> id_to_token;
+    const std::string path = tb_source_dir() + "/../model/tokenizer.json";
+    std::ifstream f(path.c_str());
+    if (!f) {
+        std::fprintf(stderr, "[WARN] Could not open tokenizer at '%s' — token strings will not be shown\n",
+                     path.c_str());
+        return id_to_token;
+    }
+    const std::string content((std::istreambuf_iterator<char>(f)),
+                               std::istreambuf_iterator<char>());
+
+    // Locate "vocab": {
+    const size_t vocab_pos = content.find("\"vocab\"");
+    if (vocab_pos == std::string::npos) return id_to_token;
+    const size_t brace_pos = content.find('{', vocab_pos);
+    if (brace_pos == std::string::npos) return id_to_token;
+
+    size_t pos = brace_pos + 1;
+    while (pos < content.size()) {
+        // skip whitespace
+        while (pos < content.size() &&
+               (content[pos] == ' ' || content[pos] == '\n' ||
+                content[pos] == '\r' || content[pos] == '\t'))
+            pos++;
+        if (pos >= content.size() || content[pos] == '}') break;
+        if (content[pos] != '"') break;
+        pos++; // skip opening "
+
+        // parse JSON string key (token text)
+        std::string token;
+        while (pos < content.size() && content[pos] != '"') {
+            if (content[pos] == '\\' && pos + 1 < content.size()) {
+                pos++;
+                switch (content[pos]) {
+                    case '"':  token += '"';  break;
+                    case '\\': token += '\\'; break;
+                    case 'n':  token += '\n'; break;
+                    case 'r':  token += '\r'; break;
+                    case 't':  token += '\t'; break;
+                    case 'u': {
+                        if (pos + 4 < content.size()) {
+                            const unsigned int cp =
+                                static_cast<unsigned int>(
+                                    std::stoul(content.substr(pos + 1, 4), nullptr, 16));
+                            pos += 4;
+                            if (cp < 0x80u) {
+                                token += static_cast<char>(cp);
+                            } else if (cp < 0x800u) {
+                                token += static_cast<char>(0xC0u | (cp >> 6));
+                                token += static_cast<char>(0x80u | (cp & 0x3Fu));
+                            } else {
+                                token += static_cast<char>(0xE0u | (cp >> 12));
+                                token += static_cast<char>(0x80u | ((cp >> 6) & 0x3Fu));
+                                token += static_cast<char>(0x80u | (cp & 0x3Fu));
+                            }
+                        }
+                        break;
+                    }
+                    default: token += content[pos]; break;
+                }
+            } else {
+                token += content[pos];
+            }
+            pos++;
+        }
+        pos++; // skip closing "
+
+        // skip ": "
+        while (pos < content.size() && (content[pos] == ':' || content[pos] == ' ')) pos++;
+
+        // parse integer value
+        const size_t num_start = pos;
+        while (pos < content.size() && std::isdigit(static_cast<unsigned char>(content[pos]))) pos++;
+        if (pos > num_start) {
+            const int32_t id = static_cast<int32_t>(
+                std::stoul(content.substr(num_start, pos - num_start)));
+            id_to_token[id] = std::move(token);
+        }
+
+        // advance past comma to next entry
+        while (pos < content.size() && content[pos] != ',' && content[pos] != '}') pos++;
+        if (pos < content.size() && content[pos] == ',') pos++;
+    }
+    return id_to_token;
 }
 
 int main() {
@@ -45,11 +157,16 @@ int main() {
     ensure_default_ctrl_mem_loaded();
     maybe_print_tb_repro_info();
 
-    const size_t total_stream_tokens = count_stream_tokens_from_file();
+    const std::unordered_map<int32_t, std::string> vocab = load_tokenizer_vocab();
+
+    std::vector<uint8_t> stream_bytes;
+    const size_t total_stream_tokens = load_all_stream_tokens(stream_bytes);
     if (total_stream_tokens == 0) {
         std::fprintf(stderr, "ERROR: stream_in.bin does not contain any full tokens\n");
         return 1;
     }
+    std::printf("[TEST] stream_in.bin loaded: %zu token(s) x %d bytes\n",
+                total_stream_tokens, STREAM_IN_BUF_BYTES);
     size_t run_stream_tokens = total_stream_tokens;
     if (const char *env_max_tokens = std::getenv("LITELM_TB_MAX_TOKENS")) {
         char *end = nullptr;
@@ -82,17 +199,67 @@ int main() {
     std::printf("[TEST] Multi-token run across %zu/%zu token(s) (debug_mode=%s)\n",
                 run_stream_tokens, total_stream_tokens, TB_DEBUG_MODE ? "on" : "off");
     dump_ctrl_mem_words(g_loaded_ctrl_mem);
+
+    std::vector<int32_t> output_tokens;
+    output_tokens.reserve(run_stream_tokens + NUM_FEEDBACK_TOKENS);
+
     for (size_t token_idx = 0; token_idx < run_stream_tokens; ++token_idx) {
-        std::printf("\n[TEST] ===== Begin token %zu =====\n", token_idx);
-        const int rc = run_top_no_debug_tb_single_token_with_mem(
-            token_idx, ddr_mem.data(), kv_cache.data());
-        if (rc != 0) {
-            std::fprintf(stderr, "ERROR: token %zu failed with rc=%d\n", token_idx, rc);
-            return rc;
+        std::printf("\n[TEST] ===== Begin prompt token %zu =====\n", token_idx);
+        const uint8_t *token_bytes = stream_bytes.data() + token_idx * static_cast<size_t>(STREAM_IN_BUF_BYTES);
+        const int32_t rc = run_top_no_debug_tb_single_token_with_mem(
+            token_idx, token_bytes, ddr_mem.data(), kv_cache.data());
+        if (rc < 0) {
+            std::fprintf(stderr, "ERROR: prompt token %zu failed (rc=%d)\n", token_idx, rc);
+            return 1;
         }
-        std::printf("[TEST] ===== End token %zu =====\n", token_idx);
+        const auto it = vocab.find(rc);
+        const std::string token_str = (it != vocab.end()) ? it->second : "<unknown>";
+        std::printf("[TEST] Output: id=%-6d  text=\"%s\"\n", rc, token_str.c_str());
+        std::printf("[TEST] ===== End prompt token %zu =====\n", token_idx);
+        output_tokens.push_back(rc);
     }
 
-    std::printf("PASS: Multi-token inference complete for %zu token(s)\n", run_stream_tokens);
+    // Autoregressive feedback: feed each output token back as the next input.
+    // Skipped in debug mode since expected_debug_sum checks would be meaningless.
+    if (!TB_DEBUG_MODE && NUM_FEEDBACK_TOKENS > 0 && !output_tokens.empty()) {
+        std::printf("\n[TEST] Starting %zu feedback token(s) (autoregressive)\n",
+                    NUM_FEEDBACK_TOKENS);
+        for (size_t fb = 0; fb < NUM_FEEDBACK_TOKENS; ++fb) {
+            const size_t token_idx = run_stream_tokens + fb;
+            const int32_t prev_id = output_tokens.back();
+
+            // Encode the previous output token id as little-endian into a
+            // zero-padded STREAM_IN_BUF_BYTES buffer.
+            uint8_t feedback_buf[STREAM_IN_BUF_BYTES] = {};
+            feedback_buf[0] = static_cast<uint8_t>( prev_id        & 0xFF);
+            feedback_buf[1] = static_cast<uint8_t>((prev_id >>  8) & 0xFF);
+            feedback_buf[2] = static_cast<uint8_t>((prev_id >> 16) & 0xFF);
+            feedback_buf[3] = static_cast<uint8_t>((prev_id >> 24) & 0xFF);
+
+            std::printf("\n[TEST] ===== Begin feedback token %zu (input id=%d) =====\n",
+                        fb, prev_id);
+            const int32_t rc = run_top_no_debug_tb_single_token_with_mem(
+                token_idx, feedback_buf, ddr_mem.data(), kv_cache.data());
+            if (rc < 0) {
+                std::fprintf(stderr, "ERROR: feedback token %zu failed (rc=%d)\n", fb, rc);
+                return 1;
+            }
+            const auto it = vocab.find(rc);
+            const std::string token_str = (it != vocab.end()) ? it->second : "<unknown>";
+            std::printf("[TEST] Output: id=%-6d  text=\"%s\"\n", rc, token_str.c_str());
+            std::printf("[TEST] ===== End feedback token %zu =====\n", fb);
+            output_tokens.push_back(rc);
+        }
+    }
+
+    std::printf("\nPASS: Multi-token inference complete (%zu prompt + %zu feedback token(s))\n",
+                run_stream_tokens, NUM_FEEDBACK_TOKENS);
+    std::printf("[TEST] Output token sequence:\n");
+    for (size_t i = 0; i < output_tokens.size(); ++i) {
+        const int32_t id = output_tokens[i];
+        const auto it = vocab.find(id);
+        const std::string token_str = (it != vocab.end()) ? it->second : "<unknown>";
+        std::printf("  [%zu]  id=%-6d  text=\"%s\"\n", i, id, token_str.c_str());
+    }
     return 0;
 }

@@ -675,9 +675,10 @@ static void print_kv_cache_upto_token(const ControlMemSpace &ctrl,
     }
 }
 
-static int run_top_no_debug_tb_single_token_with_mem(size_t selected_stream_token,
-                                                     axi_gmem_word_t *ddr_mem,
-                                                     axi_gmem_word_t *kv_cache) {
+static int32_t run_top_no_debug_tb_single_token_with_mem(size_t selected_stream_token,
+                                                         const uint8_t *stream_in_bytes,
+                                                         axi_gmem_word_t *ddr_mem,
+                                                         axi_gmem_word_t *kv_cache) {
     const int MAX_CYCLES = 1000000000;
     const int STREAM_TOKEN_BYTES = STREAM_IN_BUF_BYTES;
     const int AXIS_BEATS = STREAM_TOKEN_BYTES;
@@ -714,17 +715,12 @@ static int run_top_no_debug_tb_single_token_with_mem(size_t selected_stream_toke
     bool seen_idle_after = false;
     bool aborted_on_error = false;
     bool debug_output_match = false;
+    int32_t result_token = -1;
     int  base_assign_step = 0;
 
     ensure_default_ctrl_mem_loaded();
     maybe_print_tb_repro_info();
-    size_t total_stream_tokens = 0;
-    if (!load_shared_stream_token(stream_in_buf, STREAM_IN_BUF_BYTES,
-                                  selected_stream_token, total_stream_tokens)) {
-        return 1;
-    }
-    std::printf("[TEST] stream_in.bin contains %zu token(s), sending token %zu only.\n",
-                total_stream_tokens, selected_stream_token);
+    std::memcpy(stream_in_buf, stream_in_bytes, STREAM_IN_BUF_BYTES);
     {
         print_token_vector(selected_stream_token, stream_in_buf,
                            static_cast<size_t>(STREAM_TOKEN_BYTES));
@@ -863,7 +859,7 @@ static int run_top_no_debug_tb_single_token_with_mem(size_t selected_stream_toke
                              "ERROR: ctrl_mem.token_position mismatch before start (expected=%zu got=%u)\n",
                              selected_stream_token,
                              ctrl_mem.token_position);
-                return 1;
+                return -1;
             }
             set_control(CTRL_RESETN_BIT | CTRL_START_BIT);
             reset_released = true;
@@ -969,6 +965,7 @@ static int run_top_no_debug_tb_single_token_with_mem(size_t selected_stream_toke
                     (static_cast<uint32_t>(stream_out_buf[2]) << 16) |
                     (static_cast<uint32_t>(stream_out_buf[3]) << 24));
                 std::printf("(index=%d)\n", token_id);
+                result_token = token_id;
                 if (!TB_DEBUG_MODE && (token_id < 0 || token_id >= D_VOCAB)) {
                     std::fprintf(stderr,
                                  "ERROR: Stream out token index out of range: %d (expected 0..%d)\n",
@@ -1067,31 +1064,41 @@ static int run_top_no_debug_tb_single_token_with_mem(size_t selected_stream_toke
         if (!seen_stream_out) std::fprintf(stderr, "ERROR: Inference done never reached\n");
         if (idle_after_stream < 4) std::fprintf(stderr, "ERROR: Did not remain in IDLE for 4 cycles after done\n");
         if (!debug_output_match) std::fprintf(stderr, "ERROR: Debug output mismatch detected\n");
-        return 1;
+        return -1;
     }
 
     print_kv_cache_upto_token(ctrl_mem, kv_cache, selected_stream_token);
     std::printf("PASS: Token %zu inference complete, FSM stayed IDLE for %d cycles after.\n",
                 selected_stream_token, idle_after_stream);
-    return 0;
+    return result_token;
 }
 
-static int run_top_no_debug_tb_single_token(size_t selected_stream_token) {
+static int32_t run_top_no_debug_tb_single_token(size_t selected_stream_token) {
     std::vector<axi_gmem_word_t> ddr_mem(static_cast<size_t>(TB_DDR_IMAGE_WORDS));
     std::vector<axi_gmem_word_t> kv_cache(static_cast<size_t>(TB_KV_IMAGE_WORDS));
 
     if (!load_shared_ddr_image(ddr_mem.data(), TB_DDR_IMAGE_WORDS)) {
-        return 1;
+        return -1;
     }
     zero_axi_mem(kv_cache.data(), TB_KV_IMAGE_WORDS);
 
+    uint8_t stream_in_buf[STREAM_IN_BUF_BYTES] = {};
+    size_t total_stream_tokens = 0;
+    if (!load_shared_stream_token(stream_in_buf, STREAM_IN_BUF_BYTES,
+                                  selected_stream_token, total_stream_tokens)) {
+        return -1;
+    }
+    std::printf("[TEST] stream_in.bin contains %zu token(s), sending token %zu only.\n",
+                total_stream_tokens, selected_stream_token);
+
     return run_top_no_debug_tb_single_token_with_mem(
-        selected_stream_token, ddr_mem.data(), kv_cache.data());
+        selected_stream_token, stream_in_buf, ddr_mem.data(), kv_cache.data());
 }
 
 int main() {
     if (!init_tb_logs()) {
         return 1;
     }
-    return run_top_no_debug_tb_single_token(0);
+    int32_t token = run_top_no_debug_tb_single_token(0);
+    return (token < 0) ? 1 : 0;
 }

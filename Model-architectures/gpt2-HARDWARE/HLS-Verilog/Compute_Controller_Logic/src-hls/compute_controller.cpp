@@ -527,20 +527,10 @@ static void RES_ADD_TO_BUF(ComputeOp op,
                            const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                            uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
 #pragma HLS INLINE off
-    int8_t x_local[D_MODEL];
-    int8_t r_local[D_MODEL];
-#pragma HLS ARRAY_PARTITION variable=x_local cyclic factor=RES_ADD_TO_BUF_VEC_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=r_local cyclic factor=RES_ADD_TO_BUF_VEC_UNROLL dim=1
-
     for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS UNROLL factor=RES_ADD_TO_BUF_VEC_UNROLL
-        x_local[i] = compute_buf::read_i8(in_buf, compute_buf::INResidLayout::X + i);
-        r_local[i] = compute_buf::read_i8(in_buf, compute_buf::INResidLayout::R + i);
-    }
-
-    for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS UNROLL factor=RES_ADD_TO_BUF_VEC_UNROLL
-        const int16_t sum = static_cast<int16_t>(x_local[i]) + static_cast<int16_t>(r_local[i]);
+        const int8_t x = compute_buf::read_i8(in_buf, compute_buf::INResidLayout::X + i);
+        const int8_t r = compute_buf::read_i8(in_buf, compute_buf::INResidLayout::R + i);
+        const int16_t sum = static_cast<int16_t>(x) + static_cast<int16_t>(r);
         int16_t sat = sum;
         if (sat > 127) sat = 127;
         else if (sat < -128) sat = -128;
@@ -556,28 +546,10 @@ static void FFN_ACT_Gelu_TO_BUF(uint8_t layer_idx,
                                 const uint8_t in_buf[compute_buf::IN_BUF_BYTES],
                                 uint8_t out_buf[compute_buf::OUT_BUF_BYTES]) {
 #pragma HLS INLINE off
-    int16_t gate_local[D_FFN];
-    int16_t out_local[D_FFN];
-#pragma HLS ARRAY_PARTITION variable=gate_local cyclic factor=FFN_ACT_TO_BUF_VEC_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=out_local  cyclic factor=FFN_ACT_TO_BUF_VEC_UNROLL dim=1
-
-    // Stage 1: load from in_buf into partitioned staging array
     for (int i = 0; i < D_FFN; ++i) {
-#pragma HLS UNROLL factor=FFN_ACT_TO_BUF_VEC_UNROLL
-        gate_local[i] = compute_buf::read_i16(in_buf, compute_buf::INFfnActLayout::GATE + (i * 2));
-    }
-
-    // Stage 2: parallel GELU — both arrays are cyclic-partitioned so
-    // FFN_ACT_TO_BUF_VEC_UNROLL independent GELU lanes can execute simultaneously
-    for (int i = 0; i < D_FFN; ++i) {
-#pragma HLS UNROLL factor=FFN_ACT_TO_BUF_VEC_UNROLL
-        out_local[i] = gelu_q511(gate_local[i]);
-    }
-
-    // Stage 3: write results back to out_buf
-    for (int i = 0; i < D_FFN; ++i) {
-#pragma HLS UNROLL factor=FFN_ACT_TO_BUF_VEC_UNROLL
-        compute_buf::write_i16(out_buf, compute_buf::OUTFfnActLayout::Y + (i * 2), out_local[i]);
+        const int16_t x = compute_buf::read_i16(in_buf, compute_buf::INFfnActLayout::GATE + (i * 2));
+        const int16_t y = gelu_q511(x);
+        compute_buf::write_i16(out_buf, compute_buf::OUTFfnActLayout::Y + (i * 2), y);
     }
 #ifndef __SYNTHESIS__
     trace_ffn_act_buffers(layer_idx, tile_idx, in_buf, out_buf);

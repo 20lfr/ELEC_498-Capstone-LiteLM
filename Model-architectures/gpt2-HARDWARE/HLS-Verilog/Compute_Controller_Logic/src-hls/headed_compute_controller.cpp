@@ -388,17 +388,9 @@ static void VALUE_SCALE_CLAMP_TO_BUF(
     uint8_t out_buf[head_buf::OUT_BUF_BYTES]
 ) {
 #pragma HLS INLINE
-    int32_t x_local[CONTEXT_LENGTH];
-#pragma HLS ARRAY_PARTITION variable=x_local cyclic factor=VALUE_SCALE_CLAMP_TO_BUF_CTX_UNROLL dim=1
-
     for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-#pragma HLS UNROLL factor=VALUE_SCALE_CLAMP_TO_BUF_CTX_UNROLL
-        x_local[t] = compute_buf::read_i32(in_buf, head_buf::INValueScaleLayout::X + (t * 4));
-    }
-
-    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-#pragma HLS UNROLL factor=VALUE_SCALE_CLAMP_TO_BUF_CTX_UNROLL
-        int64_t prod = static_cast<int64_t>(x_local[t]) * static_cast<int64_t>(ATTN_SCALE_Q15);
+        const int32_t x = compute_buf::read_i32(in_buf, head_buf::INValueScaleLayout::X + (t * 4));
+        int64_t prod = static_cast<int64_t>(x) * static_cast<int64_t>(ATTN_SCALE_Q15);
         int64_t rounded = prod + ((prod >= 0) ? (1LL << 14) : -(1LL << 14));
         int32_t scaled = static_cast<int32_t>(rounded >> 15);
         if (scaled > 32767) {
