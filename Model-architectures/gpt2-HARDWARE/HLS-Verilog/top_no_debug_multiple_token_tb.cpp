@@ -12,6 +12,7 @@
 
 // Number of autoregressive feedback steps to run after the prompt tokens.
 // Each step feeds the previous output token id back as the next input.
+// Set to 0 to disable. Has no effect in TB_DEBUG_MODE.
 static constexpr size_t NUM_FEEDBACK_TOKENS = 3;
 
 // Loads all tokens from stream_in.bin into a flat byte buffer.
@@ -141,6 +142,60 @@ static std::unordered_map<int32_t, std::string> load_tokenizer_vocab() {
     return id_to_token;
 }
 
+// Builds the stream_in payload for a given token at a given position:
+//   out_buf = wte[token_id] + wpe[position]  (saturating int8, element-wise)
+// embed_tokens.bin: D_VOCAB rows x STREAM_IN_BUF_BYTES int8 bytes (wte)
+// pos_embed.bin:    CONTEXT_LEN rows x STREAM_IN_BUF_BYTES int8 bytes (wpe)
+static bool build_token_stream_input(int32_t token_id, size_t position,
+                                     uint8_t out_buf[STREAM_IN_BUF_BYTES]) {
+    const std::string model_dir = tb_source_dir() + "/../model/";
+
+    // Load wte[token_id]
+    uint8_t wte[STREAM_IN_BUF_BYTES] = {};
+    {
+        const std::string path = model_dir + "embed_tokens.bin";
+        std::ifstream f(path.c_str(), std::ios::binary);
+        if (!f) {
+            std::fprintf(stderr, "ERROR: Could not open '%s'\n", path.c_str());
+            return false;
+        }
+        f.seekg(static_cast<std::streamoff>(token_id) *
+                static_cast<std::streamoff>(STREAM_IN_BUF_BYTES), std::ios::beg);
+        f.read(reinterpret_cast<char *>(wte), STREAM_IN_BUF_BYTES);
+        if (f.gcount() != static_cast<std::streamsize>(STREAM_IN_BUF_BYTES)) {
+            std::fprintf(stderr, "ERROR: Short read from embed_tokens.bin for token %d\n", token_id);
+            return false;
+        }
+    }
+
+    // Load wpe[position]
+    uint8_t wpe[STREAM_IN_BUF_BYTES] = {};
+    {
+        const std::string path = model_dir + "pos_embed.bin";
+        std::ifstream f(path.c_str(), std::ios::binary);
+        if (!f) {
+            std::fprintf(stderr, "ERROR: Could not open '%s'\n", path.c_str());
+            return false;
+        }
+        f.seekg(static_cast<std::streamoff>(position) *
+                static_cast<std::streamoff>(STREAM_IN_BUF_BYTES), std::ios::beg);
+        f.read(reinterpret_cast<char *>(wpe), STREAM_IN_BUF_BYTES);
+        if (f.gcount() != static_cast<std::streamsize>(STREAM_IN_BUF_BYTES)) {
+            std::fprintf(stderr, "ERROR: Short read from pos_embed.bin for position %zu\n", position);
+            return false;
+        }
+    }
+
+    // wte + wpe, saturating int8
+    for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
+        const int32_t sum = static_cast<int32_t>(static_cast<int8_t>(wte[i])) +
+                            static_cast<int32_t>(static_cast<int8_t>(wpe[i]));
+        const int32_t clamped = sum < -128 ? -128 : (sum > 127 ? 127 : sum);
+        out_buf[i] = static_cast<uint8_t>(static_cast<int8_t>(clamped));
+    }
+    return true;
+}
+
 int main() {
     const char *env_log_root = std::getenv("LITELM_LOG_ROOT");
     if (env_log_root == nullptr || env_log_root[0] == '\0') {
@@ -228,13 +283,14 @@ int main() {
             const size_t token_idx = run_stream_tokens + fb;
             const int32_t prev_id = output_tokens.back();
 
-            // Encode the previous output token id as little-endian into a
-            // zero-padded STREAM_IN_BUF_BYTES buffer.
+            // Build wte[prev_id] + wpe[token_idx] for the stream input.
             uint8_t feedback_buf[STREAM_IN_BUF_BYTES] = {};
-            feedback_buf[0] = static_cast<uint8_t>( prev_id        & 0xFF);
-            feedback_buf[1] = static_cast<uint8_t>((prev_id >>  8) & 0xFF);
-            feedback_buf[2] = static_cast<uint8_t>((prev_id >> 16) & 0xFF);
-            feedback_buf[3] = static_cast<uint8_t>((prev_id >> 24) & 0xFF);
+            if (!build_token_stream_input(prev_id, token_idx, feedback_buf)) {
+                std::fprintf(stderr,
+                             "ERROR: Failed to build stream input for token id %d at position %zu\n",
+                             prev_id, token_idx);
+                return 1;
+            }
 
             std::printf("\n[TEST] ===== Begin feedback token %zu (input id=%d) =====\n",
                         fb, prev_id);

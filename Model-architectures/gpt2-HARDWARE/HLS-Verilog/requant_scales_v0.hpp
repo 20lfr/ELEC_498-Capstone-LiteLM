@@ -87,14 +87,14 @@ constexpr int16_t FFN_W2_SCALE_Q15 = 0x4000; // 0.5 (unused)
 } // namespace requant_scales
 
 namespace requant_params {
-constexpr int32_t REQUANT_POST_LN0_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39 };
+constexpr int32_t REQUANT_POST_LN0_N_L[MODEL_LAYERS] = { 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41 };
 constexpr int32_t REQUANT_POST_OUTPROJ_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 38, 38 };
-constexpr int32_t REQUANT_POST_LN1_N_L[MODEL_LAYERS] = { 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39 };
+constexpr int32_t REQUANT_POST_LN1_N_L[MODEL_LAYERS] = { 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41, 41 };
 constexpr int32_t REQUANT_POST_FFN_N_L[MODEL_LAYERS] = { 43, 43, 43, 43, 43, 43, 42, 42, 42, 42, 42, 41 };
 constexpr int32_t REQUANT_FFN_W1_N_L[MODEL_LAYERS]   = { 34, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35 };
-constexpr int32_t REQUANT_Q_N_L[MODEL_LAYERS] = { 38, 38, 38, 38, 38, 38, 39, 39, 39, 39, 39, 39 };
-constexpr int32_t REQUANT_K_N_L[MODEL_LAYERS] = { 37, 38, 38, 38, 38, 38, 38, 39, 39, 39, 39, 39 };
-constexpr int32_t REQUANT_V_N_L[MODEL_LAYERS] = { 40, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 38 };
+constexpr int32_t REQUANT_Q_N_L[MODEL_LAYERS] = { 37, 37, 37, 37, 37, 37, 38, 38, 38, 38, 38, 38 };
+constexpr int32_t REQUANT_K_N_L[MODEL_LAYERS] = { 36, 37, 37, 37, 37, 37, 37, 38, 38, 38, 38, 38 };
+constexpr int32_t REQUANT_V_N_L[MODEL_LAYERS] = { 39, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 37 };
 constexpr int32_t REQUANT_HEAD_N_L[MODEL_LAYERS] = { 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45 };
 
 constexpr int32_t REQUANT_POST_LN0_M_L[MODEL_LAYERS] = {

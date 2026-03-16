@@ -309,6 +309,8 @@ static void MAC_I8I8_DISPATCH(
                 // real_scale = S_w1_eff[l] × 16; uses per-layer M/N requant
                 const int32_t M_w1 = requant_params::REQUANT_FFN_W1_M_L[layer];
                 const int32_t n_w1 = requant_params::REQUANT_FFN_W1_N_L[layer];
+                trace_M = M_w1;
+                trace_n = n_w1;
                 const int64_t prod = static_cast<int64_t>(accum[out]) * static_cast<int64_t>(M_w1);
                 const int64_t rounded = prod + ((prod >= 0) ? (1LL << (n_w1 - 1)) : -(1LL << (n_w1 - 1)));
                 int32_t scaled = static_cast<int32_t>(rounded >> n_w1);
