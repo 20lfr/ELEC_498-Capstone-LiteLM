@@ -24,7 +24,13 @@ struct ModelConfig {
     std::string tokenizer_vocab = "model/vocab.txt";
     std::string embeddings_file = "model/embed_tokens.bin";
     std::string pos_embeddings_file = "model/pos_embed.bin";
-
+    std::string model_dir = "model";
+    std::string embed_float_file = "model/embed_tokens_float.bin";
+    std::string pos_float_file = "model/pos_embed_float.bin";
+    std::string quant_scales_file = "model/quant_scales.json";
+    uint32_t num_heads = MODEL_NUM_HEADS;
+    uint32_t head_dim = MODEL_HEAD_DIM;
+    uint32_t intermediate_size = MODEL_INTERMEDIATE_SIZE;
     uint32_t vocab_size = MODEL_VOCAB_SIZE;
     uint32_t context_length = MODEL_CONTEXT_LENGTH;
     uint32_t hidden_size = MODEL_HIDDEN_SIZE;
@@ -119,8 +125,8 @@ struct MemoryLayout {
         return !((wq_offset | wk_offset | wv_offset | wo_offset | w1_offset |
                   w2_offset | wlogit_offset | wo_bias_offset | w1_bias_offset |
                   w2_bias_offset | ln0_gamma_offset | ln1_gamma_offset |
-                  final_norm_gamma_offset | ln0_eps_offset | ln1_eps_offset |
-                  final_norm_eps_offset | k_cache_offset | v_cache_offset |
+                  final_norm_gamma_offset |ln0_beta_offset | ln1_beta_offset | final_norm_beta_offset |
+                  ln0_eps_offset | ln1_eps_offset | final_norm_eps_offset | k_cache_offset | v_cache_offset |
                   input_offset | output_offset) &
                  0x3F);
     }

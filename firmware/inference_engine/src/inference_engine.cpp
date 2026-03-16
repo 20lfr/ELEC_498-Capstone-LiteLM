@@ -903,20 +903,12 @@ public:
         exec->setMemoryLayout(config.memory);
 
         // Float embeddings (falls back to int8 if files not found)
-        std::string model_dir = config.model.weights_file;
-        // Extract directory from weights file path
-        size_t last_slash = model_dir.find_last_of('/');
-        if (last_slash != std::string::npos)
-            model_dir = model_dir.substr(0, last_slash);
-        else
-            model_dir = ".";
-
         exec->loadFloatEmbeddings(
-            model_dir + "/embed_tokens_float.bin",
-            model_dir + "/pos_embed_float.bin");
+            config.model.float_embeddings_file,
+            config.model.float_pos_embeddings_file);
 
         // Load weight scales, biases, LN params for matmul mode
-        if (!exec->loadMatmulModeParams(model_dir)) {
+        if (!exec->loadMatmulModeParams(config.model.model_dir)) {
             LOG_WARN("Matmul mode params not loaded, hybrid mode unavailable");
         }
 
