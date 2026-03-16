@@ -4,6 +4,7 @@
 #include "logger.hpp"
 #include <cstdio>
 #include <cstdlib>
+#include <sstream>
 
 PLInterface::PLInterface(Logger *log, ErrorHandler *error, bool mock)
     : _ctrl_fd(-1), _ctrl_regs(nullptr), _ctrl_size(0), _addr_regs(nullptr),
@@ -321,7 +322,8 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
         _mock_regs[PLReg::IRQ_STATUS / 4] |= IRQ_INFER_DONE_BIT;
         return true;
     }
-    if (!waitIRQ(timeout_ms)) {
+    // Hardcode 10 minutes for inference wait
+    if (!waitIRQ(600000)) {
         _err->setError(
             ErrorCode::HARDWARE_TIMEOUT,
             "waitDone: IRQ timeout | HW error: " + getErrorCodeString() +
@@ -335,8 +337,13 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
                            " | MMU error: " + getMMUErrorSubcodeString());
         return false;
     }
-    if (testRegBits(PLReg::IRQ_STATUS, IRQ_INFER_DONE_BIT))
+    if (testRegBits(PLReg::IRQ_STATUS, IRQ_INFER_DONE_BIT)) {
+        if (_logger) {
+            _logger->debug("Inference finished. Triggering KV Cache Dump...");
+            _logger->debug(dumpKVCache());
+        }
         return true;
+    }
 
     _logger->warn("waitDone: spurious IRQ wakeup");
     return false;
@@ -501,27 +508,84 @@ bool PLInterface::clearIRQ() {
     return true;
 }
 
-// UIO interrupt wait: unmask -> poll -> acknowledge
 bool PLInterface::waitIRQ(uint32_t timeout_ms) {
     if (_mock_mode) {
         usleep(100000);
         return true;
     }
 
-    // Unmask UIO interrupt (required before each wait)
-    uint32_t unmask = 1;
-    if (write(_ctrl_fd, &unmask, sizeof(unmask)) != sizeof(unmask))
-        return false;
+    uint32_t elapsed_ms = 0;
+    const uint32_t poll_interval_ms = 5000;
 
-    struct pollfd pfd = {_ctrl_fd, POLLIN, 0};
-    int r = poll(&pfd, 1, timeout_ms);
-    if (r <= 0)
-        return false;
+    while (elapsed_ms < timeout_ms) {
+        // Unmask UIO interrupt (required before each wait)
+        uint32_t unmask = 1;
+        if (write(_ctrl_fd, &unmask, sizeof(unmask)) != sizeof(unmask))
+            return false;
 
-    // Acknowledge interrupt
-    uint32_t irq_count = 0;
-    read(_ctrl_fd, &irq_count, sizeof(irq_count));
-    return true;
+        struct pollfd pfd = {_ctrl_fd, POLLIN, 0};
+        uint32_t wait_now = std::min(poll_interval_ms, timeout_ms - elapsed_ms);
+        int r = poll(&pfd, 1, wait_now);
+
+        if (r > 0) {
+            // Acknowledge interrupt
+            uint32_t irq_count = 0;
+            read(_ctrl_fd, &irq_count, sizeof(irq_count));
+            return true;
+        } else if (r == 0) {
+            elapsed_ms += wait_now;
+            if (_logger) {
+                _logger->debug("waitIRQ: still waiting... " +
+                               getRegStats(true));
+            }
+        } else {
+            return false;
+        }
+    }
+
+    if (_logger) {
+        _logger->debug("waitIRQ: timeout after " + std::to_string(timeout_ms) +
+                       "ms");
+    }
+    return false;
+}
+
+std::string PLInterface::dumpKVCache() {
+    uint32_t token_pos = readReg(PLReg::TOKEN_POSITION);
+    uint32_t k_off = readReg(PLReg::K_CACHE_OFFSET);
+    uint32_t v_off = readReg(PLReg::V_CACHE_OFFSET);
+
+    std::stringstream ss;
+    ss << "[KV DUMP] K/V cache through token " << token_pos << "\n";
+
+    for (int l = 0; l < NUM_LAYERS; l++) {
+        for (int h = 0; h < NUM_HEADS; h++) {
+            for (uint32_t t = 0; t <= token_pos; t++) {
+                uint32_t k_base = k_off + l * STRIDE_KV_LAYER +
+                                  h * STRIDE_KV_HEAD + t * STRIDE_KV_TOKEN;
+                uint32_t v_base = v_off + l * STRIDE_KV_LAYER +
+                                  h * STRIDE_KV_HEAD + t * STRIDE_KV_TOKEN;
+
+                int8_t k_data[D_HEADS];
+                int8_t v_data[D_HEADS];
+
+                if (!readDDR(DmaBufType::BUF1, k_base, k_data, D_HEADS))
+                    continue;
+                if (!readDDR(DmaBufType::BUF1, v_base, v_data, D_HEADS))
+                    continue;
+
+                ss << "[KV DUMP] L" << l << " H" << h << " T" << t << " K:";
+                for (int i = 0; i < D_HEADS; i++)
+                    ss << " " << (int)k_data[i];
+                ss << " | V:";
+                for (int i = 0; i < D_HEADS; i++)
+                    ss << " " << (int)v_data[i];
+                ss << "\n";
+            }
+        }
+    }
+
+    return ss.str();
 }
 
 std::string PLInterface::getRegStats(bool compact) {
@@ -555,15 +619,9 @@ std::string PLInterface::getRegStats(bool compact) {
     if (compact) {
         snprintf(buf, sizeof(buf),
                  "status=0x%08X irq=0x%08X error=0x%08X mmu_sub=0x%08X "
-                 "layer=%u head=%u token=%u | cfg: L=%u DM=%u FFN=%u V=%u "
-                 "CTX=%u DH=%u H=%u | tiles: WO=%u W1=%u W2=%u LOG=%u QKV=%u "
-                 "BLK=%u AV=%u | stream: %s",
+                 "layer=%u head=%u token=%u | stream: %s",
                  status, irq_status, error_code, mmu_subcode, layer_idx,
-                 head_idx, token_idx, cfg_num_layers, cfg_d_model, cfg_d_ffn,
-                 cfg_d_vocab, cfg_context_length, cfg_d_heads, cfg_num_heads,
-                 cfg_d_tile_wo, cfg_d_tile_w1, cfg_d_tile_w2, cfg_d_tile_logit,
-                 cfg_d_head_tile_qkv, cfg_att_ctx_block,
-                 cfg_d_head_tile_att_value, streamStatusString().c_str());
+                 head_idx, token_idx, streamStatusString().c_str());
     } else {
         snprintf(buf, sizeof(buf),
                  "  Status:     0x%08X\n"
