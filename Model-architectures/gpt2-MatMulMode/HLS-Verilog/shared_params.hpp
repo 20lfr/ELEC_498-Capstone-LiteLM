@@ -131,16 +131,15 @@ constexpr int STREAM_IN_BUF_BYTES  = max2_constexpr(D_FFN, max2_constexpr(D_MODE
 //   Q/K/V: D_HEAD_TILE_QKV, OUT_PROJ: D_TILE_WO, FFN_W1: D_TILE_W1, FFN_W2: D_TILE_W2,
 //   LOGITS: D_TILE_LOGIT.
 //   (ATT_SCORES and ATT_VALUE removed — those ops are handled on PS.)
-constexpr int STREAM_OUT_BUF_BYTES =
-    max2_constexpr(D_HEAD_TILE_QKV,
-    max2_constexpr(D_TILE_WO,
-    max2_constexpr(D_TILE_W1,
-    max2_constexpr(D_TILE_W2,
-                   D_TILE_LOGIT)))) * 4;
 
 // On-chip accumulation buffer: holds the complete output activation for one
 // non-LOGITS invocation. Sized for the largest non-logits output = W1 = int32[D_FFN].
 constexpr int FULL_OUT_BUF_BYTES = D_FFN * 4;
+
+
+constexpr int STREAM_OUT_BUF_BYTES = FULL_OUT_BUF_BYTES;
+
+
 
 static_assert((D_MODEL % D_TILE_WO) == 0,            "D_MODEL must be divisible by D_TILE_WO");
 static_assert((D_FFN   % D_TILE_W1) == 0,            "D_FFN must be divisible by D_TILE_W1");
@@ -155,7 +154,7 @@ static_assert(((D_TILE_LOGIT * NUM_LOGIT_TILES) >= D_VOCAB), "D_TILE_LOGIT*NUM_L
 // Keep this aligned with the top-level DDR port element type.
 constexpr int NUM_ATT_CTX_BLOCKS      = CONTEXT_LENGTH / ATT_CTX_BLOCK;
 constexpr int NUM_HEAD_GROUPS         = (NUM_HEADS + HEADS_PARALLEL - 1) / HEADS_PARALLEL;
-constexpr int AXI_GMEM_WORD_BYTES     = 4;
+constexpr int AXI_GMEM_WORD_BYTES     = 64;  // 512-bit AXI4-Full bus (max width)
 constexpr int AXI_GMEM_WORD_BITS      = AXI_GMEM_WORD_BYTES * 8;
 
 static_assert((CONTEXT_LENGTH % ATT_CTX_BLOCK) == 0,

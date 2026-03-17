@@ -83,9 +83,7 @@
 //         bit 31~0 - ctrl_mem[895:864] (Read/Write)
 // 0x080 : Data signal of ctrl_mem
 //         bit 31~0 - ctrl_mem[927:896] (Read/Write)
-// 0x084 : Data signal of ctrl_mem
-//         bit 31~0 - ctrl_mem[959:928] (Read/Write)
-// 0x088 : reserved
+// 0x084 : reserved
 // 0x100 ~
 // 0x17f : Memory 'status_mem' (21 * 32b)
 //         Word n : bit [31:0] - status_mem[n]
@@ -96,9 +94,9 @@
 #define XTRANSFORMER_TOP_CONTROL_ADDR_IER             0x008
 #define XTRANSFORMER_TOP_CONTROL_ADDR_ISR             0x00c
 #define XTRANSFORMER_TOP_CONTROL_ADDR_CTRL_MEM_DATA   0x010
-#define XTRANSFORMER_TOP_CONTROL_BITS_CTRL_MEM_DATA   960
+#define XTRANSFORMER_TOP_CONTROL_BITS_CTRL_MEM_DATA   928
 #define XTRANSFORMER_TOP_CONTROL_ADDR_CTRL_MEM_DATA_  0x038
-#define XTRANSFORMER_TOP_CONTROL_BITS_CTRL_MEM_DATA   960
+#define XTRANSFORMER_TOP_CONTROL_BITS_CTRL_MEM_DATA   928
 #define XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_BASE 0x100
 #define XTRANSFORMER_TOP_CONTROL_ADDR_STATUS_MEM_HIGH 0x17f
 #define XTRANSFORMER_TOP_CONTROL_WIDTH_STATUS_MEM     32

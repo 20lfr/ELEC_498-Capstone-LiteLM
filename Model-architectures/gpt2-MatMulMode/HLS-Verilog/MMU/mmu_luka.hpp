@@ -169,8 +169,8 @@ void mmu_fsm(
     // ------------------------------------------------------------
     bool dma_ready,                     // [INPUT] External DMA can accept new command
     bool dma_done,                      // [INPUT] External DMA transfer complete pulse
-    const uint32_t dma_rx_buf[DMA_BUF_WORDS], // [INPUT] DMA read payload words (DDR -> MMU)
-    uint32_t dma_tx_buf[DMA_BUF_WORDS],       // [OUTPUT] DMA write payload words (MMU -> DDR)
+    const axi_gmem_word_t dma_rx_buf[DMA_BUF_WORDS], // [INPUT] DMA read payload (512-bit words, DDR -> MMU)
+    axi_gmem_word_t dma_tx_buf[DMA_BUF_WORDS],       // [OUTPUT] DMA write payload (512-bit words, MMU -> DDR)
     bool &dma_start,                    // [OUTPUT] Start DMA transfer
     uint64_t &dma_addr,                 // [OUTPUT] DMA address
     uint32_t &dma_len,                  // [OUTPUT] DMA length in bytes
@@ -178,14 +178,12 @@ void mmu_fsm(
     bool &dma_use_kv_cache,             // [OUTPUT] Select KV-cache AXI interface
 
     // ------------------------------------------------------------
-    // Stream ingress/egress buffers (beat capture on AXIS valid/ready)
+    // Stream ingress (beat capture on AXIS valid/ready)
     // ------------------------------------------------------------
-    bool axis_in_valid,                 // [INPUT] AXIS ingress valid
-    bool axis_in_last,                  // [INPUT] AXIS ingress TLAST
-    bool axis_in_ready,                 // [INPUT] Scheduler AXIS ingress ready flag
-    bool stream_start,                  // [INPUT] Scheduler pulse: begin stream-out payload
-    const uint8_t stream_in_buf[STREAM_IN_BUF_BYTES], // [INPUT] Constructed stream-in payload
-    uint8_t stream_out_buf[STREAM_OUT_BUF_BYTES],     // [OUTPUT] Stream-out payload produced by MMU
+    bool axis_in_valid,                         // [INPUT] AXIS ingress valid
+    bool axis_in_last,                          // [INPUT] AXIS ingress TLAST
+    bool axis_in_ready,                         // [INPUT] Scheduler AXIS ingress ready flag
+    ap_uint<AXI_GMEM_WORD_BITS> axis_in_data,   // [INPUT] Raw 512-bit beat payload
 
     // ------------------------------------------------------------
     // Main scheduler DMA requests

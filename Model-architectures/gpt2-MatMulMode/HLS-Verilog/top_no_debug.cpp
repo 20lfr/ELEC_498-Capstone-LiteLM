@@ -1,21 +1,18 @@
 #include "top_no_debug.hpp"
 #include "MMU/mmu_luka.hpp"
 
-// C-sim helper: access the local testbench DMA staging buffer as byte-addressable storage.
-static inline uint8_t dma_buf_get_byte_u32(const uint32_t *buf, uint32_t byte_idx) {
-    const uint32_t word = buf[byte_idx / static_cast<uint32_t>(sizeof(uint32_t))];
-    const uint32_t shift = (byte_idx % static_cast<uint32_t>(sizeof(uint32_t))) << 3;
-    return static_cast<uint8_t>((word >> shift) & 0xFFu);
+// Helper: extract one byte from a 512-bit AXI-Full DMA staging buffer.
+static inline uint8_t dma_buf_get_byte(const axi_gmem_word_t *buf, uint32_t byte_idx) {
+    const uint32_t word_idx = byte_idx / static_cast<uint32_t>(AXI_GMEM_WORD_BYTES);
+    const uint32_t lane     = byte_idx % static_cast<uint32_t>(AXI_GMEM_WORD_BYTES);
+    return static_cast<uint8_t>(buf[word_idx].range(lane * 8u + 7u, lane * 8u));
 }
 
-// C-sim helper: write a single byte into the local testbench DMA staging buffer.
-static inline void dma_buf_set_byte_u32(uint32_t *buf, uint32_t byte_idx, uint8_t value) {
-    const uint32_t word_idx = byte_idx / static_cast<uint32_t>(sizeof(uint32_t));
-    const uint32_t shift = (byte_idx % static_cast<uint32_t>(sizeof(uint32_t))) << 3;
-    uint32_t word = buf[word_idx];
-    word &= ~(0xFFu << shift);
-    word |= (static_cast<uint32_t>(value) << shift);
-    buf[word_idx] = word;
+// Helper: write one byte into a 512-bit AXI-Full DMA staging buffer.
+static inline void dma_buf_set_byte(axi_gmem_word_t *buf, uint32_t byte_idx, uint8_t value) {
+    const uint32_t word_idx = byte_idx / static_cast<uint32_t>(AXI_GMEM_WORD_BYTES);
+    const uint32_t lane     = byte_idx % static_cast<uint32_t>(AXI_GMEM_WORD_BYTES);
+    buf[word_idx].range(lane * 8u + 7u, lane * 8u) = static_cast<ap_uint<8>>(value);
 }
 
 // Shared helper: extract one byte lane from an AXI-Full word.
@@ -29,7 +26,7 @@ static inline uint8_t gmem_get_byte(const axi_gmem_word_t &word, uint32_t lane) 
 static inline void gmem_set_byte(axi_gmem_word_t &word, uint32_t lane, uint8_t value) {
     const uint32_t hi = ((lane + 1u) * 8u) - 1u;
     const uint32_t lo = lane * 8u;
-    word.range(hi, lo) = static_cast<ap_uint<8> >(value);
+    word.range(hi, lo) = static_cast<ap_uint<8>>(value);
 }
 
 #ifndef __SYNTHESIS__
@@ -44,8 +41,8 @@ static inline uint64_t map_csim_ddr_addr(uint64_t byte_addr, const ControlMemSpa
 // Production top-level wrapper with reduced debug ports.
 void transformer_top(
     // AXI4-STREAM INPUT/OUTPUT
-    hls::stream<axis8_t> &s_axis_in,
-    hls::stream<axis8_t> &m_axis_out,
+    hls::stream<axis512_t> &s_axis_in,
+    hls::stream<axis512_t> &m_axis_out,
     volatile axi_gmem_word_t *ddr_mem,
     volatile axi_gmem_word_t *kv_cache,
 
@@ -67,10 +64,9 @@ void transformer_top(
 #pragma HLS INTERFACE s_axilite port=return bundle=control
 #pragma HLS INTERFACE ap_none port=irq_ps
 
-    bool done                   = false;    // Scheduler done flag
+    bool done                   = false;
     bool scheduler_error        = false;
     bool compute_error          = false;
-
 
     static ControlMemInterface ctrl_mem_interface;
     StatusMemSpace &active_status_mem = ctrl_mem_interface.get_mutable_status();
@@ -86,15 +82,17 @@ void transformer_top(
 #pragma HLS BIND_STORAGE variable=mmu_in_buf type=ram_t2p impl=bram
     static uint8_t          mmu_out_buf[compute_buf::OUT_BUF_BYTES];
 #pragma HLS BIND_STORAGE variable=mmu_out_buf type=ram_t2p impl=bram
-    static uint8_t          stream_in_buf_local[STREAM_IN_BUF_BYTES];
-#pragma HLS BIND_STORAGE variable=stream_in_buf_local type=ram_t2p impl=bram
-// Per-invocation full activation accumulation buffer.
-    static uint8_t          full_out_buf[FULL_OUT_BUF_BYTES];
-#pragma HLS BIND_STORAGE variable=full_out_buf type=ram_t2p impl=bram
-    static uint32_t         dma_rx_buf_local[TOP_DMA_BUF_WORDS];
+
+    // Per-invocation output activation buffer (tile outputs accumulated here, then streamed out).
+    static uint8_t          stream_out_buf_local[STREAM_OUT_BUF_BYTES];
+#pragma HLS BIND_STORAGE variable=stream_out_buf_local type=ram_t2p impl=bram
+
+    // 512-bit AXI-Full DMA staging buffers.
+    static axi_gmem_word_t  dma_rx_buf_local[TOP_DMA_BUF_WORDS];
 #pragma HLS BIND_STORAGE variable=dma_rx_buf_local type=ram_t2p impl=uram
-    static uint32_t         dma_tx_buf_local[TOP_DMA_BUF_WORDS];
+    static axi_gmem_word_t  dma_tx_buf_local[TOP_DMA_BUF_WORDS];
 #pragma HLS BIND_STORAGE variable=dma_tx_buf_local type=ram_t2p impl=uram
+
     static bool             dma_ready_local                = true;
     static bool             dma_done_local                 = false;
     static bool             dma_busy_local                 = false;
@@ -112,12 +110,10 @@ void transformer_top(
     static bool             stream_done_local              = false;
     static bool             stream_done_pulse_local        = false;
     static bool             stream_tx_active_local         = false;
-    static uint32_t         stream_tx_index_local          = 0;    // u32: up to FULL_OUT_BUF_BYTES-1
-    static uint32_t         stream_tx_len_local            = 0;    // bytes to emit this TX
-    static uint32_t         stream_in_counter              = 0;
+    static uint32_t         stream_tx_index_local          = 0;
+    static uint32_t         stream_tx_len_local            = 0;
     static bool             token_loaded_complete_local    = false;
 
-    
     static uint32_t         full_out_write_offset          = 0;
 
     // Tile writeback handshake
@@ -141,7 +137,7 @@ void transformer_top(
     static int32_t          debug_sum_value_local         = 0;
     static bool             prev_start                    = false;
     static uint32_t         scheduler_layer_index_local   = 0;
-    
+
     // Active-low reset derived from control register.
     const bool reset_n = (ctrl_mem.control & CTRL_RESETN_BIT) != 0u;
     const bool reset = !reset_n;
@@ -152,7 +148,7 @@ void transformer_top(
         ((active_status_mem.irq_status & IRQ_ERROR_BIT) != 0u) ||
         (active_status_mem.error_code != ERR_NONE);
     const uint16_t token_position_local = static_cast<uint16_t>(ctrl_mem.token_position);
-        
+
     // Reset once at boot, then re-arm run-local state on each new start pulse.
     if (reset || start_edge) {
         compute_ready = true;
@@ -192,7 +188,6 @@ void transformer_top(
         stream_tx_active_local = false;
         stream_tx_index_local = 0;
         stream_tx_len_local = 0;
-        stream_in_counter = 0;
         token_loaded_complete_local = false;
         full_out_write_offset = 0;
         tile_wb_done_local = false;
@@ -208,12 +203,9 @@ void transformer_top(
         for (int i = 0; i < compute_buf::OUT_BUF_BYTES; ++i) {
             mmu_out_buf[i] = 0;
         }
-        for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
-            stream_in_buf_local[i] = 0;
-        }
         for (int i = 0; i < TOP_DMA_BUF_WORDS; ++i) {
-            dma_rx_buf_local[i] = 0;
-            dma_tx_buf_local[i] = 0;
+            dma_rx_buf_local[i] = axi_gmem_word_t(0);
+            dma_tx_buf_local[i] = axi_gmem_word_t(0);
         }
     }
     if (reset) {
@@ -222,23 +214,19 @@ void transformer_top(
         prev_start = start_en;
     }
 
-    const bool axis_buf_full = (stream_in_counter >= static_cast<uint32_t>(STREAM_IN_BUF_BYTES));
-    const bool axis_in_ready_wire = (reset_n && (state_local == S_STREAM_IN) && !axis_buf_full && !token_loaded_complete_local);
+    // AXI4-Stream ingress: read one 512-bit beat when the scheduler is in S_STREAM_IN state.
+    // Raw beat data is passed to mmu_fsm which unpacks it 64 bytes at a time into stream_in_capture_buf.
+    const bool axis_in_ready_wire = (reset_n && (state_local == S_STREAM_IN) && !token_loaded_complete_local);
     bool axis_in_valid = false;
     bool axis_in_last = false;
-    bool axis_is_empty = s_axis_in.empty();
-    if (axis_in_ready_wire && !axis_is_empty) {
-        axis8_t beat = s_axis_in.read();
+    ap_uint<AXI_GMEM_WORD_BITS> axis_in_data = 0;
+    if (axis_in_ready_wire && !s_axis_in.empty()) {
+        axis512_t beat = s_axis_in.read();
         axis_in_valid = true;
-        axis_in_last = (beat.last != 0);
-
-        if (stream_in_counter < static_cast<uint32_t>(STREAM_IN_BUF_BYTES)) {
-            stream_in_buf_local[stream_in_counter] = static_cast<uint8_t>(beat.data);
-            stream_in_counter++;
-        }
+        axis_in_last  = (beat.last != 0);
+        axis_in_data  = beat.data;
         if (beat.last != 0) {
             token_loaded_complete_local = true;
-            stream_in_counter = 0;
         }
     }
 
@@ -278,13 +266,13 @@ void transformer_top(
         latched_op = static_cast<uint8_t>(compute_instruction & 0xFu);
     }
 
-    // Tile writeback: copy one tile's results from mmu_out_buf into full_out_buf at offset.
+    // Tile writeback: copy one tile's results from mmu_out_buf into stream_out_buf_local at offset.
     tile_wb_done_local = false;
     if (tile_wb_start_local) {
         const uint32_t tile_bytes = tile_out_bytes_for_op(latched_op);
         for (uint32_t i = 0; i < tile_bytes; ++i) {
 #pragma HLS PIPELINE II=1
-            full_out_buf[full_out_write_offset + i] = mmu_out_buf[i];
+            stream_out_buf_local[full_out_write_offset + i] = mmu_out_buf[i];
         }
         full_out_write_offset += tile_bytes;
         tile_wb_done_local = true;
@@ -355,9 +343,7 @@ void transformer_top(
         axis_in_valid,
         axis_in_last,
         axis_in_ready_wire,
-        stream_start_local,
-        stream_in_buf_local,
-        stream_out_buf_local,
+        axis_in_data,
         scheduler_wl_start,
         scheduler_wl_instruction,
         mmu_req_ready_wire,
@@ -385,9 +371,11 @@ void transformer_top(
         } else {
             const uint32_t bytes = dma_len_latched_local;
             if (!dma_is_write_latched_local) {
-                const uint32_t rx_words = (bytes + 3u) >> 2;
+                const uint32_t rx_words =
+                    (bytes + static_cast<uint32_t>(AXI_GMEM_WORD_BYTES) - 1u)
+                    / static_cast<uint32_t>(AXI_GMEM_WORD_BYTES);
                 for (uint32_t i = 0; i < rx_words; ++i) {
-                    dma_rx_buf_local[i] = 0;
+                    dma_rx_buf_local[i] = axi_gmem_word_t(0);
                 }
             }
             for (uint32_t i = 0; i < bytes; ++i) {
@@ -405,18 +393,18 @@ void transformer_top(
                 if (dma_use_kv_cache_latched_local) {
                     axi_gmem_word_t beat = kv_cache[idx];
                     if (dma_is_write_latched_local) {
-                        gmem_set_byte(beat, lane, dma_buf_get_byte_u32(dma_tx_buf_local, i));
+                        gmem_set_byte(beat, lane, dma_buf_get_byte(dma_tx_buf_local, i));
                         kv_cache[idx] = beat;
                     } else {
-                        dma_buf_set_byte_u32(dma_rx_buf_local, i, gmem_get_byte(beat, lane));
+                        dma_buf_set_byte(dma_rx_buf_local, i, gmem_get_byte(beat, lane));
                     }
                 } else {
                     axi_gmem_word_t beat = ddr_mem[idx];
                     if (dma_is_write_latched_local) {
-                        gmem_set_byte(beat, lane, dma_buf_get_byte_u32(dma_tx_buf_local, i));
+                        gmem_set_byte(beat, lane, dma_buf_get_byte(dma_tx_buf_local, i));
                         ddr_mem[idx] = beat;
                     } else {
-                        dma_buf_set_byte_u32(dma_rx_buf_local, i, gmem_get_byte(beat, lane));
+                        dma_buf_set_byte(dma_rx_buf_local, i, gmem_get_byte(beat, lane));
                     }
                 }
             }
@@ -426,27 +414,43 @@ void transformer_top(
     } else {
         dma_done_local = false;
     }
+
     if (!stream_tx_active_local && stream_start_local) {
         stream_tx_active_local = true;
         stream_tx_index_local  = 0;
         stream_tx_len_local    = full_out_bytes_for_op(latched_op);
     }
+    // AXI4-Stream egress: pack up to 64 bytes per 512-bit beat.
     if (stream_tx_active_local) {
-        axis8_t out_beat{};
-        out_beat.data = full_out_buf[stream_tx_index_local];
-        out_beat.last = (stream_tx_index_local == stream_tx_len_local - 1u) ? 1 : 0;
-        out_beat.keep = 1;
-        out_beat.strb = 1;
+        axis512_t out_beat{};
+        out_beat.data = ap_uint<AXI_GMEM_WORD_BITS>(0);
+        out_beat.keep = ap_uint<AXI_GMEM_WORD_BYTES>(0);
+        out_beat.strb = ap_uint<AXI_GMEM_WORD_BYTES>(0);
+
+        const uint32_t bytes_remaining = stream_tx_len_local - stream_tx_index_local;
+        const uint32_t this_beat_bytes =
+            (bytes_remaining > static_cast<uint32_t>(AXI_GMEM_WORD_BYTES))
+            ? static_cast<uint32_t>(AXI_GMEM_WORD_BYTES)
+            : bytes_remaining;
+
+        for (uint32_t b = 0; b < static_cast<uint32_t>(AXI_GMEM_WORD_BYTES); ++b) {
+#pragma HLS UNROLL
+            if (b < this_beat_bytes) {
+                out_beat.data.range(b * 8u + 7u, b * 8u) =
+                    static_cast<ap_uint<8>>(stream_out_buf_local[stream_tx_index_local + b]);
+                out_beat.keep[b] = 1;
+                out_beat.strb[b] = 1;
+            }
+        }
+        const bool is_last = (stream_tx_index_local + this_beat_bytes >= stream_tx_len_local);
+        out_beat.last = is_last ? ap_uint<1>(1) : ap_uint<1>(0);
+
         if (m_axis_out.write_nb(out_beat)) {
-            if (stream_tx_index_local == stream_tx_len_local - 1u) {
-                // End of this tile's TX — stop regardless of TLAST.
-                // TLAST controls the AXIS last flag only; stream_done always fires
-                // so the scheduler can advance to the next tile (or declare done).
+            stream_tx_index_local += this_beat_bytes;
+            if (is_last) {
                 stream_tx_active_local  = false;
                 stream_done_pulse_local = true;
                 stream_tx_index_local   = 0;
-            } else {
-                stream_tx_index_local   = stream_tx_index_local + 1u;
             }
         }
     }

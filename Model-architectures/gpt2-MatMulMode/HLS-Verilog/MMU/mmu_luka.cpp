@@ -93,7 +93,6 @@ static uint64_t prev_main_mem_op = 0;
 static bool stream_in_capturing = false;
 static uint16_t stream_in_write_idx = 0;
 static uint8_t stream_in_capture_buf[STREAM_IN_BUF_BYTES];
-static bool prev_stream_start = false;
 static bool prev_ctrl_start = false;
 static int g_current_layer = -1;
 
@@ -122,30 +121,27 @@ static inline int decode_s8(uint32_t v) {
 //   bits [23:16] = head  (8-bit signed via decode_s8, covers -1..11)
 //   bits [55:24] = tile  (32-bit unsigned, covers 0..12799 and beyond)
 
-static inline uint8_t dma_word_get_byte(const uint32_t *buf, uint32_t byte_idx) {
-#pragma HLS INLINE
-    const uint32_t word = buf[byte_idx / static_cast<uint32_t>(AXI_GMEM_WORD_BYTES)];
-    const uint32_t shift = (byte_idx % static_cast<uint32_t>(AXI_GMEM_WORD_BYTES)) << 3;
-    return static_cast<uint8_t>((word >> shift) & 0xFFu);
-}
-
-static inline void dma_word_set_byte(uint32_t *buf, uint32_t byte_idx, uint8_t value) {
+static inline uint8_t dma_word_get_byte(const axi_gmem_word_t *buf, uint32_t byte_idx) {
 #pragma HLS INLINE
     const uint32_t word_idx = byte_idx / static_cast<uint32_t>(AXI_GMEM_WORD_BYTES);
-    const uint32_t shift = (byte_idx % static_cast<uint32_t>(AXI_GMEM_WORD_BYTES)) << 3;
-    uint32_t word = buf[word_idx];
-    word &= ~(0xFFu << shift);
-    word |= (static_cast<uint32_t>(value) << shift);
-    buf[word_idx] = word;
+    const uint32_t lane     = byte_idx % static_cast<uint32_t>(AXI_GMEM_WORD_BYTES);
+    return static_cast<uint8_t>(buf[word_idx].range(lane * 8u + 7u, lane * 8u));
 }
 
-static inline void dma_word_clear_bytes(uint32_t *buf, uint32_t bytes) {
+static inline void dma_word_set_byte(axi_gmem_word_t *buf, uint32_t byte_idx, uint8_t value) {
+#pragma HLS INLINE
+    const uint32_t word_idx = byte_idx / static_cast<uint32_t>(AXI_GMEM_WORD_BYTES);
+    const uint32_t lane     = byte_idx % static_cast<uint32_t>(AXI_GMEM_WORD_BYTES);
+    buf[word_idx].range(lane * 8u + 7u, lane * 8u) = static_cast<ap_uint<8>>(value);
+}
+
+static inline void dma_word_clear_bytes(axi_gmem_word_t *buf, uint32_t bytes) {
     const uint32_t words =
-        (bytes + static_cast<uint32_t>(AXI_GMEM_WORD_BYTES - 1))
+        (bytes + static_cast<uint32_t>(AXI_GMEM_WORD_BYTES) - 1u)
         / static_cast<uint32_t>(AXI_GMEM_WORD_BYTES);
     for (uint32_t i = 0; i < words; ++i) {
 // #pragma HLS PIPELINE II=1
-        buf[i] = 0;
+        buf[i] = axi_gmem_word_t(0);
     }
 }
 
@@ -1940,21 +1936,19 @@ void mmu_fsm(
     // External DMA control/payload
     bool            dma_ready,                      // [INPUT] DMA command interface ready
     bool            dma_done,                       // [INPUT] DMA completion pulse
-    const uint32_t  dma_rx_buf[DMA_BUF_WORDS],      // [INPUT] DMA read payload words into MMU
-    uint32_t        dma_tx_buf[DMA_BUF_WORDS],      // [OUTPUT] DMA write payload words from MMU
+    const axi_gmem_word_t dma_rx_buf[DMA_BUF_WORDS],  // [INPUT] DMA read payload (512-bit words, DDR -> MMU)
+    axi_gmem_word_t       dma_tx_buf[DMA_BUF_WORDS],  // [OUTPUT] DMA write payload (512-bit words, MMU -> DDR)
     bool            &dma_start,                     // [OUTPUT] Start DMA transfer
     uint64_t        &dma_addr,                      // [OUTPUT] DMA address
     uint32_t        &dma_len,                       // [OUTPUT] DMA transfer length
     bool            &dma_is_write,                  // [OUTPUT] DMA direction (1=MMU->DDR)
     bool            &dma_use_kv_cache,              // [OUTPUT] Select KV-cache AXI interface
 
-    // Stream ingress/egress interfaces
-    bool            axis_in_valid,                  // [INPUT] AXIS ingress valid
-    bool            axis_in_last,                   // [INPUT] AXIS ingress TLAST
-    bool            axis_in_ready,                  // [INPUT] Scheduler AXIS ingress ready flag
-    bool            stream_start,                   // [INPUT] Scheduler pulse: begin stream-out payload
-    const uint8_t   stream_in_buf[STREAM_IN_BUF_BYTES], // [INPUT] Constructed stream-in payload
-    uint8_t         stream_out_buf[STREAM_OUT_BUF_BYTES], // [OUTPUT] Stream-out payload produced by MMU
+    // Stream ingress (beat capture on AXIS valid/ready)
+    bool            axis_in_valid,                         // [INPUT] AXIS ingress valid
+    bool            axis_in_last,                          // [INPUT] AXIS ingress TLAST
+    bool            axis_in_ready,                         // [INPUT] Scheduler AXIS ingress ready flag
+    ap_uint<AXI_GMEM_WORD_BITS> axis_in_data,              // [INPUT] Raw 512-bit beat payload
 
     // Main scheduler DMA request (non-headed path)
     bool            mmu_dma_req_start,              // [INPUT] Main scheduler DMA request valid
@@ -2039,7 +2033,6 @@ void mmu_fsm(
 // #pragma HLS PIPELINE II=1
             main_x_slot[i] = 0;
         }
-        prev_stream_start = false;
         prev_ctrl_start = false;
         for (int i = 0; i < URAM_BANKS; ++i) {
             bank_offsets[i] = 0;
@@ -2083,6 +2076,8 @@ void mmu_fsm(
     }
     prev_ctrl_start = ctrl_start;
 
+    // Stream ingress: unpack AXI_GMEM_WORD_BYTES bytes from each 512-bit beat into
+    // stream_in_capture_buf. On TLAST the full buffer is committed to main_x_slot.
     const bool axis_in_handshake = reset_n && axis_in_ready && axis_in_valid;
     if (axis_in_handshake) {
         if (!stream_in_capturing) {
@@ -2090,17 +2085,17 @@ void mmu_fsm(
             stream_in_write_idx = 0;
         }
 
-        if (stream_in_write_idx < STREAM_IN_BUF_BYTES) {
-            stream_in_capture_buf[stream_in_write_idx] = stream_in_buf[stream_in_write_idx];
-            ++stream_in_write_idx;
-        } else {
-            mmu_set_invalid(ERR_MMU_INVALID);
-            stream_in_capturing = false;
-            stream_in_write_idx = 0;
+        for (uint32_t b = 0; b < static_cast<uint32_t>(AXI_GMEM_WORD_BYTES); ++b) {
+#pragma HLS UNROLL
+            if (stream_in_write_idx < static_cast<uint16_t>(STREAM_IN_BUF_BYTES)) {
+                stream_in_capture_buf[stream_in_write_idx] =
+                    static_cast<uint8_t>((axis_in_data >> (b * 8u)) & ap_uint<AXI_GMEM_WORD_BITS>(0xFFu));
+                ++stream_in_write_idx;
+            }
         }
 
         if (axis_in_last) {
-            if (stream_in_write_idx == STREAM_IN_BUF_BYTES) {
+            if (stream_in_write_idx >= static_cast<uint16_t>(STREAM_IN_BUF_BYTES)) {
                 if (!write_main_x_slot_from_buf(
                         stream_in_capture_buf,
                         static_cast<uint32_t>(STREAM_IN_BUF_BYTES))) {
@@ -2114,21 +2109,6 @@ void mmu_fsm(
             stream_in_write_idx = 0;
         }
     }
-
-    const bool stream_start_edge = reset_n && stream_start && !prev_stream_start;
-    if (stream_start_edge) {
-        // MatMul mode: stream-out copies the raw int32 accumulator results
-        // directly from out_buf. The compute controller wrote them there
-        // in MEM_WRITEBACK. STREAM_OUT_BUF_BYTES = ATT_CTX_BLOCK*4 = 256
-        // bytes covers the largest op (ATT_SCORES). Ops that produce fewer
-        // bytes write only to lower offsets; the PS reads exactly as many
-        // bytes as the issued instruction requires.
-        for (int i = 0; i < STREAM_OUT_BUF_BYTES; ++i) {
-#pragma HLS UNROLL factor=8
-            stream_out_buf[i] = out_buf[i];
-        }
-    }
-    prev_stream_start = stream_start;
 
     // Enqueue main DMA request.
     // Level handshake: MMU accepts when wl_start is high and holds wl_accept until wl_start drops.

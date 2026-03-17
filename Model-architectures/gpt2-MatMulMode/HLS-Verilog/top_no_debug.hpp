@@ -13,12 +13,12 @@ constexpr int TOP_DMA_BUF_WORDS = TOP_DMA_BUF_BYTES / AXI_GMEM_WORD_BYTES;
 static_assert((TOP_DMA_BUF_BYTES % AXI_GMEM_WORD_BYTES) == 0, "TOP_DMA_BUF_BYTES must be word-aligned");
 static_assert(static_cast<int>(sizeof(axi_gmem_word_t)) == AXI_GMEM_WORD_BYTES,
               "axi_gmem_word_t width must match AXI_GMEM_WORD_BYTES");
-using axis8_t = ap_axiu<8, 0, 0, 0>;
+using axis512_t = ap_axiu<512, 0, 0, 0>;  // 512-bit AXI4-Stream (max width)
 
 // Top-level wrapper prototype (reduced debug ports)
 void transformer_top(
-    hls::stream<axis8_t> &s_axis_in,    // [INPUT]  AXI4-Stream ingress
-    hls::stream<axis8_t> &m_axis_out,   // [OUTPUT] AXI4-Stream egress
+    hls::stream<axis512_t> &s_axis_in,    // [INPUT]  AXI4-Stream ingress
+    hls::stream<axis512_t> &m_axis_out,   // [OUTPUT] AXI4-Stream egress
     volatile axi_gmem_word_t *ddr_mem,  // [BOTH]   AXI4-Full external memory
     volatile axi_gmem_word_t *kv_cache, // [BOTH]   AXI4-Full KV cache memory
     ControlMemSpace ctrl_mem,           // [INPUT]  Control memory interface

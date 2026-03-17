@@ -386,8 +386,8 @@ struct MatmulInvocationResult {
 };
 
 static MatmulInvocationResult run_one_matmul(
-    hls::stream<axis8_t>  &s_axis,
-    hls::stream<axis8_t>  &m_axis,
+    hls::stream<axis512_t>  &s_axis,
+    hls::stream<axis512_t>  &m_axis,
     axi_gmem_word_t       *ddr_mem,
     axi_gmem_word_t       *kv_cache,
     std::ofstream         &out_file,
@@ -429,16 +429,29 @@ static MatmulInvocationResult run_one_matmul(
     // -- Phase 3: Clear start -------------------------------------------------
     ctrl_mem.control = CTRL_RESETN_BIT;
 
-    // Pre-load AXIS stream: meaningful bytes up to act_len, then zero-pad up to
-    // STREAM_IN_BUF_BYTES. TLAST is asserted on the final beat (MMU requires
-    // STREAM_IN_BUF_BYTES bytes per token).
-    for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
-        axis8_t beat{};
-        beat.data = (i < act_len) ? static_cast<ap_uint<8>>(act[i]) : ap_uint<8>(0);
-        beat.keep = 1;
-        beat.strb = 1;
-        beat.last = (i == (STREAM_IN_BUF_BYTES - 1)) ? ap_uint<1>(1) : ap_uint<1>(0);
-        s_axis.write(beat);
+    // Pre-load AXIS stream: pack AXI_GMEM_WORD_BYTES (64) bytes per 512-bit beat.
+    // Meaningful bytes up to act_len, zero-padded to STREAM_IN_BUF_BYTES.
+    // TLAST is asserted on the final beat.
+    {
+        const int num_beats = (STREAM_IN_BUF_BYTES + AXI_GMEM_WORD_BYTES - 1) / AXI_GMEM_WORD_BYTES;
+        for (int b = 0; b < num_beats; ++b) {
+            axis512_t beat{};
+            beat.data = ap_uint<AXI_GMEM_WORD_BITS>(0);
+            beat.keep = ap_uint<AXI_GMEM_WORD_BYTES>(0);
+            beat.strb = ap_uint<AXI_GMEM_WORD_BYTES>(0);
+            const int base = b * AXI_GMEM_WORD_BYTES;
+            for (int j = 0; j < AXI_GMEM_WORD_BYTES; ++j) {
+                const int byte_idx = base + j;
+                if (byte_idx < STREAM_IN_BUF_BYTES) {
+                    const uint8_t val = (byte_idx < act_len) ? act[byte_idx] : 0u;
+                    beat.data.range(j * 8 + 7, j * 8) = static_cast<ap_uint<8>>(val);
+                    beat.keep[j] = 1;
+                    beat.strb[j] = 1;
+                }
+            }
+            beat.last = (b == num_beats - 1) ? ap_uint<1>(1) : ap_uint<1>(0);
+            s_axis.write(beat);
+        }
     }
 
     // -- Main cycle loop ------------------------------------------------------
@@ -458,11 +471,14 @@ static MatmulInvocationResult run_one_matmul(
     for (int cycle = 0; cycle < max_cycles; ++cycle) {
         transformer_top(s_axis, m_axis, ddr_mem, kv_cache, ctrl_mem, status_mem, irq_ps, dbg_state);
 
-        // Drain stream-out
-        axis8_t beat_out{};
+        // Drain stream-out (unpack 512-bit beats, extract enabled byte lanes)
+        axis512_t beat_out{};
         while (m_axis.read_nb(beat_out)) {
-            if (burst_count < FULL_OUT_BUF_BYTES) {
-                burst_buf[burst_count++] = static_cast<uint8_t>(beat_out.data);
+            for (int j = 0; j < AXI_GMEM_WORD_BYTES; ++j) {
+                if (beat_out.keep[j] && burst_count < FULL_OUT_BUF_BYTES) {
+                    burst_buf[burst_count++] =
+                        static_cast<uint8_t>(beat_out.data.range(j * 8 + 7, j * 8));
+                }
             }
             if (beat_out.last != 0) {
                 // Single TLAST per invocation carries all tiles concatenated.
@@ -668,8 +684,8 @@ int main()
     tprintf("=========================================\n\n");
 
     // --- AXIS streams (persistent across invocations) ----------------------
-    hls::stream<axis8_t> s_axis("s_axis_in");
-    hls::stream<axis8_t> m_axis("m_axis_out");
+    hls::stream<axis512_t> s_axis("s_axis_in");
+    hls::stream<axis512_t> m_axis("m_axis_out");
 
     // --- Iteration limits --------------------------------------------------
     // Default sweep is intentionally small for fast bring-up:

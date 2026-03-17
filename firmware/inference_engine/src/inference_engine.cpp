@@ -661,43 +661,17 @@ bool executeMatmul(ComputeOp op, uint32_t layer, uint32_t head,
                        uint32_t out_len) {
         mm_calls++;
 
-        uint32_t tile_end = 0;
-        uint32_t tile_out_elems = 0;
-        switch (op) {
-        case ComputeOp::CMP_Q:
-        case ComputeOp::CMP_K:
-        case ComputeOp::CMP_V:
-            tile_end = NUM_QKV_HEAD_TILES;
-            tile_out_elems = D_HEAD_TILE_QKV;
-            break;
-        case ComputeOp::CMP_OUT_PROJ:
-            tile_end = NUM_WO_TILES;
-            tile_out_elems = D_TILE_WO;
-            break;
-        case ComputeOp::CMP_FFN_W1:
-            tile_end = NUM_W1_TILES;
-            tile_out_elems = D_TILE_W1;
-            break;
-        case ComputeOp::CMP_FFN_W2:
-            tile_end = NUM_W2_TILES;
-            tile_out_elems = D_TILE_W2;
-            break;
-        case ComputeOp::CMP_LOGITS:
-            tile_end = NUM_LOGIT_TILES;
-            tile_out_elems = D_TILE_LOGIT;
-            break;
-        default:
+        const size_t recv_bytes =
+            static_cast<size_t>(full_out_bytes_for_op(static_cast<uint8_t>(op)));
+        if (recv_bytes == 0) {
             LOG_ERROR("[MM] invalid op " + std::to_string(static_cast<int>(op)));
             return false;
         }
 
-        const size_t recv_bytes =
-            static_cast<size_t>(full_out_bytes_for_op(static_cast<uint8_t>(op)));
-
-        const uint32_t expected_total = tile_end * tile_out_elems;
+        const uint32_t expected_total = static_cast<uint32_t>(recv_bytes / sizeof(int32_t));
         if (out_len > expected_total) {
             LOG_ERROR("[MM] out_len=" + std::to_string(out_len) +
-                      " exceeds tile output=" + std::to_string(expected_total));
+                      " exceeds expected=" + std::to_string(expected_total));
             return false;
         }
         if (act_len > static_cast<uint32_t>(STREAM_IN_BUF_BYTES)) {
@@ -712,7 +686,7 @@ bool executeMatmul(ComputeOp op, uint32_t layer, uint32_t head,
                   " ly=" + std::to_string(layer) + " hd=" + std::to_string(head) +
                   " pos=" + std::to_string(token_position) +
                   " act=" + std::to_string(act_len) + "B out=" + std::to_string(out_len) +
-                  " tiles=" + std::to_string(tile_end) + "x" + std::to_string(tile_out_elems) +
+                  " elems=" + std::to_string(expected_total) +
                   " recv_bytes=" + std::to_string(recv_bytes) +
                   " instr=" + hex32(instr) + " act_i8" + v4i8(act_i8, act_len));
 
