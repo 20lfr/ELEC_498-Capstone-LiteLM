@@ -41,6 +41,22 @@ enum class ComputeOp : uint8_t {
     CMP_LOGITS     = 9,
 };
 
+static const char *op_name(ComputeOp op) {
+    switch (op) {
+    case ComputeOp::CMP_NONE:       return "NONE";
+    case ComputeOp::CMP_Q:          return "Q";
+    case ComputeOp::CMP_K:          return "K";
+    case ComputeOp::CMP_V:          return "V";
+    case ComputeOp::CMP_ATT_SCORES: return "ATT_SC";
+    case ComputeOp::CMP_ATT_VALUE:  return "ATT_V";
+    case ComputeOp::CMP_OUT_PROJ:   return "O_PROJ";
+    case ComputeOp::CMP_FFN_W1:     return "W1";
+    case ComputeOp::CMP_FFN_W2:     return "W2";
+    case ComputeOp::CMP_LOGITS:     return "LOGIT";
+    default:                         return "?";
+    }
+}
+
 static inline uint32_t pack_instr32(ComputeOp op, uint32_t layer, uint32_t head) {
     // MatMulMode PS->PL instruction format (must match HLS):
     //   [3:0]=op, [11:4]=layer (8-bit), [19:12]=head (8-bit), [31:20]=reserved
@@ -48,6 +64,42 @@ static inline uint32_t pack_instr32(ComputeOp op, uint32_t layer, uint32_t head)
     const uint32_t layer8 = layer & 0xFFu;
     const uint32_t head8 = head & 0xFFu;
     return op4 | (layer8 << 4) | (head8 << 12);
+}
+
+// ── Debug helpers ──
+static std::string hex32(uint32_t v) {
+    char b[16]; snprintf(b, sizeof(b), "0x%08X", v); return b;
+}
+static std::string v4f(const double *v, int n, int m = 4) {
+    std::ostringstream s; s << "[";
+    int sh = n < m ? n : m;
+    for (int i = 0; i < sh; i++) {
+        if (i) s << ", ";
+        char b[24]; snprintf(b, sizeof(b), "%.4f", v[i]); s << b;
+    }
+    if (sh < n) s << ", ...";
+    s << "]"; return s.str();
+}
+static std::string v4i8(const int8_t *v, int n, int m = 4) {
+    std::ostringstream s; s << "[";
+    int sh = n < m ? n : m;
+    for (int i = 0; i < sh; i++) { if (i) s << ", "; s << (int)v[i]; }
+    if (sh < n) s << ", ...";
+    s << "]"; return s.str();
+}
+static std::string v4i32(const int32_t *v, int n, int m = 4) {
+    std::ostringstream s; s << "[";
+    int sh = n < m ? n : m;
+    for (int i = 0; i < sh; i++) { if (i) s << ", "; s << v[i]; }
+    if (sh < n) s << ", ...";
+    s << "]"; return s.str();
+}
+static double vabsmax(const double *v, int n) {
+    double m = 0; for (int i = 0; i < n; i++) { double a = fabs(v[i]); if (a > m) m = a; } return m;
+}
+static std::string ms_str(std::chrono::steady_clock::time_point a,
+                           std::chrono::steady_clock::time_point b) {
+    return std::to_string((int)std::chrono::duration<double, std::milli>(b - a).count()) + "ms";
 }
 
 // =============================================================================
@@ -255,6 +307,9 @@ class InferenceExecutor {
 
     bool matmul_mode_ready = false;
 
+    // Debug counter
+    uint64_t mm_calls = 0;
+
     // ── PS-side float helpers ──
 
     static void ps_layernorm(const double *x, const double *gamma,
@@ -434,6 +489,7 @@ public:
 
     bool loadFloatEmbeddings(const std::string &tok_path,
                              const std::string &pos_path) {
+        LOG_DEBUG("loadFloatEmbeddings: tok=" + tok_path + " pos=" + pos_path);
         const uint32_t H = model_cfg.hidden_size;
         std::ifstream ft(tok_path, std::ios::binary);
         std::ifstream fp(pos_path, std::ios::binary);
@@ -448,11 +504,18 @@ public:
         fp.read(reinterpret_cast<char *>(pos_float.data()),
                 pos_float.size() * sizeof(float));
         use_float_embed = true;
-        LOG_INFO("Loaded float embeddings for matmul mode");
+        LOG_INFO("Loaded float embeddings: tok=" +
+                 std::to_string(model_cfg.vocab_size) + "x" + std::to_string(H) +
+                 " pos=" + std::to_string(model_cfg.context_length) + "x" + std::to_string(H));
+        LOG_DEBUG("  tok[0..2]={" + std::to_string(embed_float[0]) + "," +
+                  std::to_string(embed_float[1]) + "," + std::to_string(embed_float[2]) + "}");
+        LOG_DEBUG("  pos[0..2]={" + std::to_string(pos_float[0]) + "," +
+                  std::to_string(pos_float[1]) + "," + std::to_string(pos_float[2]) + "}");
         return true;
     }
 
     bool loadMatmulModeParams(const std::string &model_dir) {
+        LOG_INFO("Loading matmul mode params from " + model_dir);
         const uint32_t H = model_cfg.hidden_size;
         const uint32_t FF = model_cfg.intermediate_size;
         const uint32_t V = model_cfg.vocab_size;
@@ -461,6 +524,7 @@ public:
 
         // ── Load per-channel weight scales from quant_scales.json ──
         std::string json_path = model_dir + "/quant_scales.json";
+        LOG_DEBUG("  Opening " + json_path);
         std::ifstream jf(json_path);
         if (!jf) {
             LOG_ERROR("Cannot open " + json_path);
@@ -468,6 +532,7 @@ public:
         }
         std::string json_str((std::istreambuf_iterator<char>(jf)),
                               std::istreambuf_iterator<char>());
+        LOG_DEBUG("  JSON size: " + std::to_string(json_str.size()) + " bytes");
 
         auto parse_array = [&](const std::string &key,
                                std::vector<double> &out) -> bool {
@@ -504,18 +569,32 @@ public:
 
         for (uint32_t ly = 0; ly < NL; ly++) {
             std::string pfx = "layer" + std::to_string(ly) + ".";
-            parse_array(pfx + "wq", wq_scale[ly]);
-            parse_array(pfx + "wk", wk_scale[ly]);
-            parse_array(pfx + "wv", wv_scale[ly]);
-            parse_array(pfx + "wo", wo_scale[ly]);
-            parse_array(pfx + "w1", w1_scale[ly]);
-            parse_array(pfx + "w2", w2_scale[ly]);
+            bool ok = parse_array(pfx + "wq", wq_scale[ly])
+                   && parse_array(pfx + "wk", wk_scale[ly])
+                   && parse_array(pfx + "wv", wv_scale[ly])
+                   && parse_array(pfx + "wo", wo_scale[ly])
+                   && parse_array(pfx + "w1", w1_scale[ly])
+                   && parse_array(pfx + "w2", w2_scale[ly]);
+            if (!ok) {
+                LOG_ERROR("  Scale parse fail L" + std::to_string(ly));
+                return false;
+            }
+            LOG_DEBUG("  L" + std::to_string(ly) + " scales: wq[" +
+                      std::to_string(wq_scale[ly].size()) + "] wo[" +
+                      std::to_string(wo_scale[ly].size()) + "] w1[" +
+                      std::to_string(w1_scale[ly].size()) + "] w2[" +
+                      std::to_string(w2_scale[ly].size()) + "]");
             kv_k[ly].resize((size_t)model_cfg.context_length * H, 0.0);
             kv_v[ly].resize((size_t)model_cfg.context_length * H, 0.0);
         }
-        parse_array("lm_head", logit_scale);
+        if (!parse_array("lm_head", logit_scale)) {
+            LOG_ERROR("  lm_head parse fail");
+            return false;
+        }
+        LOG_DEBUG("  logit_scale[" + std::to_string(logit_scale.size()) + "]");
 
         // ── Read biases and LN params from DDR (Q16.16 -> float) ──
+        LOG_DEBUG("  Reading biases and LN params from DDR...");
         auto read_q16 = [&](uint32_t offset, uint32_t count,
                             std::vector<double> &fout,
                             std::vector<int32_t> &raw) -> bool {
@@ -550,9 +629,16 @@ public:
             read_q16_f(mem.ln0_beta_offset + ly*g4, H, ln1_b_f[ly]);
             read_q16_f(mem.ln1_gamma_offset + ly*g4, H, ln2_w_f[ly]);
             read_q16_f(mem.ln1_beta_offset + ly*g4, H, ln2_b_f[ly]);
+            LOG_DEBUG("  L" + std::to_string(ly) +
+                      " bq_raw[0]=" + std::to_string(bq_raw[ly][0]) +
+                      " bq_f[0]=" + std::to_string(bq_f[ly][0]) +
+                      " ln1_w[0]=" + std::to_string(ln1_w_f[ly][0]) +
+                      " ln1_b[0]=" + std::to_string(ln1_b_f[ly][0]));
         }
         read_q16_f(mem.final_norm_gamma_offset, H, fln_w_f);
         read_q16_f(mem.final_norm_beta_offset, H, fln_b_f);
+        LOG_DEBUG("  fln_w[0]=" + std::to_string(fln_w_f[0]) +
+                  " fln_b[0]=" + std::to_string(fln_b_f[0]));
 
         // ── Load int8 logit weights ──
         wlogit_i8.resize((size_t)V * H);
@@ -561,10 +647,12 @@ public:
             LOG_ERROR("Failed to read logit weights from DDR");
             return false;
         }
+        LOG_DEBUG("  wlogit[0][0]=" + std::to_string((int)wlogit_i8[0]));
 
         matmul_mode_ready = true;
         LOG_INFO("Matmul mode params loaded: " + std::to_string(NL) +
-                 " layers, " + std::to_string(H) + " hidden");
+                 " layers, " + std::to_string(H) + " hidden, " +
+                 std::to_string(FF) + " ffn, " + std::to_string(V) + " vocab");
         return true;
     }
 
@@ -572,6 +660,8 @@ public:
                        uint32_t token_position, const int8_t *act_i8,
                        uint32_t act_len, int32_t *acc_out,
                        uint32_t out_len) {
+        mm_calls++;
+
         uint32_t tile_end = 0;
         uint32_t tile_out_elems = 0;
         switch (op) {
@@ -606,50 +696,69 @@ public:
             tile_out_elems = D_TILE_LOGIT;
             break;
         default:
-            LOG_ERROR("executeMatmul: invalid op");
+            LOG_ERROR("[MM] invalid op " + std::to_string(static_cast<int>(op)));
             return false;
         }
 
         const uint32_t expected_total = tile_end * tile_out_elems;
         if (out_len > expected_total) {
-            LOG_ERROR("executeMatmul: out_len exceeds op tile output");
+            LOG_ERROR("[MM] out_len=" + std::to_string(out_len) +
+                      " exceeds tile output=" + std::to_string(expected_total));
             return false;
         }
         if (act_len > static_cast<uint32_t>(STREAM_IN_BUF_BYTES)) {
-            LOG_ERROR("executeMatmul: act_len exceeds STREAM_IN_BUF_BYTES");
+            LOG_ERROR("[MM] act_len=" + std::to_string(act_len) +
+                      " exceeds STREAM_IN_BUF_BYTES=" + std::to_string(STREAM_IN_BUF_BYTES));
             return false;
         }
+
+        const uint32_t instr = pack_instr32(op, layer, head);
+
+        LOG_DEBUG("[MM#" + std::to_string(mm_calls) + "] op=" + op_name(op) +
+                  " ly=" + std::to_string(layer) + " hd=" + std::to_string(head) +
+                  " pos=" + std::to_string(token_position) +
+                  " act=" + std::to_string(act_len) + "B out=" + std::to_string(out_len) +
+                  " tiles=" + std::to_string(tile_end) + "x" + std::to_string(tile_out_elems) +
+                  " instr=" + hex32(instr) + " act_i8" + v4i8(act_i8, act_len));
 
         std::vector<uint8_t> send_buf(STREAM_IN_BUF_BYTES, 0);
         memcpy(send_buf.data(), act_i8, act_len);
 
-        pl->writeReg(PLReg::INSTR, pack_instr32(op, layer, head));
+        pl->writeReg(PLReg::INSTR, instr);
         pl->writeReg(PLReg::TOKEN_POSITION, token_position);
 
         // Arm first receive before starting (backpressure-safe).
         if (!pl->streamInitRecv(output_offset,
                                 static_cast<size_t>(STREAM_OUT_BUF_BYTES))) {
-            LOG_ERROR("matmul recv init failed");
+            LOG_ERROR("[MM#" + std::to_string(mm_calls) + "] recv init fail");
             return false;
         }
         if (!pl->streamInitSend(input_offset, send_buf.data(),
                                 static_cast<size_t>(STREAM_IN_BUF_BYTES))) {
-            LOG_ERROR("matmul send init failed");
+            LOG_ERROR("[MM#" + std::to_string(mm_calls) + "] send init fail");
             return false;
         }
 
         uint32_t ctrl = CTRL_RESETN_BIT | CTRL_START_BIT;
         if (debug_mode)
             ctrl |= CTRL_DEBUG_MODE_BIT;
+
+        LOG_DEBUG("[MM#" + std::to_string(mm_calls) + "] START ctrl=" + hex32(ctrl));
         pl->writeReg(PLReg::CONTROL, ctrl);
         usleep(10);
         pl->writeReg(PLReg::CONTROL, ctrl & ~CTRL_START_BIT);
 
+        auto t_start = std::chrono::steady_clock::now();
+
         if (!pl->streamWaitSend(timeout_ms)) {
-            LOG_ERROR("matmul send timeout");
+            LOG_ERROR("[MM#" + std::to_string(mm_calls) +
+                      "] send timeout | " + pl->streamStatusString());
             pl->clearIRQ();
             return false;
         }
+
+        LOG_DEBUG("[MM#" + std::to_string(mm_calls) +
+                  "] sent, recv " + std::to_string(tile_end) + " tiles...");
 
         std::vector<uint8_t> recv_tile(STREAM_OUT_BUF_BYTES, 0);
         for (uint32_t t = 0; t < tile_end; t++) {
@@ -657,7 +766,11 @@ public:
                     output_offset + t * STREAM_OUT_BUF_BYTES,
                     recv_tile.data(), static_cast<size_t>(STREAM_OUT_BUF_BYTES),
                     timeout_ms)) {
-                LOG_ERROR("matmul recv timeout");
+                LOG_ERROR("[MM#" + std::to_string(mm_calls) +
+                          "] recv timeout tile " + std::to_string(t) + "/" +
+                          std::to_string(tile_end) +
+                          " | " + pl->streamStatusString() +
+                          " | " + pl->getRegStats(true));
                 pl->clearIRQ();
                 return false;
             }
@@ -675,23 +788,29 @@ public:
                 if (!pl->streamInitRecv(
                         output_offset + (t + 1) * STREAM_OUT_BUF_BYTES,
                         static_cast<size_t>(STREAM_OUT_BUF_BYTES))) {
-                    LOG_ERROR("matmul recv init failed (next tile)");
+                    LOG_ERROR("[MM#" + std::to_string(mm_calls) +
+                              "] recv init fail tile " + std::to_string(t + 1));
                     pl->clearIRQ();
                     return false;
                 }
             }
         }
 
+        LOG_DEBUG("[MM#" + std::to_string(mm_calls) + "] tiles done, wait PL done...");
+
         if (!pl->waitDone(timeout_ms)) {
-            LOG_ERROR("matmul done timeout (op=" +
-                      std::to_string(static_cast<uint32_t>(op)) +
-                      " layer=" + std::to_string(layer) +
-                      " head=" + std::to_string(head) + ")");
+            LOG_ERROR("[MM#" + std::to_string(mm_calls) +
+                      "] PL done timeout | " + pl->getRegStats(true));
             pl->clearIRQ();
             return false;
         }
 
         pl->clearIRQ();
+
+        auto t_end = std::chrono::steady_clock::now();
+        LOG_DEBUG("[MM#" + std::to_string(mm_calls) + "] OK " +
+                  ms_str(t_start, t_end) + " acc" + v4i32(acc_out, out_len));
+
         return true;
     }
 
@@ -703,6 +822,7 @@ public:
         }
 
         perf->startGeneration();
+        mm_calls = 0;
 
         const uint32_t H = model_cfg.hidden_size;
         const uint32_t FF = model_cfg.intermediate_size;
@@ -710,6 +830,9 @@ public:
         const uint32_t NL_count = model_cfg.num_layers;
         const uint32_t NH_count = model_cfg.num_heads;
         const uint32_t DH_size = model_cfg.head_dim;
+
+        LOG_DEBUG("=== ForwardHybrid: tid=" + std::to_string(token_id) +
+                  " pos=" + std::to_string(token_position) + " ===");
 
         std::vector<double> x(H), h(H), h2(H);
         std::vector<double> q(H), k(H), v(H), o(H);
@@ -735,13 +858,21 @@ public:
                 x[i] = (double)(sum < -128 ? -128 : (sum > 127 ? 127 : sum));
             }
         }
+        LOG_DEBUG("  embed: x" + v4f(x.data(), H) +
+                  " amax=" + std::to_string(vabsmax(x.data(), H)));
 
         // ── Layer loop ──
         for (uint32_t ly = 0; ly < NL_count; ly++) {
+            auto tL0 = std::chrono::steady_clock::now();
+            LOG_DEBUG("  --- L" + std::to_string(ly) +
+                      " x_amax=" + std::to_string(vabsmax(x.data(), H)) + " ---");
 
             ps_layernorm(x.data(), ln1_w_f[ly].data(), ln1_b_f[ly].data(),
                          h.data(), H);
             ps_quantize_act(h.data(), act_i8_h.data(), act_scale, H);
+            LOG_DEBUG("  L" + std::to_string(ly) + " LN0: h_amax=" +
+                      std::to_string(vabsmax(h.data(), H)) + " scale=" +
+                      std::to_string(act_scale) + " ai8" + v4i8(act_i8_h.data(), H));
 
             // PL: Q/K/V projections are per-head in MatMulMode.
             for (uint32_t head = 0; head < NH_count; head++) {
@@ -771,6 +902,8 @@ public:
                            wv_scale[ly].data() + off, bv_f[ly].data() + off,
                            bv_raw[ly].data() + off, v.data() + off, DH_size);
             }
+            LOG_DEBUG("  L" + std::to_string(ly) + " QKV: q" + v4f(q.data(), H) +
+                      " k" + v4f(k.data(), H) + " v" + v4f(v.data(), H));
 
             // PS: KV cache
             size_t kv_off = (size_t)token_position * H;
@@ -804,6 +937,8 @@ public:
                     attn_out[head * DH_size + d] = a;
                 }
             }
+            LOG_DEBUG("  L" + std::to_string(ly) + " attn" + v4f(attn_out.data(), H) +
+                      " amax=" + std::to_string(vabsmax(attn_out.data(), H)));
 
             // PS: Quantize attention output
             ps_quantize_act(attn_out.data(), act_i8_h.data(), act_scale, H);
@@ -814,14 +949,20 @@ public:
                 return false;
             ps_dequant(acc_h.data(), act_scale, wo_scale[ly].data(),
                        bo_f[ly].data(), bo_raw[ly].data(), o.data(), H);
+            LOG_DEBUG("  L" + std::to_string(ly) + " O" + v4f(o.data(), H));
 
             // PS: Float residual 1
             for (uint32_t i = 0; i < H; i++) x[i] += o[i];
+            LOG_DEBUG("  L" + std::to_string(ly) + " res1 x_amax=" +
+                      std::to_string(vabsmax(x.data(), H)));
 
             // PS: Float LayerNorm 1
             ps_layernorm(x.data(), ln2_w_f[ly].data(), ln2_b_f[ly].data(),
                          h2.data(), H);
             ps_quantize_act(h2.data(), act_i8_h.data(), act_scale, H);
+            LOG_DEBUG("  L" + std::to_string(ly) + " LN1: h2_amax=" +
+                      std::to_string(vabsmax(h2.data(), H)) +
+                      " scale=" + std::to_string(act_scale));
 
             // PL: FFN W1
             if (!executeMatmul(ComputeOp::CMP_FFN_W1, ly, 0, token_position,
@@ -829,9 +970,14 @@ public:
                 return false;
             ps_dequant(acc_ff.data(), act_scale, w1_scale[ly].data(),
                        b1_f[ly].data(), b1_raw[ly].data(), fc1.data(), FF);
+            LOG_DEBUG("  L" + std::to_string(ly) + " W1" + v4f(fc1.data(), FF) +
+                      " amax=" + std::to_string(vabsmax(fc1.data(), FF)));
 
             // PS: Float GELU
             ps_gelu(fc1.data(), FF);
+            LOG_DEBUG("  L" + std::to_string(ly) + " GELU" + v4f(fc1.data(), FF) +
+                      " amax=" + std::to_string(vabsmax(fc1.data(), FF)));
+
             ps_quantize_act(fc1.data(), act_i8_ff.data(), act_scale, FF);
 
             // PL: FFN W2
@@ -840,18 +986,25 @@ public:
                 return false;
             ps_dequant(acc_h.data(), act_scale, w2_scale[ly].data(),
                        b2_f[ly].data(), b2_raw[ly].data(), fc2.data(), H);
+            LOG_DEBUG("  L" + std::to_string(ly) + " W2" + v4f(fc2.data(), H));
 
             // PS: Float residual 2
             for (uint32_t i = 0; i < H; i++) x[i] += fc2[i];
 
-            LOG_DEBUG("Layer " + std::to_string(ly) + " complete");
+            auto tL1 = std::chrono::steady_clock::now();
+            LOG_DEBUG("  L" + std::to_string(ly) + " done " + ms_str(tL0, tL1) +
+                      " mm=" + std::to_string(mm_calls) +
+                      " x_amax=" + std::to_string(vabsmax(x.data(), H)));
         }
 
         // PS: Float final LayerNorm
         ps_layernorm(x.data(), fln_w_f.data(), fln_b_f.data(), h.data(), H);
         ps_quantize_act(h.data(), act_i8_h.data(), act_scale, H);
+        LOG_DEBUG("  FinalLN: h_amax=" + std::to_string(vabsmax(h.data(), H)) +
+                  " scale=" + std::to_string(act_scale));
 
         // PS: Logit projection on ARM
+        auto tLogit0 = std::chrono::steady_clock::now();
         double best_logit = -1e30;
         out_token = 0;
         for (uint32_t i = 0; i < V; i++) {
@@ -865,6 +1018,11 @@ public:
                 out_token = i;
             }
         }
+        auto tLogit1 = std::chrono::steady_clock::now();
+        LOG_DEBUG("  Logit(ARM) " + ms_str(tLogit0, tLogit1) +
+                  " token=" + std::to_string(out_token) +
+                  " logit=" + std::to_string(best_logit) +
+                  " total_mm=" + std::to_string(mm_calls));
 
         perf->recordToken();
         perf->endGeneration();
@@ -872,6 +1030,7 @@ public:
     }
 
     void resetKVCache() {
+        LOG_DEBUG("Reset KV cache (" + std::to_string(kv_k.size()) + " layers)");
         for (size_t ly = 0; ly < kv_k.size(); ly++) {
             std::fill(kv_k[ly].begin(), kv_k[ly].end(), 0.0);
             std::fill(kv_v[ly].begin(), kv_v[ly].end(), 0.0);
@@ -1167,60 +1326,85 @@ private:
             return;
         }
 
-        LOG_DEBUG("Entering Prefill phase: prompt_len=" +
-                  std::to_string(tokens.size()));
+        LOG_INFO("Task: \"" + task.prompt + "\" tokens=" +
+                 std::to_string(tokens.size()));
+        LOG_DEBUG("Token IDs: " + ([&] {
+            std::string s;
+            for (size_t i = 0; i < tokens.size(); i++) {
+                if (i > 0) s += ", ";
+                s += std::to_string(tokens[i]);
+            }
+            return s;
+        })());
 
         // Reset PS-side KV cache before new generation
         exec->resetKVCache();
 
         // ── Prefill ──
+        LOG_INFO("Prefill: " + std::to_string(tokens.size() - 1) + " tokens");
+        auto tPF0 = std::chrono::steady_clock::now();
+
         for (size_t i = 0; i + 1 < tokens.size() && !state.cancel; i++) {
             uint32_t discard = 0;
+            auto t0 = std::chrono::steady_clock::now();
             if (!exec->executeForwardHybrid(tokens[i],
                                             static_cast<uint32_t>(i),
                                             discard)) {
                 LOG_ERROR("Prefill failed at token " + std::to_string(i));
                 break;
             }
-            LOG_DEBUG("Prefill [" + std::to_string(i) + "/" +
-                      std::to_string(tokens.size()) +
-                      "] token=" + std::to_string(tokens[i]));
+            auto t1 = std::chrono::steady_clock::now();
+            LOG_INFO("  Prefill [" + std::to_string(i) + "/" +
+                     std::to_string(tokens.size() - 1) +
+                     "] token=" + std::to_string(tokens[i]) +
+                     " -> " + std::to_string(discard) +
+                     " (" + ms_str(t0, t1) + ")");
         }
 
+        auto tPF1 = std::chrono::steady_clock::now();
+        LOG_INFO("Prefill done: " + ms_str(tPF0, tPF1));
+
         if (state.cancel) {
+            LOG_INFO("Task cancelled during prefill");
             state.status = EngineStatus::IDLE;
             g_engine_status = EngineStatus::IDLE;
             return;
         }
 
-        LOG_DEBUG("Entering Decode phase: max_tokens=" +
-                  std::to_string(state.maxTokens));
-
         // ── Decode ──
+        LOG_INFO("Decode: max_tokens=" + std::to_string(state.maxTokens));
         uint32_t next_input = tokens.back();
 
         for (uint32_t i = 0; i < state.maxTokens && !state.cancel; i++) {
             uint32_t out_token = 0;
             const uint32_t token_position =
                 static_cast<uint32_t>(tokens.size() - 1) + i;
+
+            auto t0 = std::chrono::steady_clock::now();
             if (!exec->executeForwardHybrid(next_input, token_position,
                                             out_token))
                 break;
+            auto t1 = std::chrono::steady_clock::now();
 
             std::string decoded = tokenizer->decodeToken(out_token);
 
-            LOG_DEBUG("Decode [" + std::to_string(i) + "/" +
-                      std::to_string(state.maxTokens) +
-                      "] next_input=" + std::to_string(next_input) +
-                      " out_token=" + std::to_string(out_token) +
-                      " out_decode=\"" + decoded + "\"");
+            LOG_INFO("  Decode [" + std::to_string(i) +
+                     "] in=" + std::to_string(next_input) +
+                     " pos=" + std::to_string(token_position) +
+                     " -> " + std::to_string(out_token) +
+                     " \"" + decoded + "\"" +
+                     " (" + ms_str(t0, t1) + ")");
 
             if (!decoded.empty()) print(decoded);
-            if (out_token == tokenizer->getEOSTokenId()) break;
+            if (out_token == tokenizer->getEOSTokenId()) {
+                LOG_INFO("  EOS token reached");
+                break;
+            }
             next_input = out_token;
         }
 
         print("\n");
+        LOG_INFO("Task complete");
         state.status = EngineStatus::IDLE;
         g_engine_status = EngineStatus::IDLE;
     }
