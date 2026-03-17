@@ -2,8 +2,11 @@
 // Testbench for the MatMul-only instruction-driven accelerator.
 //
 // Exercises every matmul operation in the transformer forward-pass order:
-//   Q -> K -> V -> ATT_SCORES -> ATT_VALUE -> OUT_PROJ -> W1 -> W2  (per layer)
+//   Q -> K -> V -> OUT_PROJ -> W1 -> W2  (per layer)
 //   LOGITS (after all layers)
+//
+// NOTE: CMP_ATT_SCORES and CMP_ATT_VALUE have been removed from the PL;
+// attention is computed in float on the PS side.
 //
 // For each invocation:
 //   1. Encodes a 32-bit INSTR and writes ctrl_mem.instr
@@ -233,9 +236,7 @@ static inline int valid_n_out(uint8_t op)
     switch (op) {
         case CMP_Q:
         case CMP_K:
-        case CMP_V:          return D_HEAD_TILE_QKV;          // 4
-        case CMP_ATT_SCORES: return ATT_CTX_BLOCK;             // 64
-        case CMP_ATT_VALUE:  return D_HEAD_TILE_ATT_VALUE;     // 4
+        case CMP_V:          return D_HEAD_TILE_QKV;           // 4
         case CMP_OUT_PROJ:   return D_TILE_WO;                 // 16
         case CMP_FFN_W1:     return D_TILE_W1;                 // 16
         case CMP_FFN_W2:     return D_TILE_W2;                 // 8
@@ -244,8 +245,8 @@ static inline int valid_n_out(uint8_t op)
     }
 }
 
-// Returns true if the op uses per-tile streaming (LOGITS only).
-static inline bool op_is_per_tile_stream(uint8_t op) { return op == CMP_LOGITS; }
+// All ops now use single-TLAST streaming (LOGITS uses deferred-TLAST from PL).
+static inline bool op_is_per_tile_stream(uint8_t /*op*/) { return false; }
 
 // ---------------------------------------------------------------------------
 // Tile count per op (scheduler internally iterates tiles; PS does not specify tile)
@@ -255,14 +256,12 @@ static inline int tile_end_for_op(uint8_t op)
     switch (op) {
         case CMP_Q:
         case CMP_K:
-        case CMP_V:          return NUM_QKV_HEAD_TILES;
-        case CMP_ATT_SCORES: return NUM_ATT_CTX_BLOCKS;
-        case CMP_ATT_VALUE:  return NUM_ATT_VALUE_HEAD_TILES; // d_tile only (no ctx chunking)
-        case CMP_OUT_PROJ:   return NUM_WO_TILES;
-        case CMP_FFN_W1:     return NUM_W1_TILES;
-        case CMP_FFN_W2:     return NUM_W2_TILES;
-        case CMP_LOGITS:     return NUM_LOGIT_TILES;
-        default:             return 0;
+        case CMP_V:        return NUM_QKV_HEAD_TILES;
+        case CMP_OUT_PROJ: return NUM_WO_TILES;
+        case CMP_FFN_W1:   return NUM_W1_TILES;
+        case CMP_FFN_W2:   return NUM_W2_TILES;
+        case CMP_LOGITS:   return NUM_LOGIT_TILES;
+        default:           return 0;
     }
 }
 
@@ -281,10 +280,8 @@ static inline uint16_t tile_for_burst(uint8_t op, int burst_idx)
 static inline int act_len_for_op(uint8_t op)
 {
     switch (op) {
-        case CMP_ATT_SCORES: return D_HEADS;          // 64
-        case CMP_ATT_VALUE:  return CONTEXT_LENGTH * 2; // int16[CONTEXT_LENGTH]
-        case CMP_FFN_W2:     return D_FFN;            // 3072 (= STREAM_IN_BUF_BYTES)
-        default:             return D_MODEL;           // 768
+        case CMP_FFN_W2: return D_FFN;    // 3072 (= STREAM_IN_BUF_BYTES)
+        default:         return D_MODEL;  // 768
     }
 }
 
@@ -448,10 +445,15 @@ static MatmulInvocationResult run_one_matmul(
     }
 
     // -- Main cycle loop ------------------------------------------------------
-    // Non-LOGITS: single TLAST per invocation carries the full activation.
-    // LOGITS: one TLAST per tile (per-tile streaming, unchanged).
+    // All ops produce a single TLAST per invocation.
+    // LOGITS uses deferred-TLAST: PL streams all tiles before asserting TLAST.
+    // burst_buf must hold the largest possible burst: LOGITS full output.
+    static constexpr int LOGIT_FULL_BYTES   = NUM_LOGIT_TILES * D_TILE_LOGIT * 4;
+    static constexpr int TB_MAX_BURST_BYTES =
+        (LOGIT_FULL_BYTES > FULL_OUT_BUF_BYTES) ? LOGIT_FULL_BYTES : FULL_OUT_BUF_BYTES;
+    static uint8_t burst_buf[TB_MAX_BURST_BYTES];
+    std::memset(burst_buf, 0, sizeof(burst_buf));
     const bool per_tile_stream = op_is_per_tile_stream(op);
-    uint8_t burst_buf[FULL_OUT_BUF_BYTES] = {};
     int     burst_count     = 0;
     bool    done_seen       = false;
     int     idle_cycles     = 0;
@@ -467,70 +469,37 @@ static MatmulInvocationResult run_one_matmul(
         // Drain stream-out
         axis8_t beat_out{};
         while (m_axis.read_nb(beat_out)) {
-            if (burst_count < FULL_OUT_BUF_BYTES) {
+            if (burst_count < TB_MAX_BURST_BYTES) {
                 burst_buf[burst_count++] = static_cast<uint8_t>(beat_out.data);
             }
             if (beat_out.last != 0) {
-                if (per_tile_stream) {
-                    // LOGITS: one tile per TLAST — same as before.
-                    if (result.tiles_seen >= result.tiles_expected) {
-                        std::fprintf(stderr,
-                            "  ERROR extra burst on (op=%u L=%u H=%u): tiles_seen=%d tiles_expected=%d\n",
-                            op, layer, head, result.tiles_seen, result.tiles_expected);
-                        error_seen = true;
-                        break;
-                    }
-                    int32_t decoded[ATT_CTX_BLOCK] = {};
-                    for (int i = 0; i < n_out && i < ATT_CTX_BLOCK; ++i) {
-                        const int b = i * 4;
+                // Single TLAST per invocation carries all tiles concatenated.
+                // Slice burst_buf into per-tile chunks and write per-tile records.
+                const int tile_bytes = n_out * 4;
+                for (int t = 0; t < result.tiles_expected; ++t) {
+                    int32_t decoded[16] = {};
+                    for (int i = 0; i < n_out && i < 16; ++i) {
+                        const int b = t * tile_bytes + i * 4;
                         decoded[i] = static_cast<int32_t>(
                             static_cast<uint32_t>(burst_buf[b + 0])
                           | (static_cast<uint32_t>(burst_buf[b + 1]) << 8)
                           | (static_cast<uint32_t>(burst_buf[b + 2]) << 16)
                           | (static_cast<uint32_t>(burst_buf[b + 3]) << 24));
                     }
-                    const uint16_t tile = tile_for_burst(op, result.tiles_seen);
-                    write_result_record(out_file, op, layer, head, tile,
+                    write_result_record(out_file, op, layer, head,
+                                        static_cast<uint16_t>(t),
                                         decoded, static_cast<uint8_t>(n_out));
-                    if (result.tiles_seen == 0) {
+                    if (t == 0) {
                         result.first_out0 = decoded[0];
                     }
                     result.tiles_seen++;
-                    burst_count = 0;
                     // Stream-out logging
-                    tprintf("  [STREAM OUT] op=%u L=%u H=%u tile=%u n=%d:", op, layer, head, tile, n_out);
+                    tprintf("  [STREAM OUT] op=%u L=%u H=%u tile=%d/%d n=%d:", op, layer, head, t, result.tiles_expected, n_out);
                     for (int _i = 0; _i < n_out && _i < 8; ++_i) tprintf(" %d", decoded[_i]);
                     if (n_out > 8) tprintf(" ...");
                     tprintf("\n");
-                } else {
-                    // Non-LOGITS: single TLAST carries all tiles concatenated.
-                    // Slice burst_buf into per-tile chunks and write per-tile records.
-                    const int tile_bytes = n_out * 4;
-                    for (int t = 0; t < result.tiles_expected; ++t) {
-                        int32_t decoded[ATT_CTX_BLOCK] = {};
-                        for (int i = 0; i < n_out && i < ATT_CTX_BLOCK; ++i) {
-                            const int b = t * tile_bytes + i * 4;
-                            decoded[i] = static_cast<int32_t>(
-                                static_cast<uint32_t>(burst_buf[b + 0])
-                              | (static_cast<uint32_t>(burst_buf[b + 1]) << 8)
-                              | (static_cast<uint32_t>(burst_buf[b + 2]) << 16)
-                              | (static_cast<uint32_t>(burst_buf[b + 3]) << 24));
-                        }
-                        write_result_record(out_file, op, layer, head,
-                                            static_cast<uint16_t>(t),
-                                            decoded, static_cast<uint8_t>(n_out));
-                        if (t == 0) {
-                            result.first_out0 = decoded[0];
-                        }
-                        result.tiles_seen++;
-                        // Stream-out logging
-                        tprintf("  [STREAM OUT] op=%u L=%u H=%u tile=%d/%d n=%d:", op, layer, head, t, result.tiles_expected, n_out);
-                        for (int _i = 0; _i < n_out && _i < 8; ++_i) tprintf(" %d", decoded[_i]);
-                        if (n_out > 8) tprintf(" ...");
-                        tprintf("\n");
-                    }
-                    burst_count = 0;
                 }
+                burst_count = 0;
             }
         }
         if (error_seen) {
@@ -669,7 +638,7 @@ int main()
     }
 
     // --- Populate kv_cache with repeating stream_in[0:D_HEADS] pattern ------
-    // This gives ATT_SCORES/ATT_VALUE meaningful (non-zero) and reproducible data.
+    // Gives non-zero, reproducible K/V cache data for future use.
     // Python verify_matmul.py uses the same fill to extract expected K/V tiles.
     zero_axi_mem(kv_cache.data(), TB_KV_IMAGE_WORDS);
     fill_axi_mem_bytes(kv_cache.data(), TB_KV_IMAGE_WORDS,
@@ -729,25 +698,13 @@ int main()
 
     // Activation slices (zero-padded to STREAM_IN_BUF_BYTES)
     // D_MODEL bytes from stream_in (for Q/K/V/OUT_PROJ/W1/LOGITS)
-    const uint8_t *act_model = stream_in_token;     // first D_MODEL bytes
-    // D_HEADS bytes from stream_in (for ATT_SCORES)
-    const uint8_t *act_heads = stream_in_token;     // first D_HEADS bytes
-    // int16[CONTEXT_LENGTH] softmax weights (for ATT_VALUE)
-    uint8_t act_ctx_i16[static_cast<size_t>(CONTEXT_LENGTH) * 2] = {};
-    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-        const int16_t w = static_cast<int16_t>(static_cast<int8_t>(stream_in_token[t]));
-        act_ctx_i16[t * 2 + 0] = static_cast<uint8_t>(static_cast<uint16_t>(w) & 0xFFu);
-        act_ctx_i16[t * 2 + 1] = static_cast<uint8_t>((static_cast<uint16_t>(w) >> 8) & 0xFFu);
-    }
-    // D_FFN bytes = full STREAM_IN_BUF_BYTES (for W2)
-    const uint8_t *act_ffn   = stream_in_token;     // full D_FFN bytes
+    // D_FFN bytes from stream_in (for W2)
+    const uint8_t *act_model = stream_in_token;
+    const uint8_t *act_ffn   = stream_in_token;
 
     auto run = [&](uint8_t op, int layer, int head) -> bool {
-        const int act_len = act_len_for_op(op);
-        const uint8_t *act = (op == CMP_FFN_W2)      ? act_ffn
-                           : (op == CMP_ATT_SCORES)  ? act_heads
-                           : (op == CMP_ATT_VALUE)   ? act_ctx_i16
-                           : act_model;
+        const int act_len      = act_len_for_op(op);
+        const uint8_t *act     = (op == CMP_FFN_W2) ? act_ffn : act_model;
 
         MatmulInvocationResult r = run_one_matmul(
             s_axis, m_axis,
@@ -763,15 +720,13 @@ int main()
 
         static int report_every = 100;
         if (total % report_every == 0 || !r.ok) {
-            const char *op_name = (op == CMP_Q)          ? "Q"
-                                : (op == CMP_K)          ? "K"
-                                : (op == CMP_V)          ? "V"
-                                : (op == CMP_ATT_SCORES) ? "ATT_SCORES"
-                                : (op == CMP_ATT_VALUE)  ? "ATT_VALUE"
-                                : (op == CMP_OUT_PROJ)   ? "OUT_PROJ"
-                                : (op == CMP_FFN_W1)     ? "W1"
-                                : (op == CMP_FFN_W2)     ? "W2"
-                                : (op == CMP_LOGITS)     ? "LOGITS"
+            const char *op_name = (op == CMP_Q)        ? "Q"
+                                : (op == CMP_K)        ? "K"
+                                : (op == CMP_V)        ? "V"
+                                : (op == CMP_OUT_PROJ) ? "OUT_PROJ"
+                                : (op == CMP_FFN_W1)   ? "W1"
+                                : (op == CMP_FFN_W2)   ? "W2"
+                                : (op == CMP_LOGITS)   ? "LOGITS"
                                 : "?";
             tprintf("[%5d] %-10s L=%2d H=%2d  tiles=%d/%d  %s  out0=%d\n",
                     total, op_name, layer, head,
@@ -783,7 +738,8 @@ int main()
     };
 
     // =========================================================================
-    // Main loop: per layer → Q/K/V → ATT_SCORES → ATT_VALUE → OUT_PROJ → W1 → W2
+    // Main loop: per layer → Q/K/V → OUT_PROJ → W1 → W2
+    // (ATT_SCORES / ATT_VALUE removed — computed in float on PS)
     // =========================================================================
     for (int layer = 0; layer < max_layer; ++layer) {
         tprintf("\n--- Layer %d ---\n", layer);
@@ -793,16 +749,6 @@ int main()
             run(CMP_Q, layer, head);
             run(CMP_K, layer, head);
             run(CMP_V, layer, head);
-        }
-
-        // ATT_SCORES: per-head (scheduler internally iterates ctx blocks)
-        for (int head = 0; head < max_head; ++head) {
-            run(CMP_ATT_SCORES, layer, head);
-        }
-
-        // ATT_VALUE: per-head (scheduler internally iterates d_tile only)
-        for (int head = 0; head < max_head; ++head) {
-            run(CMP_ATT_VALUE, layer, head);
         }
 
         // OUT_PROJ (head ignored)

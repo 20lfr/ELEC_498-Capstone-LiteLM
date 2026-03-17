@@ -70,8 +70,6 @@ static const char *compute_op_name(ComputeOp op) {
         case CMP_Q: return "CMP_Q";
         case CMP_K: return "CMP_K";
         case CMP_V: return "CMP_V";
-        case CMP_ATT_SCORES: return "CMP_ATT_SCORES";
-        case CMP_ATT_VALUE: return "CMP_ATT_VALUE";
         case CMP_OUT_PROJ: return "CMP_OUT_PROJ";
         case CMP_FFN_W1: return "CMP_FFN_W1";
         case CMP_FFN_W2: return "CMP_FFN_W2";
@@ -135,22 +133,6 @@ static void trace_matmul_io(const PendingRequest &req,
             print_i8_prefix("IN.W",   in_buf, mm_buf::INQkvLayout::W, D_HEAD_TILE_QKV * D_MODEL);
             print_i32_prefix("IN.B",  in_buf, mm_buf::INQkvLayout::B, D_HEAD_TILE_QKV, D_HEAD_TILE_QKV);
             print_i32_prefix("OUT",   out_buf, 0, D_HEAD_TILE_QKV, D_HEAD_TILE_QKV);
-            break;
-
-        case CMP_ATT_SCORES:
-            std::printf("  INAttScoresLayout: ACT=%d W=%d\n",
-                        mm_buf::INAttScoresLayout::ACT, mm_buf::INAttScoresLayout::W);
-            print_i8_prefix("IN.ACT(Q)", in_buf, mm_buf::INAttScoresLayout::ACT, D_HEADS);
-            print_i8_prefix("IN.W(K)",   in_buf, mm_buf::INAttScoresLayout::W, ATT_CTX_BLOCK * D_HEADS);
-            print_i32_prefix("OUT(scores)", out_buf, 0, ATT_CTX_BLOCK);
-            break;
-
-        case CMP_ATT_VALUE:
-            std::printf("  INAttValueLayout: ACT=%d W=%d\n",
-                        mm_buf::INAttValueLayout::ACT, mm_buf::INAttValueLayout::W);
-            print_i16_prefix("IN.ACT(weights)", in_buf, mm_buf::INAttValueLayout::ACT, CONTEXT_LENGTH);
-            print_i8_prefix("IN.W(V)",          in_buf, mm_buf::INAttValueLayout::W, CONTEXT_LENGTH * D_HEAD_TILE_ATT_VALUE);
-            print_i32_prefix("OUT(values)", out_buf, 0, D_HEAD_TILE_ATT_VALUE, D_HEAD_TILE_ATT_VALUE);
             break;
 
         case CMP_OUT_PROJ:
@@ -259,177 +241,6 @@ static void MATMUL_QKV(
             for (int lane = 0; lane < OUT_LANES; ++lane) {
 #pragma HLS UNROLL
                 int32_t prod = a * static_cast<int32_t>(w_lane[lane][k_idx]);
-#pragma HLS BIND_OP variable=prod op=mul impl=dsp
-                acc_lane[lane] += prod;
-            }
-        }
-    }
-
-    // Write raw int32 output (out_buf access must be pipelined, not unrolled)
-    for (int lane = 0; lane < OUT_LANES; ++lane) {
-#pragma HLS PIPELINE II=1
-        write_i32_out(out_buf, lane * 4, acc_lane[lane]);
-    }
-}
-
-// ---------------------------------------------------------------------------
-// MATMUL_ATT_SCORES
-//
-// Computes attention scores for one context block:
-//   scores[t] = dot(Q[D_HEAD], K_cache[t][D_HEAD])  for t in [0, ATT_CTX_BLOCK)
-//
-// in_buf layout (mm_buf::INAttScoresLayout):
-//   [ACT] int8[D_HEADS]                       — Q vector from stream-in
-//   [W]   int8[ATT_CTX_BLOCK * D_HEADS]       — K cache tile from DMA
-// out_buf:
-//   int32[ATT_CTX_BLOCK]                       — raw dot products
-// ---------------------------------------------------------------------------
-static void MATMUL_ATT_SCORES(
-    const uint8_t in_buf[mm_buf::IN_BUF_BYTES],
-    uint8_t       out_buf[mm_buf::OUT_BUF_BYTES]
-) {
-#pragma HLS INLINE off
-    constexpr int T_LANES   = ATT_SCORES_TO_BUF_OUT_UNROLL;
-    constexpr int T_GROUPS  = ATT_CTX_BLOCK / T_LANES;
-    constexpr int UK_ATT_D  = ATT_SCORES_TO_BUF_VEC_UNROLL;  // k-unroll over D_HEADS (= 16)
-    int8_t  q[D_HEADS];
-    static_assert(T_LANES == 4, "MATMUL_ATT_SCORES expects ATT_SCORES_TO_BUF_OUT_UNROLL == 4");
-    int8_t  k0[T_GROUPS][D_HEADS];
-    int8_t  k1[T_GROUPS][D_HEADS];
-    int8_t  k2[T_GROUPS][D_HEADS];
-    int8_t  k3[T_GROUPS][D_HEADS];
-#pragma HLS ARRAY_PARTITION variable=q  cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=k0 cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=2
-#pragma HLS ARRAY_PARTITION variable=k1 cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=2
-#pragma HLS ARRAY_PARTITION variable=k2 cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=2
-#pragma HLS ARRAY_PARTITION variable=k3 cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=2
-#pragma HLS bind_storage variable=q  type=RAM_2P impl=LUTRAM
-#pragma HLS bind_storage variable=k0 type=RAM_2P impl=LUTRAM
-#pragma HLS bind_storage variable=k1 type=RAM_2P impl=LUTRAM
-#pragma HLS bind_storage variable=k2 type=RAM_2P impl=LUTRAM
-#pragma HLS bind_storage variable=k3 type=RAM_2P impl=LUTRAM
-
-    // Stage 1: activation (Q)
-    for (int d = 0; d < D_HEADS; ++d) {
-#pragma HLS PIPELINE II=1
-        q[d] = read_i8_in(in_buf, mm_buf::INAttScoresLayout::ACT + d);
-    }
-
-    // Stage 2: weight tile (K cache)
-    for (int t = 0; t < ATT_CTX_BLOCK; ++t) {
-        const int lane = t % T_LANES;
-        const int tgrp = t / T_LANES;
-        for (int d = 0; d < D_HEADS; ++d) {
-#pragma HLS PIPELINE II=1
-            const int8_t kv = read_i8_in(in_buf, mm_buf::INAttScoresLayout::W + t * D_HEADS + d);
-            switch (lane) {
-                case 0: k0[tgrp][d] = kv; break;
-                case 1: k1[tgrp][d] = kv; break;
-                case 2: k2[tgrp][d] = kv; break;
-                default: k3[tgrp][d] = kv; break;
-            }
-        }
-    }
-
-    // Compute (local only): t-grouped dot products.
-    // This avoids HLS flattening an inner "t" loop into a huge pipelined body.
-    for (int tgrp = 0; tgrp < T_GROUPS; ++tgrp) {
-#pragma HLS LOOP_FLATTEN off
-        int32_t acc0 = 0, acc1 = 0, acc2 = 0, acc3 = 0;
-        ATT_D_OUTER: for (int d_base = 0; d_base < D_HEADS; d_base += UK_ATT_D) {
-#pragma HLS PIPELINE II=1
-            ATT_D_INNER: for (int dd = 0; dd < UK_ATT_D; ++dd) {
-#pragma HLS UNROLL
-                const int     d  = d_base + dd;
-                const int32_t qd = static_cast<int32_t>(q[d]);
-                int32_t p0 = qd * static_cast<int32_t>(k0[tgrp][d]);
-#pragma HLS BIND_OP variable=p0 op=mul impl=dsp
-                acc0 += p0;
-                int32_t p1 = qd * static_cast<int32_t>(k1[tgrp][d]);
-#pragma HLS BIND_OP variable=p1 op=mul impl=dsp
-                acc1 += p1;
-                int32_t p2 = qd * static_cast<int32_t>(k2[tgrp][d]);
-#pragma HLS BIND_OP variable=p2 op=mul impl=dsp
-                acc2 += p2;
-                int32_t p3 = qd * static_cast<int32_t>(k3[tgrp][d]);
-#pragma HLS BIND_OP variable=p3 op=mul impl=dsp
-                acc3 += p3;
-            }
-        }
-        // Write this group
-        for (int lane = 0; lane < 4; ++lane) {
-#pragma HLS PIPELINE II=1
-            const int32_t acc =
-                (lane == 0) ? acc0 :
-                (lane == 1) ? acc1 :
-                (lane == 2) ? acc2 : acc3;
-            write_i32_out(out_buf, (tgrp * 4 + lane) * 4, acc);
-        }
-    }
-
-    // Note: out_buf writes performed per t-group above.
-}
-
-// ---------------------------------------------------------------------------
-// MATMUL_ATT_VALUE
-//
-// Computes the full-context weighted sum of V for one d-tile (no ctx chunking).
-//
-//   out[d] = sum_{t in [0, CONTEXT_LENGTH)} weights[t] * V_tile[d][t]
-//
-// in_buf layout (mm_buf::INAttValueLayout):
-//   [ACT] int16[CONTEXT_LENGTH]                         — softmax weights (full context) from stream-in
-//   [W]   int8[CONTEXT_LENGTH * D_HEAD_TILE_ATT_VALUE]   — V cache tile from DMA
-//                                                         layout: V[d][t] at W + d*CONTEXT_LENGTH + t
-// out_buf:
-//   int32[D_HEAD_TILE_ATT_VALUE]                        — full-context sums for this d-tile
-// ---------------------------------------------------------------------------
-static void MATMUL_ATT_VALUE(
-    const uint8_t in_buf[mm_buf::IN_BUF_BYTES],
-    uint8_t       out_buf[mm_buf::OUT_BUF_BYTES]
-) {
-#pragma HLS INLINE off
-    constexpr int OUT_LANES = D_HEAD_TILE_ATT_VALUE;
-    constexpr int UK_VAL    = ATT_VALUE_TO_BUF_CTX_UNROLL;  // k-unroll over CONTEXT_LENGTH (= 8)
-    int16_t weights[CONTEXT_LENGTH];
-    int8_t  v_lane[OUT_LANES][CONTEXT_LENGTH];
-    int32_t acc_lane[OUT_LANES];
-#pragma HLS ARRAY_PARTITION variable=weights cyclic factor=ATT_VALUE_TO_BUF_CTX_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=v_lane  complete dim=1
-#pragma HLS ARRAY_PARTITION variable=v_lane  cyclic factor=ATT_VALUE_TO_BUF_CTX_UNROLL dim=2
-#pragma HLS ARRAY_PARTITION variable=acc_lane cyclic factor=ATT_VALUE_TO_BUF_OUT_UNROLL dim=1
-#pragma HLS bind_storage variable=weights type=RAM_2P impl=LUTRAM
-#pragma HLS bind_storage variable=v_lane  type=RAM_2P impl=LUTRAM
-
-    // Stage 1: activation (softmax weights)
-    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-#pragma HLS PIPELINE II=1
-        weights[t] = read_i16_in(in_buf, mm_buf::INAttValueLayout::ACT + t * 2);
-    }
-
-    // Stage 2: weight tile (V cache)
-    for (int lane = 0; lane < OUT_LANES; ++lane) {
-        for (int t = 0; t < CONTEXT_LENGTH; ++t) {
-#pragma HLS PIPELINE II=1
-            v_lane[lane][t] =
-                read_i8_in(in_buf, mm_buf::INAttValueLayout::W + lane * CONTEXT_LENGTH + t);
-        }
-    }
-
-    // Compute (local only)
-    for (int lane = 0; lane < OUT_LANES; ++lane) {
-#pragma HLS UNROLL factor=ATT_VALUE_TO_BUF_OUT_UNROLL
-        acc_lane[lane] = 0;
-    }
-    ATT_VAL_T_OUTER: for (int t_base = 0; t_base < CONTEXT_LENGTH; t_base += UK_VAL) {
-#pragma HLS PIPELINE II=1
-        ATT_VAL_T_INNER: for (int tt = 0; tt < UK_VAL; ++tt) {
-#pragma HLS UNROLL
-            const int     t  = t_base + tt;
-            const int32_t wt = static_cast<int32_t>(weights[t]);
-            for (int lane = 0; lane < OUT_LANES; ++lane) {
-#pragma HLS UNROLL
-                int32_t prod = wt * static_cast<int32_t>(v_lane[lane][t]);
 #pragma HLS BIND_OP variable=prod op=mul impl=dsp
                 acc_lane[lane] += prod;
             }
@@ -743,14 +554,6 @@ void compute_controller(
                 case CMP_K:
                 case CMP_V:
                     MATMUL_QKV(in_buf, out_buf);
-                    break;
-
-                case CMP_ATT_SCORES:
-                    MATMUL_ATT_SCORES(in_buf, out_buf);
-                    break;
-
-                case CMP_ATT_VALUE:
-                    MATMUL_ATT_VALUE(in_buf, out_buf);
                     break;
 
                 case CMP_OUT_PROJ:

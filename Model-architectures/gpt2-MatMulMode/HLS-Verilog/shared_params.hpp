@@ -128,16 +128,15 @@ constexpr int HEADS_PARALLEL = 2;
 // the final byte so the MMU can capture a fixed-size token payload.
 constexpr int STREAM_IN_BUF_BYTES  = max2_constexpr(D_FFN, max2_constexpr(D_MODEL, 2 * CONTEXT_LENGTH));
 // Max over all op tile output sizes (each op produces int32[tile_width]):
-//   Q/K/V: D_HEAD_TILE_QKV, ATT_SCORES: ATT_CTX_BLOCK, ATT_VALUE: D_HEAD_TILE_ATT_VALUE,
-//   OUT_PROJ: D_TILE_WO, FFN_W1: D_TILE_W1, FFN_W2: D_TILE_W2, LOGITS: D_TILE_LOGIT
+//   Q/K/V: D_HEAD_TILE_QKV, OUT_PROJ: D_TILE_WO, FFN_W1: D_TILE_W1, FFN_W2: D_TILE_W2,
+//   LOGITS: D_TILE_LOGIT.
+//   (ATT_SCORES and ATT_VALUE removed — those ops are handled on PS.)
 constexpr int STREAM_OUT_BUF_BYTES =
     max2_constexpr(D_HEAD_TILE_QKV,
-    max2_constexpr(ATT_CTX_BLOCK,
-    max2_constexpr(D_HEAD_TILE_ATT_VALUE,
     max2_constexpr(D_TILE_WO,
     max2_constexpr(D_TILE_W1,
     max2_constexpr(D_TILE_W2,
-                   D_TILE_LOGIT)))))) * 4;
+                   D_TILE_LOGIT)))) * 4;
 
 // On-chip accumulation buffer: holds the complete output activation for one
 // non-LOGITS invocation. Sized for the largest non-logits output = W1 = int32[D_FFN].
@@ -394,10 +393,6 @@ static inline uint32_t tile_out_bytes_for_op(uint8_t op) {
     switch (op) {
         case 1: case 2: case 3:  // CMP_Q, CMP_K, CMP_V
             return static_cast<uint32_t>(D_HEAD_TILE_QKV * 4);
-        case 4:                  // CMP_ATT_SCORES
-            return static_cast<uint32_t>(ATT_CTX_BLOCK * 4);
-        case 5:                  // CMP_ATT_VALUE
-            return static_cast<uint32_t>(D_HEAD_TILE_ATT_VALUE * 4);
         case 6:                  // CMP_OUT_PROJ
             return static_cast<uint32_t>(D_TILE_WO * 4);
         case 7:                  // CMP_FFN_W1
@@ -411,20 +406,22 @@ static inline uint32_t tile_out_bytes_for_op(uint8_t op) {
     }
 }
 
-// Total bytes of the full output activation for 'op' (for final per-invocation stream-out TX).
+// Total bytes of the full output activation for 'op' (for per-invocation stream-out TX).
+// For non-LOGITS: all tiles accumulated in full_out_buf, single TLAST burst.
+// For LOGITS: per-tile compute, deferred TLAST; total = NUM_LOGIT_TILES * tile bytes.
 static inline uint32_t full_out_bytes_for_op(uint8_t op) {
     switch (op) {
         case 1: case 2: case 3:  // CMP_Q, CMP_K, CMP_V
-        case 5:                  // CMP_ATT_VALUE
             return static_cast<uint32_t>(D_HEADS * 4);
-        case 4:                  // CMP_ATT_SCORES
-            return static_cast<uint32_t>(CONTEXT_LENGTH * 4);
         case 6:                  // CMP_OUT_PROJ
         case 8:                  // CMP_FFN_W2
             return static_cast<uint32_t>(D_MODEL * 4);
         case 7:                  // CMP_FFN_W1
             return static_cast<uint32_t>(D_FFN * 4);
-        default:   // CMP_LOGITS (9) or unknown: not used for full-activation TX
+        case 9:                  // CMP_LOGITS — deferred TLAST over all tiles
+            return static_cast<uint32_t>(NUM_LOGIT_TILES) *
+                   static_cast<uint32_t>(D_TILE_LOGIT) * 4u;
+        default:
             return static_cast<uint32_t>(STREAM_OUT_BUF_BYTES);
     }
 }

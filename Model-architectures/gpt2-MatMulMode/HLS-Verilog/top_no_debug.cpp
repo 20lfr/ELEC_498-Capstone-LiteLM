@@ -90,6 +90,9 @@ void transformer_top(
 #pragma HLS BIND_STORAGE variable=stream_in_buf_local type=ram_t2p impl=bram
     static uint8_t          stream_out_buf_local[STREAM_OUT_BUF_BYTES];
 #pragma HLS BIND_STORAGE variable=stream_out_buf_local type=ram_t2p impl=bram
+// Per-invocation full activation accumulation buffer (non-LOGITS ops).
+    static uint8_t          full_out_buf[FULL_OUT_BUF_BYTES];
+#pragma HLS BIND_STORAGE variable=full_out_buf type=ram_t2p impl=bram
     static uint32_t         dma_rx_buf_local[TOP_DMA_BUF_WORDS];
 #pragma HLS BIND_STORAGE variable=dma_rx_buf_local type=ram_t2p impl=uram
     static uint32_t         dma_tx_buf_local[TOP_DMA_BUF_WORDS];
@@ -117,13 +120,15 @@ void transformer_top(
     static uint32_t         stream_in_counter              = 0;
     static bool             token_loaded_complete_local    = false;
 
-    // Per-invocation full activation accumulation buffer (non-LOGITS ops).
-    static uint8_t          full_out_buf[FULL_OUT_BUF_BYTES];
-#pragma HLS BIND_STORAGE variable=full_out_buf type=ram_t2p impl=bram
+    
     static uint32_t         full_out_write_offset          = 0;
 
     // Tile writeback handshake
     static bool             tile_wb_done_local             = false;
+
+    // TLAST gating: true = assert TLAST on this burst (latched from scheduler).
+    // Non-LOGITS: always true (single burst). LOGITS: true only on final tile.
+    static bool             stream_is_final_local          = true;
 
     // Latched op from last compute_start (valid through tile writeback and stream-out).
     static uint8_t          latched_op                     = 0;
@@ -199,6 +204,7 @@ void transformer_top(
         token_loaded_complete_local = false;
         full_out_write_offset = 0;
         tile_wb_done_local = false;
+        stream_is_final_local = true;
         latched_op = 0;
 
         if (reset) {
@@ -271,6 +277,7 @@ void transformer_top(
         stream_ready_local,
         stream_start_local,
         stream_done_local,
+        stream_is_final_local,
         tile_wb_start_local,
         tile_wb_done_local,
         done,
@@ -435,10 +442,10 @@ void transformer_top(
     if (!stream_tx_active_local && stream_start_local) {
         stream_tx_active_local = true;
         stream_tx_index_local  = 0;
-        // LOGITS: per-tile stream from stream_out_buf_local (MMU copied out_buf there).
-        // Non-LOGITS: single full-activation stream from full_out_buf.
+        // LOGITS: stream tile-by-tile from stream_out_buf_local; TLAST deferred to final tile.
+        // Non-LOGITS: single full-activation stream from full_out_buf (TLAST always asserted).
         if (static_cast<uint8_t>(latched_op) == static_cast<uint8_t>(CMP_LOGITS)) {
-            stream_tx_len_local       = static_cast<uint32_t>(STREAM_OUT_BUF_BYTES);
+            stream_tx_len_local       = tile_out_bytes_for_op(latched_op);  // D_TILE_LOGIT * 4
             stream_tx_from_full_local = false;
         } else {
             stream_tx_len_local       = full_out_bytes_for_op(latched_op);
@@ -450,11 +457,15 @@ void transformer_top(
         out_beat.data = stream_tx_from_full_local
                         ? full_out_buf[stream_tx_index_local]
                         : stream_out_buf_local[stream_tx_index_local];
-        out_beat.last = (stream_tx_index_local == stream_tx_len_local - 1u) ? 1 : 0;
+        out_beat.last = ((stream_tx_index_local == stream_tx_len_local - 1u)
+                         && stream_is_final_local) ? 1 : 0;
         out_beat.keep = 1;
         out_beat.strb = 1;
         if (m_axis_out.write_nb(out_beat)) {
-            if (out_beat.last) {
+            if (stream_tx_index_local == stream_tx_len_local - 1u) {
+                // End of this tile's TX — stop regardless of TLAST.
+                // TLAST controls the AXIS last flag only; stream_done always fires
+                // so the scheduler can advance to the next tile (or declare done).
                 stream_tx_active_local  = false;
                 stream_done_pulse_local = true;
                 stream_tx_index_local   = 0;

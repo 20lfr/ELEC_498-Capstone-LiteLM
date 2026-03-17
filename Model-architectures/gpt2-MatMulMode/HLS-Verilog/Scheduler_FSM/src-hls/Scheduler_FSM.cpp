@@ -50,8 +50,6 @@ static inline DmaSel op_to_dmasel(ComputeOp op) {
         case CMP_Q:          return DMASEL_WQ;
         case CMP_K:          return DMASEL_WK;
         case CMP_V:          return DMASEL_WV;
-        case CMP_ATT_SCORES: return DMASEL_CTX_K;
-        case CMP_ATT_VALUE:  return DMASEL_CTX_V;
         case CMP_OUT_PROJ:   return DMASEL_WO;
         case CMP_FFN_W1:     return DMASEL_W1;
         case CMP_FFN_W2:     return DMASEL_W2;
@@ -67,11 +65,6 @@ static inline uint16_t tile_end_for_op(ComputeOp op) {
         case CMP_K:
         case CMP_V:
             return static_cast<uint16_t>(NUM_QKV_HEAD_TILES);
-        case CMP_ATT_SCORES:
-            return static_cast<uint16_t>(NUM_ATT_CTX_BLOCKS);
-        case CMP_ATT_VALUE:
-            // No context chunking: tile only over head-dim (d_tile)
-            return static_cast<uint16_t>(NUM_ATT_VALUE_HEAD_TILES);
         case CMP_OUT_PROJ:
             return static_cast<uint16_t>(NUM_WO_TILES);
         case CMP_FFN_W1:
@@ -121,6 +114,7 @@ void scheduler_hls(
     bool      stream_ready,
     bool      &stream_start,
     bool      stream_done,
+    bool      &stream_is_final,
     bool      &tile_wb_start,
     bool      tile_wb_done,
     bool      &done,
@@ -167,8 +161,10 @@ void scheduler_hls(
 #pragma HLS reset variable=stream_started
     static bool stream_done_seen;
 #pragma HLS reset variable=stream_done_seen
-    static bool wb_started;   // tile writeback in progress (non-LOGITS only)
+    static bool wb_started;             // tile writeback in progress (non-LOGITS only)
 #pragma HLS reset variable=wb_started
+    static bool stream_is_final_latch;  // true = assert TLAST on next burst
+#pragma HLS reset variable=stream_is_final_latch
     static bool error_latched;
 #pragma HLS reset variable=error_latched
 
@@ -193,14 +189,16 @@ void scheduler_hls(
         comp_done_seen   = false;
         stream_started   = false;
         stream_done_seen = false;
-        wb_started       = false;
-        error_latched    = false;
+        wb_started              = false;
+        stream_is_final_latch   = true;
+        error_latched           = false;
 
         wl_start            = false;
         wl_instruction      = pack_dma_op(DMASEL_NONE, 0, 0, 0);
         compute_start       = false;
         compute_instruction = pack_compute_instruction(CMP_NONE, 0, 0, 0);
         stream_start        = false;
+        stream_is_final     = true;
         tile_wb_start       = false;
         done                = false;
         error               = false;
@@ -221,9 +219,10 @@ void scheduler_hls(
         compute_start       = false;
         compute_instruction = pack_compute_instruction(CMP_NONE, 0, 0, 0);
     }
-    stream_start  = false;
-    tile_wb_start = false;
-    done          = false;
+    stream_start    = false;
+    stream_is_final = stream_is_final_latch;  // hold latched value
+    tile_wb_start   = false;
+    done            = false;
 
     // -----------------------------------------------------------------------
     // Sticky capture of single-cycle done pulses
@@ -344,6 +343,7 @@ void scheduler_hls(
                     st   = S_IDLE;
                 } else {
                     // Non-LOGITS: all tiles accumulated; stream full activation once.
+                    stream_is_final_latch = true;  // single burst, always final
                     stream_started   = false;
                     stream_done_seen = false;
                     st = S_STREAM_OUT;
@@ -378,7 +378,9 @@ void scheduler_hls(
                 tile_iter++;
                 dec_tile = tile_payload_for_iter(cop, tile_iter);
                 if (op_needs_per_tile_stream(cop)) {
-                    st = S_STREAM_OUT;       // LOGITS: stream this tile's result now
+                    // LOGITS: TLAST only on the very last tile (deferred-TLAST protocol).
+                    stream_is_final_latch = (tile_iter >= tile_end);
+                    st = S_STREAM_OUT;
                 } else {
                     wb_started = false;
                     st = S_TILE_WRITEBACK;   // non-LOGITS: accumulate tile into full_out_buf

@@ -46,6 +46,7 @@ void scheduler_hls(
     bool      stream_ready,
     bool      &stream_start,
     bool      stream_done,
+    bool      &stream_is_final,  // [OUTPUT] true = assert TLAST on this burst
 
     // Per-tile writeback handshake (non-LOGITS ops only)
     bool      &tile_wb_start,  // [OUTPUT] pulse: copy mmu_out_buf → full_out_buf[offset]
