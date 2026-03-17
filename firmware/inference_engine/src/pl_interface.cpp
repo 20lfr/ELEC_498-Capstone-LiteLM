@@ -339,8 +339,8 @@ bool PLInterface::waitDone(uint32_t timeout_ms) {
     }
     if (testRegBits(PLReg::IRQ_STATUS, IRQ_INFER_DONE_BIT)) {
         if (_logger) {
-            _logger->debug("Inference finished. Triggering KV Cache Dump...");
-            _logger->debug(dumpKVCache());
+           // _logger->debug("Inference finished. Triggering KV Cache Dump...");
+           // _logger->debug(dumpKVCache());
         }
         return true;
     }
@@ -672,6 +672,7 @@ std::string PLInterface::dumpCtrlMem() {
     // ctrl_mem — writable config registers (HLS packed struct at 0x10)
     static const Reg32 ctrl_regs[] = {
         {"CONTROL", PLReg::CONTROL},
+        {"INSTR" , PLReg::INSTR},
         {"IRQ_MASK", PLReg::IRQ_MASK},
         {"IRQ_CLEAR", PLReg::IRQ_CLEAR},
         {"WQ_OFFSET", PLReg::WQ_OFFSET},

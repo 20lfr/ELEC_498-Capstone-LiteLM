@@ -235,11 +235,10 @@ public:
 
         pl->writeReg(PLReg::TOKEN_POSITION, 0);
 
-	        // Instruction is written per op invocation; keep cleared during init.
-	        pl->writeReg(PLReg::INSTR, 0);
-	        // PLReg::COMPUTE_INSTRUCTION is legacy/unused in MatMulMode.
+	    // Instruction is written per op invocation; keep cleared during init.
+	    pl->writeReg(PLReg::INSTR, 0);
 
-	        pl->endConfig();
+	    pl->endConfig();
         if (err->hasError()) {
             LOG_ERROR("Config error, register dump:\n" + pl->dumpCtrlMem());
         }
@@ -656,7 +655,7 @@ public:
         return true;
     }
 
-    bool executeMatmul(ComputeOp op, uint32_t layer, uint32_t head,
+bool executeMatmul(ComputeOp op, uint32_t layer, uint32_t head,
                        uint32_t token_position, const int8_t *act_i8,
                        uint32_t act_len, int32_t *acc_out,
                        uint32_t out_len) {
@@ -670,14 +669,6 @@ public:
         case ComputeOp::CMP_V:
             tile_end = NUM_QKV_HEAD_TILES;
             tile_out_elems = D_HEAD_TILE_QKV;
-            break;
-        case ComputeOp::CMP_ATT_SCORES:
-            tile_end = NUM_ATT_CTX_BLOCKS;
-            tile_out_elems = ATT_CTX_BLOCK;
-            break;
-        case ComputeOp::CMP_ATT_VALUE:
-            tile_end = NUM_ATT_VALUE_HEAD_TILES * NUM_ATT_CTX_BLOCKS;
-            tile_out_elems = D_HEAD_TILE_ATT_VALUE;
             break;
         case ComputeOp::CMP_OUT_PROJ:
             tile_end = NUM_WO_TILES;
@@ -700,6 +691,9 @@ public:
             return false;
         }
 
+        const size_t recv_bytes =
+            static_cast<size_t>(full_out_bytes_for_op(static_cast<uint8_t>(op)));
+
         const uint32_t expected_total = tile_end * tile_out_elems;
         if (out_len > expected_total) {
             LOG_ERROR("[MM] out_len=" + std::to_string(out_len) +
@@ -719,17 +713,17 @@ public:
                   " pos=" + std::to_string(token_position) +
                   " act=" + std::to_string(act_len) + "B out=" + std::to_string(out_len) +
                   " tiles=" + std::to_string(tile_end) + "x" + std::to_string(tile_out_elems) +
+                  " recv_bytes=" + std::to_string(recv_bytes) +
                   " instr=" + hex32(instr) + " act_i8" + v4i8(act_i8, act_len));
 
         std::vector<uint8_t> send_buf(STREAM_IN_BUF_BYTES, 0);
         memcpy(send_buf.data(), act_i8, act_len);
 
         pl->writeReg(PLReg::INSTR, instr);
-        pl->writeReg(PLReg::TOKEN_POSITION, token_position);
+        LOG_DEBUG("[MM#" + std::to_string(mm_calls) + "] INSTR=" + hex32(instr));
 
-        // Arm first receive before starting (backpressure-safe).
-        if (!pl->streamInitRecv(output_offset,
-                                static_cast<size_t>(STREAM_OUT_BUF_BYTES))) {
+        // Arm receive before starting (backpressure-safe). PL sends one TLAST per invocation.
+        if (!pl->streamInitRecv(output_offset, recv_bytes)) {
             LOG_ERROR("[MM#" + std::to_string(mm_calls) + "] recv init fail");
             return false;
         }
@@ -758,43 +752,21 @@ public:
         }
 
         LOG_DEBUG("[MM#" + std::to_string(mm_calls) +
-                  "] sent, recv " + std::to_string(tile_end) + " tiles...");
+                  "] sent, waiting for full activation (" +
+                  std::to_string(recv_bytes) + "B, single TLAST)...");
 
-        std::vector<uint8_t> recv_tile(STREAM_OUT_BUF_BYTES, 0);
-        for (uint32_t t = 0; t < tile_end; t++) {
-            if (!pl->streamWaitRecv(
-                    output_offset + t * STREAM_OUT_BUF_BYTES,
-                    recv_tile.data(), static_cast<size_t>(STREAM_OUT_BUF_BYTES),
-                    timeout_ms)) {
-                LOG_ERROR("[MM#" + std::to_string(mm_calls) +
-                          "] recv timeout tile " + std::to_string(t) + "/" +
-                          std::to_string(tile_end) +
-                          " | " + pl->streamStatusString() +
-                          " | " + pl->getRegStats(true));
-                pl->clearIRQ();
-                return false;
-            }
-
-            const uint32_t base = t * tile_out_elems;
-            if (base < out_len) {
-                const uint32_t remaining = out_len - base;
-                const uint32_t copy_elems =
-                    (remaining < tile_out_elems) ? remaining : tile_out_elems;
-                memcpy(&acc_out[base], recv_tile.data(),
-                       copy_elems * sizeof(int32_t));
-            }
-
-            if (t + 1 < tile_end) {
-                if (!pl->streamInitRecv(
-                        output_offset + (t + 1) * STREAM_OUT_BUF_BYTES,
-                        static_cast<size_t>(STREAM_OUT_BUF_BYTES))) {
-                    LOG_ERROR("[MM#" + std::to_string(mm_calls) +
-                              "] recv init fail tile " + std::to_string(t + 1));
-                    pl->clearIRQ();
-                    return false;
-                }
-            }
+        std::vector<uint8_t> recv_buf(recv_bytes, 0);
+        if (!pl->streamWaitRecv(output_offset, recv_buf.data(), recv_bytes, timeout_ms)) {
+            LOG_ERROR("[MM#" + std::to_string(mm_calls) +
+                      "] recv timeout | " + pl->streamStatusString() +
+                      " | " + pl->getRegStats(true));
+            pl->clearIRQ();
+            return false;
         }
+
+        // Copy into acc_out (cap to out_len elements)
+        const uint32_t copy_elems = (out_len < expected_total) ? out_len : expected_total;
+        memcpy(acc_out, recv_buf.data(), copy_elems * sizeof(int32_t));
 
         LOG_DEBUG("[MM#" + std::to_string(mm_calls) + "] tiles done, wait PL done...");
 
@@ -1187,8 +1159,8 @@ public:
 
         // Float embeddings (falls back to int8 if files not found)
         exec->loadFloatEmbeddings(
-            config.model.float_embeddings_file,
-            config.model.float_pos_embeddings_file);
+            config.model.embed_float_file,
+            config.model.pos_float_file);
 
         // Load weight scales, biases, LN params for matmul mode
         if (!exec->loadMatmulModeParams(config.model.model_dir)) {
