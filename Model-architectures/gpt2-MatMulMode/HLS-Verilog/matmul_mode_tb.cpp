@@ -226,7 +226,7 @@ static void write_result_record(std::ofstream &out,
 }
 
 // ---------------------------------------------------------------------------
-// Valid output int32 count per op
+// Valid output int32 count per op (per tile for LOGITS, per tile slice for others)
 // ---------------------------------------------------------------------------
 static inline int valid_n_out(uint8_t op)
 {
@@ -243,6 +243,9 @@ static inline int valid_n_out(uint8_t op)
         default:             return 0;
     }
 }
+
+// Returns true if the op uses per-tile streaming (LOGITS only).
+static inline bool op_is_per_tile_stream(uint8_t op) { return op == CMP_LOGITS; }
 
 // ---------------------------------------------------------------------------
 // Tile count per op (scheduler internally iterates tiles; PS does not specify tile)
@@ -409,11 +412,11 @@ static MatmulInvocationResult run_one_matmul(
 
     const int n_out = valid_n_out(op);
 
-    // Encode instruction (tile is ignored/reserved by PL):
-    //   [15:10]=head, [9:4]=layer, [3:0]=op
-    ctrl_mem.instr = (static_cast<uint32_t>(head)  << 10)
-                   | (static_cast<uint32_t>(layer) <<  4)
-                   |  static_cast<uint32_t>(op);
+    // Encode instruction (tiling is managed on-chip; PS only supplies op/layer/head):
+    //   [3:0]=op, [11:4]=layer (8-bit), [19:12]=head (8-bit)
+    ctrl_mem.instr = (static_cast<uint32_t>(head)  << PS_INSTR_HEAD_SHIFT)
+                   | (static_cast<uint32_t>(layer) << PS_INSTR_LAYER_SHIFT)
+                   | (static_cast<uint32_t>(op)    << PS_INSTR_OP_SHIFT);
 
     StatusMemSpace status_mem{};
     bool irq_ps = false;
@@ -445,7 +448,10 @@ static MatmulInvocationResult run_one_matmul(
     }
 
     // -- Main cycle loop ------------------------------------------------------
-    uint8_t burst_buf[STREAM_OUT_BUF_BYTES] = {};
+    // Non-LOGITS: single TLAST per invocation carries the full activation.
+    // LOGITS: one TLAST per tile (per-tile streaming, unchanged).
+    const bool per_tile_stream = op_is_per_tile_stream(op);
+    uint8_t burst_buf[FULL_OUT_BUF_BYTES] = {};
     int     burst_count     = 0;
     bool    done_seen       = false;
     int     idle_cycles     = 0;
@@ -461,38 +467,70 @@ static MatmulInvocationResult run_one_matmul(
         // Drain stream-out
         axis8_t beat_out{};
         while (m_axis.read_nb(beat_out)) {
-            if (burst_count < STREAM_OUT_BUF_BYTES) {
+            if (burst_count < FULL_OUT_BUF_BYTES) {
                 burst_buf[burst_count++] = static_cast<uint8_t>(beat_out.data);
             }
             if (beat_out.last != 0) {
-                // One tile complete: decode and write a record.
-                if (result.tiles_seen >= result.tiles_expected) {
-                    std::fprintf(stderr,
-                        "  ERROR extra burst on (op=%u L=%u H=%u): tiles_seen=%d tiles_expected=%d\n",
-                        op, layer, head, result.tiles_seen, result.tiles_expected);
-                    error_seen = true;
-                    break;
+                if (per_tile_stream) {
+                    // LOGITS: one tile per TLAST — same as before.
+                    if (result.tiles_seen >= result.tiles_expected) {
+                        std::fprintf(stderr,
+                            "  ERROR extra burst on (op=%u L=%u H=%u): tiles_seen=%d tiles_expected=%d\n",
+                            op, layer, head, result.tiles_seen, result.tiles_expected);
+                        error_seen = true;
+                        break;
+                    }
+                    int32_t decoded[ATT_CTX_BLOCK] = {};
+                    for (int i = 0; i < n_out && i < ATT_CTX_BLOCK; ++i) {
+                        const int b = i * 4;
+                        decoded[i] = static_cast<int32_t>(
+                            static_cast<uint32_t>(burst_buf[b + 0])
+                          | (static_cast<uint32_t>(burst_buf[b + 1]) << 8)
+                          | (static_cast<uint32_t>(burst_buf[b + 2]) << 16)
+                          | (static_cast<uint32_t>(burst_buf[b + 3]) << 24));
+                    }
+                    const uint16_t tile = tile_for_burst(op, result.tiles_seen);
+                    write_result_record(out_file, op, layer, head, tile,
+                                        decoded, static_cast<uint8_t>(n_out));
+                    if (result.tiles_seen == 0) {
+                        result.first_out0 = decoded[0];
+                    }
+                    result.tiles_seen++;
+                    burst_count = 0;
+                    // Stream-out logging
+                    tprintf("  [STREAM OUT] op=%u L=%u H=%u tile=%u n=%d:", op, layer, head, tile, n_out);
+                    for (int _i = 0; _i < n_out && _i < 8; ++_i) tprintf(" %d", decoded[_i]);
+                    if (n_out > 8) tprintf(" ...");
+                    tprintf("\n");
+                } else {
+                    // Non-LOGITS: single TLAST carries all tiles concatenated.
+                    // Slice burst_buf into per-tile chunks and write per-tile records.
+                    const int tile_bytes = n_out * 4;
+                    for (int t = 0; t < result.tiles_expected; ++t) {
+                        int32_t decoded[ATT_CTX_BLOCK] = {};
+                        for (int i = 0; i < n_out && i < ATT_CTX_BLOCK; ++i) {
+                            const int b = t * tile_bytes + i * 4;
+                            decoded[i] = static_cast<int32_t>(
+                                static_cast<uint32_t>(burst_buf[b + 0])
+                              | (static_cast<uint32_t>(burst_buf[b + 1]) << 8)
+                              | (static_cast<uint32_t>(burst_buf[b + 2]) << 16)
+                              | (static_cast<uint32_t>(burst_buf[b + 3]) << 24));
+                        }
+                        write_result_record(out_file, op, layer, head,
+                                            static_cast<uint16_t>(t),
+                                            decoded, static_cast<uint8_t>(n_out));
+                        if (t == 0) {
+                            result.first_out0 = decoded[0];
+                        }
+                        result.tiles_seen++;
+                        // Stream-out logging
+                        tprintf("  [STREAM OUT] op=%u L=%u H=%u tile=%d/%d n=%d:", op, layer, head, t, result.tiles_expected, n_out);
+                        for (int _i = 0; _i < n_out && _i < 8; ++_i) tprintf(" %d", decoded[_i]);
+                        if (n_out > 8) tprintf(" ...");
+                        tprintf("\n");
+                    }
+                    burst_count = 0;
                 }
-
-                int32_t decoded[ATT_CTX_BLOCK] = {};
-                for (int i = 0; i < n_out && i < ATT_CTX_BLOCK; ++i) {
-                    const int b = i * 4;
-                    decoded[i] = static_cast<int32_t>(
-                        static_cast<uint32_t>(burst_buf[b + 0])
-                      | (static_cast<uint32_t>(burst_buf[b + 1]) << 8)
-                      | (static_cast<uint32_t>(burst_buf[b + 2]) << 16)
-                      | (static_cast<uint32_t>(burst_buf[b + 3]) << 24));
-                }
-
-                const uint16_t tile = tile_for_burst(op, result.tiles_seen);
-                write_result_record(out_file, op, layer, head, tile,
-                                    decoded, static_cast<uint8_t>(n_out));
-                if (result.tiles_seen == 0) {
-                    result.first_out0 = decoded[0];
-                }
-
-                result.tiles_seen++;
-                burst_count = 0;
             }
         }
         if (error_seen) {

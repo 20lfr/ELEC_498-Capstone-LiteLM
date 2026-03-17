@@ -111,9 +111,22 @@ void transformer_top(
     static bool             stream_done_local              = false;
     static bool             stream_done_pulse_local        = false;
     static bool             stream_tx_active_local         = false;
-    static uint16_t         stream_tx_index_local          = 0;
+    static uint32_t         stream_tx_index_local          = 0;    // u32: up to FULL_OUT_BUF_BYTES-1
+    static uint32_t         stream_tx_len_local            = 0;    // bytes to emit this TX
+    static bool             stream_tx_from_full_local      = false; // true=full_out_buf, false=stream_out_buf_local
     static uint32_t         stream_in_counter              = 0;
     static bool             token_loaded_complete_local    = false;
+
+    // Per-invocation full activation accumulation buffer (non-LOGITS ops).
+    static uint8_t          full_out_buf[FULL_OUT_BUF_BYTES];
+#pragma HLS BIND_STORAGE variable=full_out_buf type=ram_t2p impl=bram
+    static uint32_t         full_out_write_offset          = 0;
+
+    // Tile writeback handshake
+    static bool             tile_wb_done_local             = false;
+
+    // Latched op from last compute_start (valid through tile writeback and stream-out).
+    static uint8_t          latched_op                     = 0;
 
     // MMU external DMA/status interface state
     static Status           mmu_status;
@@ -180,8 +193,13 @@ void transformer_top(
         stream_done_pulse_local = false;
         stream_tx_active_local = false;
         stream_tx_index_local = 0;
+        stream_tx_len_local = 0;
+        stream_tx_from_full_local = false;
         stream_in_counter = 0;
         token_loaded_complete_local = false;
+        full_out_write_offset = 0;
+        tile_wb_done_local = false;
+        latched_op = 0;
 
         if (reset) {
             prev_start = false;
@@ -235,6 +253,7 @@ void transformer_top(
     stream_done_pulse_local = false;
 
     // SCHEDULER FSM
+    bool tile_wb_start_local = false;
     scheduler_hls(
         reset_n,
         start_edge,
@@ -252,11 +271,30 @@ void transformer_top(
         stream_ready_local,
         stream_start_local,
         stream_done_local,
+        tile_wb_start_local,
+        tile_wb_done_local,
         done,
         scheduler_error,
         scheduler_layer_index_local,
         state_local
     );
+
+    // Capture op from compute_start for use during tile writeback and final stream-out.
+    if (compute_start) {
+        latched_op = static_cast<uint8_t>(compute_instruction & 0xFu);
+    }
+
+    // Tile writeback: copy one tile's results from mmu_out_buf into full_out_buf at offset.
+    tile_wb_done_local = false;
+    if (tile_wb_start_local) {
+        const uint32_t tile_bytes = tile_out_bytes_for_op(latched_op);
+        for (uint32_t i = 0; i < tile_bytes; ++i) {
+#pragma HLS PIPELINE II=1
+            full_out_buf[full_out_write_offset + i] = mmu_out_buf[i];
+        }
+        full_out_write_offset += tile_bytes;
+        tile_wb_done_local = true;
+    }
 
     // AXIS token completion is a per-token ingress latch. Once the scheduler
     // has advanced beyond STREAM_IN, clear it so the next token can be accepted.
@@ -396,21 +434,32 @@ void transformer_top(
     }
     if (!stream_tx_active_local && stream_start_local) {
         stream_tx_active_local = true;
-        stream_tx_index_local = 0;
+        stream_tx_index_local  = 0;
+        // LOGITS: per-tile stream from stream_out_buf_local (MMU copied out_buf there).
+        // Non-LOGITS: single full-activation stream from full_out_buf.
+        if (static_cast<uint8_t>(latched_op) == static_cast<uint8_t>(CMP_LOGITS)) {
+            stream_tx_len_local       = static_cast<uint32_t>(STREAM_OUT_BUF_BYTES);
+            stream_tx_from_full_local = false;
+        } else {
+            stream_tx_len_local       = full_out_bytes_for_op(latched_op);
+            stream_tx_from_full_local = true;
+        }
     }
     if (stream_tx_active_local) {
         axis8_t out_beat{};
-        out_beat.data = stream_out_buf_local[stream_tx_index_local];
-        out_beat.last = (stream_tx_index_local == static_cast<uint16_t>(STREAM_OUT_BUF_BYTES - 1)) ? 1 : 0;
+        out_beat.data = stream_tx_from_full_local
+                        ? full_out_buf[stream_tx_index_local]
+                        : stream_out_buf_local[stream_tx_index_local];
+        out_beat.last = (stream_tx_index_local == stream_tx_len_local - 1u) ? 1 : 0;
         out_beat.keep = 1;
         out_beat.strb = 1;
         if (m_axis_out.write_nb(out_beat)) {
             if (out_beat.last) {
-                stream_tx_active_local = false;
+                stream_tx_active_local  = false;
                 stream_done_pulse_local = true;
-                stream_tx_index_local = 0;
+                stream_tx_index_local   = 0;
             } else {
-                stream_tx_index_local = static_cast<uint16_t>(stream_tx_index_local + 1);
+                stream_tx_index_local   = stream_tx_index_local + 1u;
             }
         }
     }

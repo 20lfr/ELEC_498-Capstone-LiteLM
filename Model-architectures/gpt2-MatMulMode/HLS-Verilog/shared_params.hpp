@@ -139,6 +139,10 @@ constexpr int STREAM_OUT_BUF_BYTES =
     max2_constexpr(D_TILE_W2,
                    D_TILE_LOGIT)))))) * 4;
 
+// On-chip accumulation buffer: holds the complete output activation for one
+// non-LOGITS invocation. Sized for the largest non-logits output = W1 = int32[D_FFN].
+constexpr int FULL_OUT_BUF_BYTES = D_FFN * 4;
+
 static_assert((D_MODEL % D_TILE_WO) == 0,            "D_MODEL must be divisible by D_TILE_WO");
 static_assert((D_FFN   % D_TILE_W1) == 0,            "D_FFN must be divisible by D_TILE_W1");
 static_assert((D_MODEL % D_TILE_W2) == 0,            "D_MODEL must be divisible by D_TILE_W2");
@@ -375,12 +379,55 @@ constexpr uint32_t IRQ_INFER_DONE_BIT = 1u << 2;
 // MatMul-only instruction-driven scheduler states.
 // One invocation = one INSTR (op + layer + head); PL iterates all tiles internally.
 enum SchedState {
-    S_IDLE       = 0,
-    S_STREAM_IN  = 1,
-    S_MATMUL     = 2,   // unified: replaces all former S_MATMUL_* states
-    S_STREAM_OUT = 10,  // keep value for status register compatibility
-    S_DECODE     = 11   // keep value for status register compatibility
+    S_IDLE           = 0,
+    S_STREAM_IN      = 1,
+    S_MATMUL         = 2,   // unified: replaces all former S_MATMUL_* states
+    S_STREAM_OUT     = 10,  // keep value for status register compatibility
+    S_DECODE         = 11,  // keep value for status register compatibility
+    S_TILE_WRITEBACK = 12   // accumulate one tile into full_out_buf (non-LOGITS only)
 };
+
+// Per-op output byte helpers (used by top_no_debug.cpp for tile writeback and stream-out TX).
+
+// Bytes written to mmu_out_buf for one tile of 'op'.
+static inline uint32_t tile_out_bytes_for_op(uint8_t op) {
+    switch (op) {
+        case 1: case 2: case 3:  // CMP_Q, CMP_K, CMP_V
+            return static_cast<uint32_t>(D_HEAD_TILE_QKV * 4);
+        case 4:                  // CMP_ATT_SCORES
+            return static_cast<uint32_t>(ATT_CTX_BLOCK * 4);
+        case 5:                  // CMP_ATT_VALUE
+            return static_cast<uint32_t>(D_HEAD_TILE_ATT_VALUE * 4);
+        case 6:                  // CMP_OUT_PROJ
+            return static_cast<uint32_t>(D_TILE_WO * 4);
+        case 7:                  // CMP_FFN_W1
+            return static_cast<uint32_t>(D_TILE_W1 * 4);
+        case 8:                  // CMP_FFN_W2
+            return static_cast<uint32_t>(D_TILE_W2 * 4);
+        case 9:                  // CMP_LOGITS
+            return static_cast<uint32_t>(D_TILE_LOGIT * 4);
+        default:
+            return static_cast<uint32_t>(STREAM_OUT_BUF_BYTES);
+    }
+}
+
+// Total bytes of the full output activation for 'op' (for final per-invocation stream-out TX).
+static inline uint32_t full_out_bytes_for_op(uint8_t op) {
+    switch (op) {
+        case 1: case 2: case 3:  // CMP_Q, CMP_K, CMP_V
+        case 5:                  // CMP_ATT_VALUE
+            return static_cast<uint32_t>(D_HEADS * 4);
+        case 4:                  // CMP_ATT_SCORES
+            return static_cast<uint32_t>(CONTEXT_LENGTH * 4);
+        case 6:                  // CMP_OUT_PROJ
+        case 8:                  // CMP_FFN_W2
+            return static_cast<uint32_t>(D_MODEL * 4);
+        case 7:                  // CMP_FFN_W1
+            return static_cast<uint32_t>(D_FFN * 4);
+        default:   // CMP_LOGITS (9) or unknown: not used for full-activation TX
+            return static_cast<uint32_t>(STREAM_OUT_BUF_BYTES);
+    }
+}
 
 // Error Codes
 constexpr uint32_t ERR_NONE = 0u;

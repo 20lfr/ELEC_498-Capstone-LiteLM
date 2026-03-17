@@ -41,12 +41,13 @@ enum class ComputeOp : uint8_t {
     CMP_LOGITS     = 9,
 };
 
-static inline uint32_t pack_instr32(ComputeOp op, uint32_t layer,
-                                   uint32_t head) {
+static inline uint32_t pack_instr32(ComputeOp op, uint32_t layer, uint32_t head) {
+    // MatMulMode PS->PL instruction format (must match HLS):
+    //   [3:0]=op, [11:4]=layer (8-bit), [19:12]=head (8-bit), [31:20]=reserved
     const uint32_t op4 = static_cast<uint32_t>(op) & 0xFu;
-    const uint32_t layer6 = layer & 0x3Fu;
-    const uint32_t head6 = head & 0x3Fu;
-    return op4 | (layer6 << 4) | (head6 << 10);
+    const uint32_t layer8 = layer & 0xFFu;
+    const uint32_t head8 = head & 0xFFu;
+    return op4 | (layer8 << 4) | (head8 << 12);
 }
 
 // =============================================================================
@@ -182,11 +183,11 @@ public:
 
         pl->writeReg(PLReg::TOKEN_POSITION, 0);
 
-        // Instruction is written per op invocation; keep cleared during init.
-        pl->writeReg(PLReg::INSTR, 0);
-        pl->writeReg(PLReg::COMPUTE_INSTRUCTION, 0);
+	        // Instruction is written per op invocation; keep cleared during init.
+	        pl->writeReg(PLReg::INSTR, 0);
+	        // PLReg::COMPUTE_INSTRUCTION is legacy/unused in MatMulMode.
 
-        pl->endConfig();
+	        pl->endConfig();
         if (err->hasError()) {
             LOG_ERROR("Config error, register dump:\n" + pl->dumpCtrlMem());
         }

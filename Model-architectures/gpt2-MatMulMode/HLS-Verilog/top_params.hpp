@@ -35,6 +35,25 @@ enum ComputeOp : uint8_t {
     CMP_LOGITS     = 9,  // Vocab proj tile: int8[D_MODEL] x int8[D_TILE_LOGIT x D_MODEL] -> int32[D_TILE_LOGIT]
 };
 
+// ---------------------------------------------------------------------------
+// PS -> PL 32-bit INSTR format (ControlMemSpace::instr)
+//
+// MatMulMode instruction word. Tile iteration is managed entirely on-chip; PS
+// only selects op/layer/head.
+//
+//   INSTR[3:0]    op    (ComputeOp)
+//   INSTR[11:4]   layer (8-bit)
+//   INSTR[19:12]  head  (8-bit)
+//   INSTR[31:20]  reserved (0)
+// ---------------------------------------------------------------------------
+constexpr uint32_t PS_INSTR_OP_SHIFT    = 0u;
+constexpr uint32_t PS_INSTR_LAYER_SHIFT = 4u;
+constexpr uint32_t PS_INSTR_HEAD_SHIFT  = 12u;
+
+constexpr uint32_t PS_INSTR_OP_MASK    = 0xFu;
+constexpr uint32_t PS_INSTR_LAYER_MASK = 0xFFu;
+constexpr uint32_t PS_INSTR_HEAD_MASK  = 0xFFu;
+
 // MatMul-only DMA selectors — only weight tiles and KV-cache ctx blocks.
 // K/V write-back to DDR is handled by PS after dequantizing the stream-out.
 enum DmaSel : uint8_t {
@@ -85,8 +104,8 @@ struct PendingRequest {
 //       sizeof(int32_t). Strides are derived inside PL from shared_params.hpp.
 struct ControlMemSpace {
     uint32_t control = CTRL_RESETN_BIT; // bit0=reset_n, bit1=start
-    // MatMul instruction (PS → PL): [15:10]=head, [9:4]=layer, [3:0]=op.
-    // [31:16] unused — no tile field; tiling is managed entirely on-chip.
+    // MatMul instruction (PS → PL):
+    //   [3:0]=op, [11:4]=layer, [19:12]=head, [31:20]=reserved (0)
     uint32_t instr   = 0;
     uint32_t irq_mask = 0; // IRQ_ERROR_BIT | IRQ_INFER_DONE_BIT for all Interrupts
     uint32_t irq_clear = 0;
@@ -121,7 +140,8 @@ struct ControlMemSpace {
     uint32_t wlogit_offset = 0;
 
     uint32_t token_position = 0;
-    uint32_t compute_instruction = 0; 
+    // Legacy/unused in MatMulMode (kept to preserve AXI-Lite register map).
+    uint32_t compute_instruction = 0;
 };
 
 // Status (PS Reads <- PL Writes)

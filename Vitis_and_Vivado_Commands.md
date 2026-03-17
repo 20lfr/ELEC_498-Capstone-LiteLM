@@ -7,6 +7,8 @@ vitis-run --mode hls --csim --config $WORK_DIR/hls_config.cfg --work_dir $WORK_D
 
 vitis-run --mode hls --csim --config /home/luka/Scripting/vitis_simulations/Top_Module_GPT2/hls_config.cfg --work_dir /home/luka/Scripting/vitis_simulations/Top_Module_GPT2/transformer_top
 
+vitis-run --mode hls --csim --config /home/luka/Scripting/vitis_simulations/Top_Module_MATMUL_ARCH/hls_config.cfg --work_dir transformer_top
+
 
 To Run Synthesis (Example):
 v++ -c --mode hls --config $WORK_DIR/hls_config.cfg --work_dir $WORK_DIR

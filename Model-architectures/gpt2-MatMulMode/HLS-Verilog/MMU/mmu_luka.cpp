@@ -780,6 +780,26 @@ static void begin_new_token_cleanup() {
     g_invalid = false;
     g_error_code = ERR_NONE;
     g_error_subcode = MMU_ERR_SUBCODE_NONE;
+    g_state = State::IDLE;
+
+    // Reset DMA and compute queues.
+    for (int i = 0; i < DMA_QUEUE_DEPTH; ++i) {
+        dma_q[i] = DmaQueueEntry{};
+    }
+    dma_q_head  = 0;
+    dma_q_tail  = 0;
+    dma_q_count = 0;
+    for (int i = 0; i < COMPUTE_QUEUE_DEPTH; ++i) {
+        compute_q[i] = ComputeQueueEntry{};
+    }
+    compute_q_head  = 0;
+    compute_q_tail  = 0;
+    compute_q_count = 0;
+
+    // Clear active request state.
+    active_dma_valid     = false;
+    active_compute_valid = false;
+    main_wl_accepted     = false;
 
     for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
         stream_in_capture_buf[i] = 0;

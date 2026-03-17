@@ -8,8 +8,11 @@
 //
 // Protocol (per invocation):
 //   1) PS writes 32-bit INSTR to ctrl_mem.instr:
-//        [15:10] = head,  [9:4] = layer,  [3:0] = op
-//        [31:16] unused — no tile field; all tiling is managed entirely on-chip.
+//        [3:0]    = op
+//        [11:4]   = layer (8-bit)
+//        [19:12]  = head  (8-bit)
+//        [31:20]  = reserved (0)
+//      No tile field; all tiling is managed entirely on-chip.
 //   2) PS asserts cntrl_start (CTRL_START_BIT in ctrl_mem.control).
 //   3) Scheduler enters S_STREAM_IN.
 //   4) PS streams activation via AXIS; scheduler waits for axis_token_complete.
@@ -43,6 +46,10 @@ void scheduler_hls(
     bool      stream_ready,
     bool      &stream_start,
     bool      stream_done,
+
+    // Per-tile writeback handshake (non-LOGITS ops only)
+    bool      &tile_wb_start,  // [OUTPUT] pulse: copy mmu_out_buf → full_out_buf[offset]
+    bool      tile_wb_done,    // [INPUT]  ack: writeback complete, advance to next tile
 
     // Status outputs
     bool      &done,

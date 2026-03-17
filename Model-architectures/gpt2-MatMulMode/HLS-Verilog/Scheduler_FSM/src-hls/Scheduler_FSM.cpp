@@ -25,14 +25,21 @@ static inline uint64_t pack_compute_instruction(ComputeOp op, uint8_t layer, uin
 }
 
 // Decode 32-bit PS instruction:
-//   [15:10]=head, [9:4]=layer, [3:0]=op
-//   [31:16] unused — no tile field; tiling is managed entirely on-chip
+//   [3:0]=op, [11:4]=layer (8-bit), [19:12]=head (8-bit), [31:20]=reserved
+//   No tile field; tiling is managed entirely on-chip.
 static inline void decode_instr(uint32_t instr,
     uint8_t &op, uint8_t &layer, uint8_t &head) {
 #pragma HLS INLINE
-    op    = static_cast<uint8_t>(instr & 0xFu);
-    layer = static_cast<uint8_t>((instr >>  4) & 0x3Fu);
-    head  = static_cast<uint8_t>((instr >> 10) & 0x3Fu);
+    op    = static_cast<uint8_t>((instr >> PS_INSTR_OP_SHIFT) & PS_INSTR_OP_MASK);
+    layer = static_cast<uint8_t>((instr >> PS_INSTR_LAYER_SHIFT) & PS_INSTR_LAYER_MASK);
+    head  = static_cast<uint8_t>((instr >> PS_INSTR_HEAD_SHIFT) & PS_INSTR_HEAD_MASK);
+}
+
+// Non-LOGITS ops accumulate all tiles into full_out_buf before a single final stream-out.
+// LOGITS keeps per-tile streaming (D_VOCAB * 4 ~ 200KB is too large for on-chip buffer).
+static inline bool op_needs_per_tile_stream(ComputeOp op) {
+#pragma HLS INLINE
+    return op == CMP_LOGITS;
 }
 
 // Map ComputeOp to DmaSel for the weight/cache fetch.
@@ -114,6 +121,8 @@ void scheduler_hls(
     bool      stream_ready,
     bool      &stream_start,
     bool      stream_done,
+    bool      &tile_wb_start,
+    bool      tile_wb_done,
     bool      &done,
     bool      &error,
     uint32_t  &layer_index_out,
@@ -158,6 +167,8 @@ void scheduler_hls(
 #pragma HLS reset variable=stream_started
     static bool stream_done_seen;
 #pragma HLS reset variable=stream_done_seen
+    static bool wb_started;   // tile writeback in progress (non-LOGITS only)
+#pragma HLS reset variable=wb_started
     static bool error_latched;
 #pragma HLS reset variable=error_latched
 
@@ -182,6 +193,7 @@ void scheduler_hls(
         comp_done_seen   = false;
         stream_started   = false;
         stream_done_seen = false;
+        wb_started       = false;
         error_latched    = false;
 
         wl_start            = false;
@@ -189,6 +201,7 @@ void scheduler_hls(
         compute_start       = false;
         compute_instruction = pack_compute_instruction(CMP_NONE, 0, 0, 0);
         stream_start        = false;
+        tile_wb_start       = false;
         done                = false;
         error               = false;
         layer_index_out     = 0;
@@ -208,8 +221,9 @@ void scheduler_hls(
         compute_start       = false;
         compute_instruction = pack_compute_instruction(CMP_NONE, 0, 0, 0);
     }
-    stream_start = false;
-    done         = false;
+    stream_start  = false;
+    tile_wb_start = false;
+    done          = false;
 
     // -----------------------------------------------------------------------
     // Sticky capture of single-cycle done pulses
@@ -243,6 +257,7 @@ void scheduler_hls(
                 comp_done_seen   = false;
                 stream_started   = false;
                 stream_done_seen = false;
+                wb_started       = false;
                 error_latched    = false;
 
                 wl_start            = false;
@@ -314,15 +329,25 @@ void scheduler_hls(
 
         // -------------------------------------------------------------------
         // Unified MatMul state: tile loop over all tiles for the decoded op.
-        //   - Exit check at top: tile_iter >= tile_end → done → S_IDLE
-        //   - else-if chain mirrors the reference S_OUT_PROJECTION pattern
-        //   - tile_iter++ and dec_tile update happen in the last branch
-        //   - → S_STREAM_OUT to stream one tile result, then loops back here
+        //   - Exit check at top: tile_iter >= tile_end
+        //     → LOGITS: done=true, S_IDLE  (per-tile streams already done)
+        //     → non-LOGITS: S_STREAM_OUT once (full activation already accumulated)
+        //   - else-if chain: DMA → compute → S_TILE_WRITEBACK (non-LOGITS)
+        //                                 → S_STREAM_OUT       (LOGITS, per-tile)
         // -------------------------------------------------------------------
         case S_MATMUL: {
             if (tile_iter >= tile_end) {
-                done = true;
-                st   = S_IDLE;
+                const ComputeOp cop2 = static_cast<ComputeOp>(dec_op);
+                if (op_needs_per_tile_stream(cop2)) {
+                    // LOGITS: per-tile streams already done; signal invocation complete.
+                    done = true;
+                    st   = S_IDLE;
+                } else {
+                    // Non-LOGITS: all tiles accumulated; stream full activation once.
+                    stream_started   = false;
+                    stream_done_seen = false;
+                    st = S_STREAM_OUT;
+                }
                 break;
             }
 
@@ -352,13 +377,34 @@ void scheduler_hls(
                 comp_done_seen = false;
                 tile_iter++;
                 dec_tile = tile_payload_for_iter(cop, tile_iter);
-                st = S_STREAM_OUT;
+                if (op_needs_per_tile_stream(cop)) {
+                    st = S_STREAM_OUT;       // LOGITS: stream this tile's result now
+                } else {
+                    wb_started = false;
+                    st = S_TILE_WRITEBACK;   // non-LOGITS: accumulate tile into full_out_buf
+                }
             }
             break;
         }
         // -------------------------------------------------------------------
-        // Stream one tile's result to PS, then return to S_MATMUL.
-        // S_MATMUL checks tile_iter >= tile_end on re-entry and exits if done.
+        // Per-tile writeback: pulse tile_wb_start, wait for tile_wb_done ack,
+        // then return to S_MATMUL for the next tile (non-LOGITS only).
+        // -------------------------------------------------------------------
+        case S_TILE_WRITEBACK: {
+            if (!wb_started) {
+                tile_wb_start = true;
+                wb_started    = true;
+            }
+            if (wb_started && tile_wb_done) {
+                wb_started = false;
+                st         = S_MATMUL;
+            }
+            break;
+        }
+        // -------------------------------------------------------------------
+        // Stream-out:
+        //   LOGITS path: stream one tile's result, return to S_MATMUL.
+        //   Non-LOGITS path: stream full accumulated activation, then done.
         // -------------------------------------------------------------------
         case S_STREAM_OUT: {
             if (!stream_started && stream_ready) {
@@ -372,7 +418,12 @@ void scheduler_hls(
                 dma_done_seen    = false;
                 comp_busy        = false;
                 comp_done_seen   = false;
-                st = S_MATMUL;
+                if (op_needs_per_tile_stream(static_cast<ComputeOp>(dec_op))) {
+                    st = S_MATMUL;   // LOGITS: loop for more tiles (or exit at top)
+                } else {
+                    done = true;     // non-LOGITS: full activation streamed; invocation done
+                    st   = S_IDLE;
+                }
             }
             break;
         }
