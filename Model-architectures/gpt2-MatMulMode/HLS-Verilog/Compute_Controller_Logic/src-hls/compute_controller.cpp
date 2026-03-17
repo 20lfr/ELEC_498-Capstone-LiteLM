@@ -73,7 +73,6 @@ static const char *compute_op_name(ComputeOp op) {
         case CMP_OUT_PROJ: return "CMP_OUT_PROJ";
         case CMP_FFN_W1: return "CMP_FFN_W1";
         case CMP_FFN_W2: return "CMP_FFN_W2";
-        case CMP_LOGITS: return "CMP_LOGITS";
         default: return "CMP_UNKNOWN";
     }
 }
@@ -160,14 +159,6 @@ static void trace_matmul_io(const PendingRequest &req,
             print_i8_prefix("IN.W",   in_buf, mm_buf::INW2Layout::W, D_TILE_W2 * D_FFN);
             print_i32_prefix("IN.B",  in_buf, mm_buf::INW2Layout::B, D_TILE_W2, D_TILE_W2);
             print_i32_prefix("OUT",   out_buf, 0, D_TILE_W2, D_TILE_W2);
-            break;
-
-        case CMP_LOGITS:
-            std::printf("  INLogitsLayout: ACT=%d W=%d\n",
-                        mm_buf::INLogitsLayout::ACT, mm_buf::INLogitsLayout::W);
-            print_i8_prefix("IN.ACT", in_buf, mm_buf::INLogitsLayout::ACT, D_MODEL);
-            print_i8_prefix("IN.W",   in_buf, mm_buf::INLogitsLayout::W, D_TILE_LOGIT * D_MODEL);
-            print_i32_prefix("OUT",   out_buf, 0, D_TILE_LOGIT, D_TILE_LOGIT);
             break;
 
         default:
@@ -288,7 +279,6 @@ static void MATMUL_SHARED(
 
     // Stage/compute/write in output-lane groups to prevent HLS from forcing a full unroll
     // across D_TILE_SHARED inside a pipelined k-loop.
-    const bool has_bias = (op != CMP_LOGITS);
     for (int base = 0; base < D_TILE_SHARED; base += OUT_LANES) {
 #pragma HLS LOOP_FLATTEN off
         // Stage 2: weights (only this group's lanes)
@@ -301,11 +291,11 @@ static void MATMUL_SHARED(
             }
         }
 
-        // Stage 3: bias (CMP_LOGITS has no bias — zero-fill)
+        // Stage 3: bias
         for (int lane = 0; lane < OUT_LANES; ++lane) {
 #pragma HLS PIPELINE II=1
             const int d = base + lane;
-            bias_lane[lane] = has_bias ? read_i32_in(in_buf, mm_buf::INOutProjLayout::B + d * 4) : 0;
+            bias_lane[lane] = read_i32_in(in_buf, mm_buf::INOutProjLayout::B + d * 4);
         }
 
         // Compute (local only)
@@ -558,7 +548,6 @@ void compute_controller(
 
                 case CMP_OUT_PROJ:
                 case CMP_FFN_W1:
-                case CMP_LOGITS:
                     MATMUL_SHARED(in_buf, out_buf, req.op);
                     break;
 

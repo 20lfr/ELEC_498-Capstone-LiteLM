@@ -229,7 +229,7 @@ static void write_result_record(std::ofstream &out,
 }
 
 // ---------------------------------------------------------------------------
-// Valid output int32 count per op (per tile for LOGITS, per tile slice for others)
+// Valid output int32 count per op (per tile slice)
 // ---------------------------------------------------------------------------
 static inline int valid_n_out(uint8_t op)
 {
@@ -240,7 +240,6 @@ static inline int valid_n_out(uint8_t op)
         case CMP_OUT_PROJ:   return D_TILE_WO;                 // 16
         case CMP_FFN_W1:     return D_TILE_W1;                 // 16
         case CMP_FFN_W2:     return D_TILE_W2;                 // 8
-        case CMP_LOGITS:     return D_TILE_LOGIT;              // 16
         default:             return 0;
     }
 }
@@ -260,7 +259,6 @@ static inline int tile_end_for_op(uint8_t op)
         case CMP_OUT_PROJ: return NUM_WO_TILES;
         case CMP_FFN_W1:   return NUM_W1_TILES;
         case CMP_FFN_W2:   return NUM_W2_TILES;
-        case CMP_LOGITS:   return NUM_LOGIT_TILES;
         default:           return 0;
     }
 }
@@ -362,7 +360,6 @@ static ControlMemSpace make_default_ctrl_mem()
     ctrl_mem.ln0_eps_offset    = LN0_EPS_OFF;
     ctrl_mem.ln1_eps_offset    = LN1_EPS_OFF;
     ctrl_mem.final_norm_eps_offset   = FINAL_NORM_EPS_OFF;
-    ctrl_mem.wlogit_offset     = WLOGIT_OFF;
     ctrl_mem.token_position    = 0;
     return ctrl_mem;
 }
@@ -445,13 +442,8 @@ static MatmulInvocationResult run_one_matmul(
     }
 
     // -- Main cycle loop ------------------------------------------------------
-    // All ops produce a single TLAST per invocation.
-    // LOGITS uses deferred-TLAST: PL streams all tiles before asserting TLAST.
-    // burst_buf must hold the largest possible burst: LOGITS full output.
-    static constexpr int LOGIT_FULL_BYTES   = NUM_LOGIT_TILES * D_TILE_LOGIT * 4;
-    static constexpr int TB_MAX_BURST_BYTES =
-        (LOGIT_FULL_BYTES > FULL_OUT_BUF_BYTES) ? LOGIT_FULL_BYTES : FULL_OUT_BUF_BYTES;
-    static uint8_t burst_buf[TB_MAX_BURST_BYTES];
+    // All ops produce a single TLAST per invocation (full activation burst).
+    static uint8_t burst_buf[FULL_OUT_BUF_BYTES];
     std::memset(burst_buf, 0, sizeof(burst_buf));
     const bool per_tile_stream = op_is_per_tile_stream(op);
     int     burst_count     = 0;
@@ -469,7 +461,7 @@ static MatmulInvocationResult run_one_matmul(
         // Drain stream-out
         axis8_t beat_out{};
         while (m_axis.read_nb(beat_out)) {
-            if (burst_count < TB_MAX_BURST_BYTES) {
+            if (burst_count < FULL_OUT_BUF_BYTES) {
                 burst_buf[burst_count++] = static_cast<uint8_t>(beat_out.data);
             }
             if (beat_out.last != 0) {
@@ -665,7 +657,6 @@ int main()
     tprintf("  wo_offset        = 0x%08X\n", ctrl_template.wo_offset);
     tprintf("  w1_offset        = 0x%08X\n", ctrl_template.w1_offset);
     tprintf("  w2_offset        = 0x%08X\n", ctrl_template.w2_offset);
-    tprintf("  wlogit_offset    = 0x%08X\n", ctrl_template.wlogit_offset);
     tprintf("  k_cache_offset   = 0x%08X\n", ctrl_template.k_cache_offset);
     tprintf("  v_cache_offset   = 0x%08X\n", ctrl_template.v_cache_offset);
     tprintf("  wq_bias_offset   = 0x%08X\n", ctrl_template.wq_bias_offset);
@@ -697,7 +688,7 @@ int main()
     int failed = 0;
 
     // Activation slices (zero-padded to STREAM_IN_BUF_BYTES)
-    // D_MODEL bytes from stream_in (for Q/K/V/OUT_PROJ/W1/LOGITS)
+    // D_MODEL bytes from stream_in (for Q/K/V/OUT_PROJ/W1)
     // D_FFN bytes from stream_in (for W2)
     const uint8_t *act_model = stream_in_token;
     const uint8_t *act_ffn   = stream_in_token;
@@ -726,7 +717,6 @@ int main()
                                 : (op == CMP_OUT_PROJ) ? "OUT_PROJ"
                                 : (op == CMP_FFN_W1)   ? "W1"
                                 : (op == CMP_FFN_W2)   ? "W2"
-                                : (op == CMP_LOGITS)   ? "LOGITS"
                                 : "?";
             tprintf("[%5d] %-10s L=%2d H=%2d  tiles=%d/%d  %s  out0=%d\n",
                     total, op_name, layer, head,
@@ -760,10 +750,6 @@ int main()
         // W2 (head ignored)
         run(CMP_FFN_W2, layer, 0);
     }
-
-    // LOGITS (all tiles, layer index irrelevant — use 0)
-    tprintf("\n--- LOGITS ---\n");
-    run(CMP_LOGITS, 0, 0);
 
     out_file.close();
 

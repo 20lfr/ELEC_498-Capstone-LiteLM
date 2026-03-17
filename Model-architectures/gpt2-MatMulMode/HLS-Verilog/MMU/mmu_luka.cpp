@@ -210,8 +210,6 @@ static inline uint32_t mmu_missing_subcode_from_tag(Tag tag) {
         case Tag::W2_B: return MMU_ERR_SUBCODE_MISSING_W2_B;
         case Tag::FFN_W2_PACKED: return MMU_ERR_SUBCODE_MISSING_FFN_W2_PACKED;
         case Tag::RESID2_OUT: return MMU_ERR_SUBCODE_MISSING_RESID2_OUT;
-        case Tag::LOGITS_W: return MMU_ERR_SUBCODE_MISSING_LOGITS_W;
-        case Tag::LOGITS_PACKED: return MMU_ERR_SUBCODE_MISSING_LOGITS_PACKED;
         case Tag::ARGMAX_OUT: return MMU_ERR_SUBCODE_MISSING_ARGMAX_OUT;
         case Tag::LN0_GAMMA: return MMU_ERR_SUBCODE_MISSING_LN0_GAMMA;
         case Tag::LN0_BETA: return MMU_ERR_SUBCODE_MISSING_LN0_BETA;
@@ -292,9 +290,6 @@ static inline uint32_t main_op_out_bytes(ComputeOp op) {
         case CMP_FFN_W2: {
             return compute_buf::OUTFfnW2Layout::TOTAL_BYTES;
         }
-        case CMP_LOGITS: {
-            return compute_buf::OUTLogitsLayout::TOTAL_BYTES;
-        }
         default: {
             return compute_buf::OUT_BUF_BYTES;
         }
@@ -316,7 +311,6 @@ static inline uint8_t default_retain(Tag tag) {
         case Tag::W1_B:
         case Tag::W2_W:
         case Tag::W2_B:
-        case Tag::LOGITS_W:
         case Tag::CTX_K:
         case Tag::CTX_V:
         case Tag::LN1_GAMMA:
@@ -345,7 +339,6 @@ static inline uint8_t default_retain(Tag tag) {
         case Tag::FFN_W1_PACKED:
         case Tag::FFN_ACT_OUT:
         case Tag::FFN_W2_PACKED:
-        case Tag::LOGITS_PACKED:
         case Tag::Q_OUT:
         case Tag::K_OUT:
         case Tag::V_OUT:
@@ -378,7 +371,6 @@ static inline bool should_consume(Tag tag) {
         case Tag::W1_B:
         case Tag::W2_W:
         case Tag::W2_B:
-        case Tag::LOGITS_W:
         case Tag::CTX_K:
         case Tag::CTX_V:
         case Tag::LN0_GAMMA:
@@ -396,7 +388,6 @@ static inline bool should_consume(Tag tag) {
         case Tag::FFN_W1_PACKED:
         case Tag::FFN_ACT_OUT:
         case Tag::FFN_W2_PACKED:
-        case Tag::LOGITS_PACKED:
         case Tag::Q_OUT:
         case Tag::K_OUT:
         case Tag::V_OUT:
@@ -1432,14 +1423,6 @@ static WriteSpec build_write_spec(ComputeOp op, int tile) {
             s.total_bytes = static_cast<uint32_t>(NUM_W2_TILES) * s.part_bytes;
             break;
         }
-        case CMP_LOGITS: {
-            s.tag = Tag::LOGITS_PACKED;
-            s.key_tile = -1;
-            s.expected_parts = NUM_LOGIT_TILES;
-            s.part_idx = (tile >= 0) ? tile : 0;
-            s.total_bytes = static_cast<uint32_t>(NUM_LOGIT_TILES) * s.part_bytes;
-            break;
-        }
         default: {
             s.tag = Tag::NONE;
             s.key_tile = -1;
@@ -1539,13 +1522,6 @@ static bool build_dma_piece_plan(DmaSel sel,
             piece_tag[0] = Tag::CTX_V;
             return true;
         }
-        case DMASEL_WLOGIT: {
-            piece_count = 1;
-            piece_bytes[0] = mm_buf::LOGITS_W_BYTES;
-            piece_addr_off[0] = 0;
-            piece_tag[0] = Tag::LOGITS_W;
-            return true;
-        }
         case DMASEL_NONE: {
             piece_count = 0;
             return true;
@@ -1621,15 +1597,6 @@ static bool calc_dma_base_addr(ControlMemSpace ctrl_mem, DmaSel sel, int layer, 
             addr_out = static_cast<uint64_t>(ctrl_mem.w2_offset)
                      + static_cast<uint32_t>(layer) * STRIDE_W2_LAYER
                      + static_cast<uint32_t>(tile) * STRIDE_W2_TILE;
-            return true;
-        }
-        case DmaSel::DMASEL_WLOGIT: {
-            if (tile < 0) return false;
-            // Logits projection weights are shared across layers in this design.
-            // Do not apply layer_stride here, otherwise layer>0 reads can go out-of-range
-            // of the compact DDR image and become nondeterministic in C-sim.
-            addr_out = static_cast<uint64_t>(ctrl_mem.wlogit_offset)
-                     + static_cast<uint32_t>(tile) * STRIDE_WLOGIT_TILE;
             return true;
         }
         case DmaSel::DMASEL_NONE: {
@@ -1733,7 +1700,6 @@ static const char *dma_sel_name(DmaSel sel) {
         case DMASEL_W2: return "DMASEL_W2";
         case DMASEL_CTX_K: return "DMASEL_CTX_K";
         case DMASEL_CTX_V: return "DMASEL_CTX_V";
-        case DMASEL_WLOGIT: return "DMASEL_WLOGIT";
         default: return "DMASEL_UNKNOWN";
     }
 }
@@ -1900,14 +1866,6 @@ static bool build_main_in_buf(ComputeOp op, int layer, int head, int tile,
             return load_region_to_buf(Tag::W2_B, layer, -1, tile,
                                       buf, mm_buf::INW2Layout::B, mm_buf::W2_B_BYTES,
                                       true, invalid_flag);
-        }
-        case CMP_LOGITS: {
-            bool ok = load_main_x_slot_to_buf(buf, mm_buf::INLogitsLayout::ACT, mm_buf::LOGITS_ACT_BYTES,
-                                              Tag::STREAM_IN_TOKEN, invalid_flag);
-            if (!ok) return false;
-            return load_region_to_buf(Tag::LOGITS_W, layer, -1, tile,
-                                      buf, mm_buf::INLogitsLayout::W,
-                                      mm_buf::LOGITS_W_BYTES, true, invalid_flag);
         }
         default: {
             mmu_set_invalid(ERR_MMU_UNSUPPORTED_REQ_COMPUTE_OP_NON_HEADED);
@@ -2313,34 +2271,6 @@ void mmu_fsm(
 	                break;
 	            }
 
-            // Logits weights tiling can require padding when D_VOCAB is not divisible by NUM_LOGIT_TILES.
-            // Guard against overreading past the end of the wlogit region: clamp reads to [wlogit_start, wlogit_end)
-            // and synthesize any out-of-range bytes as zeros.
-            if (active_dma_sel == DMASEL_WLOGIT) {
-                const uint64_t wlogit_start = static_cast<uint64_t>(ctrl_mem.wlogit_offset);
-                const uint64_t wlogit_end =
-                    wlogit_start + static_cast<uint64_t>(MEM_WLOGIT);
-
-                if (piece_addr >= wlogit_end) {
-                    // Entire chunk is past end-of-wlogit: skip external DMA and pad zeros into the region.
-                    active_dma_pad_zero = true;
-                    active_chunk_bytes = desired_sz;
-                    g_state = State::DMA_STORE;
-                    break;
-                }
-
-                const uint64_t avail = wlogit_end - piece_addr;
-                if (static_cast<uint64_t>(sz) > avail) {
-                    sz = static_cast<uint32_t>(avail);
-                    if (sz == 0) {
-                        active_dma_pad_zero = true;
-                        active_chunk_bytes = desired_sz;
-                        g_state = State::DMA_STORE;
-                        break;
-                    }
-                }
-            }
-
             if (!dma_ready) break;
 #ifndef __SYNTHESIS__
 	            if (active_dma_sel == DMASEL_CTX_V && active_dma_tile >= 0 && trace_ctx_v_issue_budget > 0) {
@@ -2395,7 +2325,6 @@ void mmu_fsm(
             const int key_tile = (tag == Tag::WO_W || tag == Tag::WO_B ||
                                   tag == Tag::W1_W || tag == Tag::W1_B ||
                                   tag == Tag::W2_W || tag == Tag::W2_B ||
-                                  tag == Tag::LOGITS_W ||
                                   tag == Tag::CTX_K || tag == Tag::CTX_V ||
                                   tag == Tag::WQ_W || tag == Tag::WK_W ||
                                   tag == Tag::WV_W ||
@@ -2528,8 +2457,7 @@ void mmu_fsm(
                 (active_compute_op == CMP_ATT_VALUE) ||
                 (active_compute_op == CMP_OUT_PROJ) ||
                 (active_compute_op == CMP_FFN_W1) ||
-                (active_compute_op == CMP_FFN_W2) ||
-                (active_compute_op == CMP_LOGITS);
+                (active_compute_op == CMP_FFN_W2);
             if (is_streamed_matmul_op) {
                 // Instruction-driven mode: stream-out pulls directly from out_buf,
                 // so no region packing/writeback is required.

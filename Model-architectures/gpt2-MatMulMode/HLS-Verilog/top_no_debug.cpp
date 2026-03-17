@@ -88,9 +88,7 @@ void transformer_top(
 #pragma HLS BIND_STORAGE variable=mmu_out_buf type=ram_t2p impl=bram
     static uint8_t          stream_in_buf_local[STREAM_IN_BUF_BYTES];
 #pragma HLS BIND_STORAGE variable=stream_in_buf_local type=ram_t2p impl=bram
-    static uint8_t          stream_out_buf_local[STREAM_OUT_BUF_BYTES];
-#pragma HLS BIND_STORAGE variable=stream_out_buf_local type=ram_t2p impl=bram
-// Per-invocation full activation accumulation buffer (non-LOGITS ops).
+// Per-invocation full activation accumulation buffer.
     static uint8_t          full_out_buf[FULL_OUT_BUF_BYTES];
 #pragma HLS BIND_STORAGE variable=full_out_buf type=ram_t2p impl=bram
     static uint32_t         dma_rx_buf_local[TOP_DMA_BUF_WORDS];
@@ -116,7 +114,6 @@ void transformer_top(
     static bool             stream_tx_active_local         = false;
     static uint32_t         stream_tx_index_local          = 0;    // u32: up to FULL_OUT_BUF_BYTES-1
     static uint32_t         stream_tx_len_local            = 0;    // bytes to emit this TX
-    static bool             stream_tx_from_full_local      = false; // true=full_out_buf, false=stream_out_buf_local
     static uint32_t         stream_in_counter              = 0;
     static bool             token_loaded_complete_local    = false;
 
@@ -125,10 +122,6 @@ void transformer_top(
 
     // Tile writeback handshake
     static bool             tile_wb_done_local             = false;
-
-    // TLAST gating: true = assert TLAST on this burst (latched from scheduler).
-    // Non-LOGITS: always true (single burst). LOGITS: true only on final tile.
-    static bool             stream_is_final_local          = true;
 
     // Latched op from last compute_start (valid through tile writeback and stream-out).
     static uint8_t          latched_op                     = 0;
@@ -199,12 +192,10 @@ void transformer_top(
         stream_tx_active_local = false;
         stream_tx_index_local = 0;
         stream_tx_len_local = 0;
-        stream_tx_from_full_local = false;
         stream_in_counter = 0;
         token_loaded_complete_local = false;
         full_out_write_offset = 0;
         tile_wb_done_local = false;
-        stream_is_final_local = true;
         latched_op = 0;
 
         if (reset) {
@@ -219,9 +210,6 @@ void transformer_top(
         }
         for (int i = 0; i < STREAM_IN_BUF_BYTES; ++i) {
             stream_in_buf_local[i] = 0;
-        }
-        for (int i = 0; i < STREAM_OUT_BUF_BYTES; ++i) {
-            stream_out_buf_local[i] = 0;
         }
         for (int i = 0; i < TOP_DMA_BUF_WORDS; ++i) {
             dma_rx_buf_local[i] = 0;
@@ -277,7 +265,6 @@ void transformer_top(
         stream_ready_local,
         stream_start_local,
         stream_done_local,
-        stream_is_final_local,
         tile_wb_start_local,
         tile_wb_done_local,
         done,
@@ -442,23 +429,12 @@ void transformer_top(
     if (!stream_tx_active_local && stream_start_local) {
         stream_tx_active_local = true;
         stream_tx_index_local  = 0;
-        // LOGITS: stream tile-by-tile from stream_out_buf_local; TLAST deferred to final tile.
-        // Non-LOGITS: single full-activation stream from full_out_buf (TLAST always asserted).
-        if (static_cast<uint8_t>(latched_op) == static_cast<uint8_t>(CMP_LOGITS)) {
-            stream_tx_len_local       = tile_out_bytes_for_op(latched_op);  // D_TILE_LOGIT * 4
-            stream_tx_from_full_local = false;
-        } else {
-            stream_tx_len_local       = full_out_bytes_for_op(latched_op);
-            stream_tx_from_full_local = true;
-        }
+        stream_tx_len_local    = full_out_bytes_for_op(latched_op);
     }
     if (stream_tx_active_local) {
         axis8_t out_beat{};
-        out_beat.data = stream_tx_from_full_local
-                        ? full_out_buf[stream_tx_index_local]
-                        : stream_out_buf_local[stream_tx_index_local];
-        out_beat.last = ((stream_tx_index_local == stream_tx_len_local - 1u)
-                         && stream_is_final_local) ? 1 : 0;
+        out_beat.data = full_out_buf[stream_tx_index_local];
+        out_beat.last = (stream_tx_index_local == stream_tx_len_local - 1u) ? 1 : 0;
         out_beat.keep = 1;
         out_beat.strb = 1;
         if (m_axis_out.write_nb(out_beat)) {
@@ -496,7 +472,6 @@ void transformer_top(
     active_status_mem.cfg_d_tile_wo = static_cast<uint32_t>(D_TILE_WO);
     active_status_mem.cfg_d_tile_w1 = static_cast<uint32_t>(D_TILE_W1);
     active_status_mem.cfg_d_tile_w2 = static_cast<uint32_t>(D_TILE_W2);
-    active_status_mem.cfg_d_tile_logit = static_cast<uint32_t>(D_TILE_LOGIT);
     active_status_mem.cfg_d_head_tile_qkv = static_cast<uint32_t>(D_HEAD_TILE_QKV);
     active_status_mem.cfg_att_ctx_block = static_cast<uint32_t>(ATT_CTX_BLOCK);
     active_status_mem.cfg_d_head_tile_att_value = static_cast<uint32_t>(D_HEAD_TILE_ATT_VALUE);

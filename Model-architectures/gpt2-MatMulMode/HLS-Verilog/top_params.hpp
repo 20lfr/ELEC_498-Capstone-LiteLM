@@ -140,8 +140,6 @@ struct ControlMemSpace {
     uint32_t wlogit_offset = 0;
 
     uint32_t token_position = 0;
-    // Legacy/unused in MatMulMode (kept to preserve AXI-Lite register map).
-    uint32_t compute_instruction = 0;
 };
 
 // Status (PS Reads <- PL Writes)
