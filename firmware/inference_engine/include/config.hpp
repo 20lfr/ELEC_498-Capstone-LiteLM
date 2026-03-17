@@ -14,7 +14,7 @@ struct HardwareConfig {
     size_t dmabuf0_size = 0x72000000;
     std::string dmabuf1_name = "udmabuf1";
     size_t dmabuf1_size = 0x20000000;
-    uint32_t timeout_ms = 3000;
+    uint32_t timeout_ms = 10000000;
     bool mock_mode = false;
     bool debug_mode = false;
 };

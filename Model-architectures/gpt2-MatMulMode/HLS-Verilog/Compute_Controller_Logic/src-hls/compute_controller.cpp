@@ -212,15 +212,17 @@ static void MATMUL_QKV(
 ) {
 #pragma HLS INLINE off
     constexpr int OUT_LANES = D_HEAD_TILE_QKV;
+    constexpr int UK_QKV    = QKV_TO_BUF_VEC_UNROLL;  // k-unroll factor (= 16)
     int8_t  act[D_MODEL];
     int8_t  w_lane[OUT_LANES][D_MODEL];
     int32_t bias_lane[OUT_LANES];
     int32_t acc_lane[OUT_LANES];
-#pragma HLS ARRAY_PARTITION variable=act  cyclic factor=QKV_TO_BUF_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=act    cyclic factor=QKV_TO_BUF_VEC_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=w_lane complete dim=1
+#pragma HLS ARRAY_PARTITION variable=w_lane cyclic factor=QKV_TO_BUF_VEC_UNROLL dim=2
 #pragma HLS ARRAY_PARTITION variable=bias_lane complete dim=1
 #pragma HLS ARRAY_PARTITION variable=acc_lane  complete dim=1
-#pragma HLS bind_storage variable=act type=RAM_2P impl=LUTRAM
+#pragma HLS bind_storage variable=act    type=RAM_2P impl=LUTRAM
 #pragma HLS bind_storage variable=w_lane type=RAM_2P impl=LUTRAM
 
     // Stage 1: activation
@@ -248,12 +250,18 @@ static void MATMUL_QKV(
 #pragma HLS UNROLL
         acc_lane[lane] = bias_lane[lane];
     }
-    for (int k_idx = 0; k_idx < D_MODEL; ++k_idx) {
+    QKV_K_OUTER: for (int k_base = 0; k_base < D_MODEL; k_base += UK_QKV) {
 #pragma HLS PIPELINE II=1
-        const int32_t a = static_cast<int32_t>(act[k_idx]);
-        for (int lane = 0; lane < OUT_LANES; ++lane) {
+        QKV_K_INNER: for (int kk = 0; kk < UK_QKV; ++kk) {
 #pragma HLS UNROLL
-            acc_lane[lane] += a * static_cast<int32_t>(w_lane[lane][k_idx]);
+            const int     k_idx = k_base + kk;
+            const int32_t a     = static_cast<int32_t>(act[k_idx]);
+            for (int lane = 0; lane < OUT_LANES; ++lane) {
+#pragma HLS UNROLL
+                int32_t prod = a * static_cast<int32_t>(w_lane[lane][k_idx]);
+#pragma HLS BIND_OP variable=prod op=mul impl=dsp
+                acc_lane[lane] += prod;
+            }
         }
     }
 
@@ -281,14 +289,25 @@ static void MATMUL_ATT_SCORES(
     uint8_t       out_buf[mm_buf::OUT_BUF_BYTES]
 ) {
 #pragma HLS INLINE off
-    constexpr int T_LANES  = ATT_SCORES_TO_BUF_OUT_UNROLL;
-    constexpr int T_GROUPS = ATT_CTX_BLOCK / T_LANES;
+    constexpr int T_LANES   = ATT_SCORES_TO_BUF_OUT_UNROLL;
+    constexpr int T_GROUPS  = ATT_CTX_BLOCK / T_LANES;
+    constexpr int UK_ATT_D  = ATT_SCORES_TO_BUF_VEC_UNROLL;  // k-unroll over D_HEADS (= 16)
     int8_t  q[D_HEADS];
-    int8_t  k_lane[T_LANES][T_GROUPS][D_HEADS];
-#pragma HLS ARRAY_PARTITION variable=q   cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=k_lane complete dim=1
-#pragma HLS bind_storage variable=q type=RAM_2P impl=LUTRAM
-#pragma HLS bind_storage variable=k_lane type=RAM_2P impl=LUTRAM
+    static_assert(T_LANES == 4, "MATMUL_ATT_SCORES expects ATT_SCORES_TO_BUF_OUT_UNROLL == 4");
+    int8_t  k0[T_GROUPS][D_HEADS];
+    int8_t  k1[T_GROUPS][D_HEADS];
+    int8_t  k2[T_GROUPS][D_HEADS];
+    int8_t  k3[T_GROUPS][D_HEADS];
+#pragma HLS ARRAY_PARTITION variable=q  cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=k0 cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=2
+#pragma HLS ARRAY_PARTITION variable=k1 cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=2
+#pragma HLS ARRAY_PARTITION variable=k2 cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=2
+#pragma HLS ARRAY_PARTITION variable=k3 cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=2
+#pragma HLS bind_storage variable=q  type=RAM_2P impl=LUTRAM
+#pragma HLS bind_storage variable=k0 type=RAM_2P impl=LUTRAM
+#pragma HLS bind_storage variable=k1 type=RAM_2P impl=LUTRAM
+#pragma HLS bind_storage variable=k2 type=RAM_2P impl=LUTRAM
+#pragma HLS bind_storage variable=k3 type=RAM_2P impl=LUTRAM
 
     // Stage 1: activation (Q)
     for (int d = 0; d < D_HEADS; ++d) {
@@ -302,8 +321,13 @@ static void MATMUL_ATT_SCORES(
         const int tgrp = t / T_LANES;
         for (int d = 0; d < D_HEADS; ++d) {
 #pragma HLS PIPELINE II=1
-            k_lane[lane][tgrp][d] =
-                read_i8_in(in_buf, mm_buf::INAttScoresLayout::W + t * D_HEADS + d);
+            const int8_t kv = read_i8_in(in_buf, mm_buf::INAttScoresLayout::W + t * D_HEADS + d);
+            switch (lane) {
+                case 0: k0[tgrp][d] = kv; break;
+                case 1: k1[tgrp][d] = kv; break;
+                case 2: k2[tgrp][d] = kv; break;
+                default: k3[tgrp][d] = kv; break;
+            }
         }
     }
 
@@ -311,25 +335,35 @@ static void MATMUL_ATT_SCORES(
     // This avoids HLS flattening an inner "t" loop into a huge pipelined body.
     for (int tgrp = 0; tgrp < T_GROUPS; ++tgrp) {
 #pragma HLS LOOP_FLATTEN off
-        int32_t acc_lane[T_LANES];
-#pragma HLS ARRAY_PARTITION variable=acc_lane complete dim=1
-        for (int lane = 0; lane < T_LANES; ++lane) {
-#pragma HLS UNROLL
-            acc_lane[lane] = 0;
-        }
-        for (int d = 0; d < D_HEADS; ++d) {
+        int32_t acc0 = 0, acc1 = 0, acc2 = 0, acc3 = 0;
+        ATT_D_OUTER: for (int d_base = 0; d_base < D_HEADS; d_base += UK_ATT_D) {
 #pragma HLS PIPELINE II=1
-            const int32_t qd = static_cast<int32_t>(q[d]);
-            for (int lane = 0; lane < T_LANES; ++lane) {
+            ATT_D_INNER: for (int dd = 0; dd < UK_ATT_D; ++dd) {
 #pragma HLS UNROLL
-                acc_lane[lane] += qd * static_cast<int32_t>(k_lane[lane][tgrp][d]);
+                const int     d  = d_base + dd;
+                const int32_t qd = static_cast<int32_t>(q[d]);
+                int32_t p0 = qd * static_cast<int32_t>(k0[tgrp][d]);
+#pragma HLS BIND_OP variable=p0 op=mul impl=dsp
+                acc0 += p0;
+                int32_t p1 = qd * static_cast<int32_t>(k1[tgrp][d]);
+#pragma HLS BIND_OP variable=p1 op=mul impl=dsp
+                acc1 += p1;
+                int32_t p2 = qd * static_cast<int32_t>(k2[tgrp][d]);
+#pragma HLS BIND_OP variable=p2 op=mul impl=dsp
+                acc2 += p2;
+                int32_t p3 = qd * static_cast<int32_t>(k3[tgrp][d]);
+#pragma HLS BIND_OP variable=p3 op=mul impl=dsp
+                acc3 += p3;
             }
         }
         // Write this group
-        for (int lane = 0; lane < T_LANES; ++lane) {
+        for (int lane = 0; lane < 4; ++lane) {
 #pragma HLS PIPELINE II=1
-            const int t = tgrp * T_LANES + lane;
-            write_i32_out(out_buf, t * 4, acc_lane[lane]);
+            const int32_t acc =
+                (lane == 0) ? acc0 :
+                (lane == 1) ? acc1 :
+                (lane == 2) ? acc2 : acc3;
+            write_i32_out(out_buf, (tgrp * 4 + lane) * 4, acc);
         }
     }
 
@@ -356,11 +390,13 @@ static void MATMUL_ATT_VALUE(
 ) {
 #pragma HLS INLINE off
     constexpr int OUT_LANES = D_HEAD_TILE_ATT_VALUE;
+    constexpr int UK_VAL    = ATT_VALUE_TO_BUF_CTX_UNROLL;  // k-unroll over CONTEXT_LENGTH (= 8)
     int16_t weights[CONTEXT_LENGTH];
     int8_t  v_lane[OUT_LANES][CONTEXT_LENGTH];
     int32_t acc_lane[OUT_LANES];
 #pragma HLS ARRAY_PARTITION variable=weights cyclic factor=ATT_VALUE_TO_BUF_CTX_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=v_lane  complete dim=1
+#pragma HLS ARRAY_PARTITION variable=v_lane  cyclic factor=ATT_VALUE_TO_BUF_CTX_UNROLL dim=2
 #pragma HLS ARRAY_PARTITION variable=acc_lane cyclic factor=ATT_VALUE_TO_BUF_OUT_UNROLL dim=1
 #pragma HLS bind_storage variable=weights type=RAM_2P impl=LUTRAM
 #pragma HLS bind_storage variable=v_lane  type=RAM_2P impl=LUTRAM
@@ -385,12 +421,18 @@ static void MATMUL_ATT_VALUE(
 #pragma HLS UNROLL factor=ATT_VALUE_TO_BUF_OUT_UNROLL
         acc_lane[lane] = 0;
     }
-    for (int t = 0; t < CONTEXT_LENGTH; ++t) {
+    ATT_VAL_T_OUTER: for (int t_base = 0; t_base < CONTEXT_LENGTH; t_base += UK_VAL) {
 #pragma HLS PIPELINE II=1
-        const int32_t wt = static_cast<int32_t>(weights[t]);
-        for (int lane = 0; lane < OUT_LANES; ++lane) {
-#pragma HLS UNROLL factor=ATT_VALUE_TO_BUF_OUT_UNROLL
-            acc_lane[lane] += wt * static_cast<int32_t>(v_lane[lane][t]);
+        ATT_VAL_T_INNER: for (int tt = 0; tt < UK_VAL; ++tt) {
+#pragma HLS UNROLL
+            const int     t  = t_base + tt;
+            const int32_t wt = static_cast<int32_t>(weights[t]);
+            for (int lane = 0; lane < OUT_LANES; ++lane) {
+#pragma HLS UNROLL
+                int32_t prod = wt * static_cast<int32_t>(v_lane[lane][t]);
+#pragma HLS BIND_OP variable=prod op=mul impl=dsp
+                acc_lane[lane] += prod;
+            }
         }
     }
 
@@ -414,14 +456,16 @@ static void MATMUL_SHARED(
 ) {
 #pragma HLS INLINE off
     constexpr int OUT_LANES = MAC_OP_TO_BUF_OUT_UNROLL;
+    constexpr int UK_SHR    = MAC_OP_TO_BUF_VEC_UNROLL;  // k-unroll over D_MODEL (= 16)
     int8_t  act_local[D_MODEL];
     int8_t  w_lane[OUT_LANES][D_MODEL];
     int32_t bias_lane[OUT_LANES];
     int32_t acc_lane[OUT_LANES];
-#pragma HLS ARRAY_PARTITION variable=act_local  cyclic factor=MAC_OP_TO_BUF_VEC_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=w_lane     complete dim=1
-#pragma HLS ARRAY_PARTITION variable=bias_lane  complete dim=1
-#pragma HLS ARRAY_PARTITION variable=acc_lane   complete dim=1
+#pragma HLS ARRAY_PARTITION variable=act_local cyclic factor=MAC_OP_TO_BUF_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=w_lane    complete dim=1
+#pragma HLS ARRAY_PARTITION variable=w_lane    cyclic factor=MAC_OP_TO_BUF_VEC_UNROLL dim=2
+#pragma HLS ARRAY_PARTITION variable=bias_lane complete dim=1
+#pragma HLS ARRAY_PARTITION variable=acc_lane  complete dim=1
 #pragma HLS bind_storage variable=act_local type=RAM_2P impl=LUTRAM
 #pragma HLS bind_storage variable=w_lane    type=RAM_2P impl=LUTRAM
 
@@ -458,12 +502,18 @@ static void MATMUL_SHARED(
 #pragma HLS UNROLL factor=MAC_OP_TO_BUF_OUT_UNROLL
             acc_lane[lane] = bias_lane[lane];
         }
-        for (int k_idx = 0; k_idx < D_MODEL; ++k_idx) {
+        SHR_K_OUTER: for (int k_base = 0; k_base < D_MODEL; k_base += UK_SHR) {
 #pragma HLS PIPELINE II=1
-            const int32_t a = static_cast<int32_t>(act_local[k_idx]);
-            for (int lane = 0; lane < OUT_LANES; ++lane) {
-#pragma HLS UNROLL factor=MAC_OP_TO_BUF_OUT_UNROLL
-                acc_lane[lane] += a * static_cast<int32_t>(w_lane[lane][k_idx]);
+            SHR_K_INNER: for (int kk = 0; kk < UK_SHR; ++kk) {
+#pragma HLS UNROLL
+                const int     k_idx = k_base + kk;
+                const int32_t a     = static_cast<int32_t>(act_local[k_idx]);
+                for (int lane = 0; lane < OUT_LANES; ++lane) {
+#pragma HLS UNROLL
+                    int32_t prod = a * static_cast<int32_t>(w_lane[lane][k_idx]);
+#pragma HLS BIND_OP variable=prod op=mul impl=dsp
+                    acc_lane[lane] += prod;
+                }
             }
         }
 
@@ -489,14 +539,16 @@ static void MATMUL_W2(
 ) {
 #pragma HLS INLINE off
     constexpr int OUT_LANES = MAC_OP_TO_BUF_OUT_UNROLL;
+    constexpr int UK_W2     = MAC_OP_TO_BUF_VEC_UNROLL;  // k-unroll over D_FFN (= 16)
     int8_t  act_local[D_FFN];
     int8_t  w_lane[OUT_LANES][D_FFN];
     int32_t bias_lane[OUT_LANES];
     int32_t acc_lane[OUT_LANES];
-#pragma HLS ARRAY_PARTITION variable=act_local  cyclic factor=MAC_OP_TO_BUF_VEC_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=w_lane     complete dim=1
-#pragma HLS ARRAY_PARTITION variable=bias_lane  complete dim=1
-#pragma HLS ARRAY_PARTITION variable=acc_lane   complete dim=1
+#pragma HLS ARRAY_PARTITION variable=act_local cyclic factor=MAC_OP_TO_BUF_VEC_UNROLL dim=1
+#pragma HLS ARRAY_PARTITION variable=w_lane    complete dim=1
+#pragma HLS ARRAY_PARTITION variable=w_lane    cyclic factor=MAC_OP_TO_BUF_VEC_UNROLL dim=2
+#pragma HLS ARRAY_PARTITION variable=bias_lane complete dim=1
+#pragma HLS ARRAY_PARTITION variable=acc_lane  complete dim=1
 #pragma HLS bind_storage variable=act_local type=RAM_2P impl=LUTRAM
 #pragma HLS bind_storage variable=w_lane    type=RAM_2P impl=LUTRAM
 
@@ -530,12 +582,18 @@ static void MATMUL_W2(
 #pragma HLS UNROLL factor=MAC_OP_TO_BUF_OUT_UNROLL
             acc_lane[lane] = bias_lane[lane];
         }
-        for (int k_idx = 0; k_idx < D_FFN; ++k_idx) {
+        W2_K_OUTER: for (int k_base = 0; k_base < D_FFN; k_base += UK_W2) {
 #pragma HLS PIPELINE II=1
-            const int32_t a = static_cast<int32_t>(act_local[k_idx]);
-            for (int lane = 0; lane < OUT_LANES; ++lane) {
-#pragma HLS UNROLL factor=MAC_OP_TO_BUF_OUT_UNROLL
-                acc_lane[lane] += a * static_cast<int32_t>(w_lane[lane][k_idx]);
+            W2_K_INNER: for (int kk = 0; kk < UK_W2; ++kk) {
+#pragma HLS UNROLL
+                const int     k_idx = k_base + kk;
+                const int32_t a     = static_cast<int32_t>(act_local[k_idx]);
+                for (int lane = 0; lane < OUT_LANES; ++lane) {
+#pragma HLS UNROLL
+                    int32_t prod = a * static_cast<int32_t>(w_lane[lane][k_idx]);
+#pragma HLS BIND_OP variable=prod op=mul impl=dsp
+                    acc_lane[lane] += prod;
+                }
             }
         }
 

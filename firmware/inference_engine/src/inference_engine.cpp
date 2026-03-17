@@ -1028,8 +1028,8 @@ public:
 
         // Float embeddings (falls back to int8 if files not found)
         exec->loadFloatEmbeddings(
-            config.model.float_embeddings_file,
-            config.model.float_pos_embeddings_file);
+            config.model.embed_float_file,
+            config.model.pos_float_file);
 
         // Load weight scales, biases, LN params for matmul mode
         if (!exec->loadMatmulModeParams(config.model.model_dir)) {
