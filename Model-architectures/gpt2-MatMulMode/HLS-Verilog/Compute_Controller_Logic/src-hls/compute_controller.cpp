@@ -210,7 +210,7 @@ static void MATMUL_QKV(
     const uint8_t in_buf[mm_buf::IN_BUF_BYTES],
     uint8_t       out_buf[mm_buf::OUT_BUF_BYTES]
 ) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     int8_t  act[D_MODEL];
     int8_t  w[D_HEAD_TILE_QKV * D_MODEL];
     int32_t bias[D_HEAD_TILE_QKV];
@@ -219,6 +219,8 @@ static void MATMUL_QKV(
 #pragma HLS ARRAY_PARTITION variable=w   cyclic factor=QKV_TO_BUF_VEC_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=bias complete dim=1
 #pragma HLS ARRAY_PARTITION variable=acc complete dim=1
+#pragma HLS bind_storage variable=act type=RAM_2P impl=LUTRAM
+#pragma HLS bind_storage variable=w   type=RAM_2P impl=LUTRAM
 
     // Stage 1: activation
     for (int i = 0; i < D_MODEL; ++i) {
@@ -275,13 +277,15 @@ static void MATMUL_ATT_SCORES(
     const uint8_t in_buf[mm_buf::IN_BUF_BYTES],
     uint8_t       out_buf[mm_buf::OUT_BUF_BYTES]
 ) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     int8_t  q[D_HEADS];
     int8_t  k[ATT_CTX_BLOCK * D_HEADS];
     int32_t acc[ATT_CTX_BLOCK];
 #pragma HLS ARRAY_PARTITION variable=q   cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=k   cyclic factor=ATT_SCORES_TO_BUF_VEC_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=acc cyclic factor=ATT_SCORES_TO_BUF_OUT_UNROLL dim=1
+#pragma HLS bind_storage variable=q type=RAM_2P impl=LUTRAM
+#pragma HLS bind_storage variable=k type=RAM_2P impl=LUTRAM
 
     // Stage 1: activation (Q)
     for (int d = 0; d < D_HEADS; ++d) {
@@ -293,8 +297,7 @@ static void MATMUL_ATT_SCORES(
     for (int t = 0; t < ATT_CTX_BLOCK; ++t) {
         for (int d = 0; d < D_HEADS; ++d) {
 #pragma HLS PIPELINE II=1
-            k[t * D_HEADS + d] = read_i8_in(in_buf,
-                mm_buf::INAttScoresLayout::W + t * D_HEADS + d);
+            k[t * D_HEADS + d] = read_i8_in(in_buf, mm_buf::INAttScoresLayout::W + t * D_HEADS + d);
         }
     }
 
@@ -337,13 +340,15 @@ static void MATMUL_ATT_VALUE(
     const uint8_t in_buf[mm_buf::IN_BUF_BYTES],
     uint8_t       out_buf[mm_buf::OUT_BUF_BYTES]
 ) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     int16_t weights[CONTEXT_LENGTH];
     int8_t  v[D_HEAD_TILE_ATT_VALUE * CONTEXT_LENGTH];
     int32_t acc[D_HEAD_TILE_ATT_VALUE];
 #pragma HLS ARRAY_PARTITION variable=weights cyclic factor=ATT_VALUE_TO_BUF_CTX_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=v       cyclic factor=ATT_VALUE_TO_BUF_CTX_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=acc     cyclic factor=ATT_VALUE_TO_BUF_OUT_UNROLL dim=1
+#pragma HLS bind_storage variable=weights type=RAM_2P impl=LUTRAM
+#pragma HLS bind_storage variable=v       type=RAM_2P impl=LUTRAM
 
     // Stage 1: activation (softmax weights)
     for (int t = 0; t < CONTEXT_LENGTH; ++t) {
@@ -387,19 +392,22 @@ static void MATMUL_ATT_VALUE(
 // in_buf: mm_buf::INOutProjLayout = [ACT(int8[D_MODEL]) | W(int8[D_TILE_WO*D_MODEL]) | B(int32[D_TILE_WO])]
 // out_buf: int32[D_TILE_WO]
 // ---------------------------------------------------------------------------
-static void MATMUL_OUT_PROJ(
+static void MATMUL_SHARED(
     const uint8_t in_buf[mm_buf::IN_BUF_BYTES],
-    uint8_t       out_buf[mm_buf::OUT_BUF_BYTES]
+    uint8_t       out_buf[mm_buf::OUT_BUF_BYTES], 
+    ComputeOp op
 ) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     int8_t  act_local[D_MODEL];
-    int8_t  w_local[D_TILE_WO * D_MODEL];
-    int32_t bias_local[D_TILE_WO];
-    int32_t acc[D_TILE_WO];
+    int8_t  w_local[D_TILE_SHARED * D_MODEL];
+    int32_t bias_local[D_TILE_SHARED];
+    int32_t acc[D_TILE_SHARED];
 #pragma HLS ARRAY_PARTITION variable=act_local cyclic factor=MAC_OP_TO_BUF_VEC_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=w_local   cyclic factor=MAC_OP_TO_BUF_VEC_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=bias_local cyclic factor=MAC_OP_TO_BUF_OUT_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=acc        cyclic factor=MAC_OP_TO_BUF_OUT_UNROLL dim=1
+#pragma HLS bind_storage variable=act_local type=RAM_2P impl=LUTRAM
+#pragma HLS bind_storage variable=w_local   type=RAM_2P impl=LUTRAM
 
     // Stage 1: activation
     for (int i = 0; i < D_MODEL; ++i) {
@@ -408,7 +416,7 @@ static void MATMUL_OUT_PROJ(
     }
 
     // Stage 2: weights
-    for (int d = 0; d < D_TILE_WO; ++d) {
+    for (int d = 0; d < D_TILE_SHARED; ++d) {
         for (int k_idx = 0; k_idx < D_MODEL; ++k_idx) {
 #pragma HLS PIPELINE II=1
             w_local[d * D_MODEL + k_idx] =
@@ -416,84 +424,29 @@ static void MATMUL_OUT_PROJ(
         }
     }
 
-    // Stage 3: bias
-    for (int d = 0; d < D_TILE_WO; ++d) {
+    // Stage 3: bias (CMP_LOGITS has no bias — zero-fill)
+    const bool has_bias = (op != CMP_LOGITS);
+    for (int d = 0; d < D_TILE_SHARED; ++d) {
 #pragma HLS PIPELINE II=1
-        bias_local[d] = read_i32_in(in_buf, mm_buf::INOutProjLayout::B + d * 4);
+        bias_local[d] = has_bias ? read_i32_in(in_buf, mm_buf::INOutProjLayout::B + d * 4) : 0;
     }
 
     // Compute (local only)
-    for (int d = 0; d < D_TILE_WO; ++d) {
+    for (int d = 0; d < D_TILE_SHARED; ++d) {
 #pragma HLS UNROLL factor=MAC_OP_TO_BUF_OUT_UNROLL
         acc[d] = bias_local[d];
     }
     for (int k_idx = 0; k_idx < D_MODEL; ++k_idx) {
 #pragma HLS PIPELINE II=1
         const int32_t a = static_cast<int32_t>(act_local[k_idx]);
-        for (int d = 0; d < D_TILE_WO; ++d) {
+        for (int d = 0; d < D_TILE_SHARED; ++d) {
 #pragma HLS UNROLL factor=MAC_OP_TO_BUF_OUT_UNROLL
             acc[d] += a * static_cast<int32_t>(w_local[d * D_MODEL + k_idx]);
         }
     }
 
     // Write raw int32 output (out_buf access must be pipelined, not unrolled)
-    for (int d = 0; d < D_TILE_WO; ++d) {
-#pragma HLS PIPELINE II=1
-        write_i32_out(out_buf, d * 4, acc[d]);
-    }
-}
-
-static void MATMUL_W1(
-    const uint8_t in_buf[mm_buf::IN_BUF_BYTES],
-    uint8_t       out_buf[mm_buf::OUT_BUF_BYTES]
-) {
-#pragma HLS INLINE
-    int8_t  act_local[D_MODEL];
-    int8_t  w_local[D_TILE_W1 * D_MODEL];
-    int32_t bias_local[D_TILE_W1];
-    int32_t acc[D_TILE_W1];
-#pragma HLS ARRAY_PARTITION variable=act_local cyclic factor=MAC_OP_TO_BUF_VEC_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=w_local   cyclic factor=MAC_OP_TO_BUF_VEC_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=bias_local cyclic factor=MAC_OP_TO_BUF_OUT_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=acc        cyclic factor=MAC_OP_TO_BUF_OUT_UNROLL dim=1
-
-    // Stage 1: activation
-    for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS PIPELINE II=1
-        act_local[i] = read_i8_in(in_buf, mm_buf::INW1Layout::ACT + i);
-    }
-
-    // Stage 2: weights
-    for (int d = 0; d < D_TILE_W1; ++d) {
-        for (int k_idx = 0; k_idx < D_MODEL; ++k_idx) {
-#pragma HLS PIPELINE II=1
-            w_local[d * D_MODEL + k_idx] =
-                read_i8_in(in_buf, mm_buf::INW1Layout::W + d * D_MODEL + k_idx);
-        }
-    }
-
-    // Stage 3: bias
-    for (int d = 0; d < D_TILE_W1; ++d) {
-#pragma HLS PIPELINE II=1
-        bias_local[d] = read_i32_in(in_buf, mm_buf::INW1Layout::B + d * 4);
-    }
-
-    // Compute (local only)
-    for (int d = 0; d < D_TILE_W1; ++d) {
-#pragma HLS UNROLL factor=MAC_OP_TO_BUF_OUT_UNROLL
-        acc[d] = bias_local[d];
-    }
-    for (int k_idx = 0; k_idx < D_MODEL; ++k_idx) {
-#pragma HLS PIPELINE II=1
-        const int32_t a = static_cast<int32_t>(act_local[k_idx]);
-        for (int d = 0; d < D_TILE_W1; ++d) {
-#pragma HLS UNROLL factor=MAC_OP_TO_BUF_OUT_UNROLL
-            acc[d] += a * static_cast<int32_t>(w_local[d * D_MODEL + k_idx]);
-        }
-    }
-
-    // Write raw int32 output (out_buf access must be pipelined, not unrolled)
-    for (int d = 0; d < D_TILE_W1; ++d) {
+    for (int d = 0; d < D_TILE_SHARED; ++d) {
 #pragma HLS PIPELINE II=1
         write_i32_out(out_buf, d * 4, acc[d]);
     }
@@ -510,7 +463,7 @@ static void MATMUL_W2(
     const uint8_t in_buf[mm_buf::IN_BUF_BYTES],
     uint8_t       out_buf[mm_buf::OUT_BUF_BYTES]
 ) {
-#pragma HLS INLINE
+#pragma HLS INLINE off
     int8_t  act_local[D_FFN];
     int8_t  w_local[D_TILE_W2 * D_FFN];
     int32_t bias_local[D_TILE_W2];
@@ -519,6 +472,8 @@ static void MATMUL_W2(
 #pragma HLS ARRAY_PARTITION variable=w_local   cyclic factor=MAC_OP_TO_BUF_VEC_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=bias_local cyclic factor=MAC_OP_TO_BUF_OUT_UNROLL dim=1
 #pragma HLS ARRAY_PARTITION variable=acc        cyclic factor=MAC_OP_TO_BUF_OUT_UNROLL dim=1
+#pragma HLS bind_storage variable=act_local type=RAM_2P impl=LUTRAM
+#pragma HLS bind_storage variable=w_local   type=RAM_2P impl=LUTRAM
 
     // Stage 1: activation
     for (int i = 0; i < D_FFN; ++i) {
@@ -557,61 +512,6 @@ static void MATMUL_W2(
 
     // Write raw int32 output (out_buf access must be pipelined, not unrolled)
     for (int d = 0; d < D_TILE_W2; ++d) {
-#pragma HLS PIPELINE II=1
-        write_i32_out(out_buf, d * 4, acc[d]);
-    }
-}
-
-// ---------------------------------------------------------------------------
-// MATMUL_LOGITS
-//
-// LOGITS tile:
-//   in_buf  = [ACT(int8[D_MODEL]) | W(int8[D_TILE_LOGIT*D_MODEL])]
-//   out_buf = int32[D_TILE_LOGIT]
-// ---------------------------------------------------------------------------
-static void MATMUL_LOGITS(
-    const uint8_t in_buf[mm_buf::IN_BUF_BYTES],
-    uint8_t       out_buf[mm_buf::OUT_BUF_BYTES]
-) {
-#pragma HLS INLINE
-    int8_t  act_local[D_MODEL];
-    int8_t  w_local[D_TILE_LOGIT * D_MODEL];
-    int32_t acc[D_TILE_LOGIT];
-#pragma HLS ARRAY_PARTITION variable=act_local cyclic factor=MAC_OP_TO_BUF_VEC_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=w_local   cyclic factor=MAC_OP_TO_BUF_VEC_UNROLL dim=1
-#pragma HLS ARRAY_PARTITION variable=acc       cyclic factor=MAC_OP_TO_BUF_OUT_UNROLL dim=1
-
-    // Stage 1: activation
-    for (int i = 0; i < D_MODEL; ++i) {
-#pragma HLS PIPELINE II=1
-        act_local[i] = read_i8_in(in_buf, mm_buf::INLogitsLayout::ACT + i);
-    }
-
-    // Stage 2: weights
-    for (int d = 0; d < D_TILE_LOGIT; ++d) {
-        for (int k_idx = 0; k_idx < D_MODEL; ++k_idx) {
-#pragma HLS PIPELINE II=1
-            w_local[d * D_MODEL + k_idx] =
-                read_i8_in(in_buf, mm_buf::INLogitsLayout::W + d * D_MODEL + k_idx);
-        }
-    }
-
-    // Compute (local only)
-    for (int d = 0; d < D_TILE_LOGIT; ++d) {
-#pragma HLS UNROLL factor=MAC_OP_TO_BUF_OUT_UNROLL
-        acc[d] = 0;
-    }
-    for (int k_idx = 0; k_idx < D_MODEL; ++k_idx) {
-#pragma HLS PIPELINE II=1
-        const int32_t a = static_cast<int32_t>(act_local[k_idx]);
-        for (int d = 0; d < D_TILE_LOGIT; ++d) {
-#pragma HLS UNROLL factor=MAC_OP_TO_BUF_OUT_UNROLL
-            acc[d] += a * static_cast<int32_t>(w_local[d * D_MODEL + k_idx]);
-        }
-    }
-
-    // Write raw int32 output (out_buf access must be pipelined, not unrolled)
-    for (int d = 0; d < D_TILE_LOGIT; ++d) {
 #pragma HLS PIPELINE II=1
         write_i32_out(out_buf, d * 4, acc[d]);
     }
@@ -765,19 +665,13 @@ void compute_controller(
                     break;
 
                 case CMP_OUT_PROJ:
-                    MATMUL_OUT_PROJ(in_buf, out_buf);
-                    break;
-
                 case CMP_FFN_W1:
-                    MATMUL_W1(in_buf, out_buf);
+                case CMP_LOGITS:
+                    MATMUL_SHARED(in_buf, out_buf, req.op);
                     break;
 
                 case CMP_FFN_W2:
                     MATMUL_W2(in_buf, out_buf);
-                    break;
-
-                case CMP_LOGITS:
-                    MATMUL_LOGITS(in_buf, out_buf);
                     break;
 
                 default:
