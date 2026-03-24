@@ -1,7 +1,16 @@
 #!/bin/bash
-
-# Kria KV260 Overlay Generator & Loader Builder
-# Automated script to generate .dtbo, .bin, shell.json, and a custom load script
+# Description:
+#   End-to-end builder for a Kria KV260 overlay: generates device-tree overlay
+#   (.dtbo), bit/bin, shell.json, and an auto-generated load_hw.sh deploy script.
+# Usage:
+#   ./overlay_generator.sh
+#   Ensure Xilinx/Vitis 2025.1 environment is available at $XILINX_SETTINGS and
+#   the Vivado export (XSA) for design_1_wrapper exists at $VIVADO_DIR.
+# Outputs:
+#   hardware_overlay/output/<APP_NAME>/     # dtbo + bit.bin + shell.json
+#   hardware_overlay/output/load_hw.sh       # loader to run on the board
+# Notes:
+#   Edits /lib/firmware/xilinx on the target board when load_hw.sh is run.
 
 # Project & tool paths
 ROOT_DIR="$(pwd)"

@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
 """
-Convert absolute $readmemh/$readmemb .dat paths to local filenames.
+Description:
+    Convert absolute .dat paths in $readmemh/$readmemb calls back to plain
+    filenames, making generated RTL portable after the repo is moved/renamed.
 
-This makes generated RTL portable when the repo is moved/renamed.
+Usage:
+    python3 relativize_readmem_dat_paths.py --rtl-dir <rtl_dir>
+
+Args:
+    --rtl-dir   Directory containing generated .v/.sv files to patch (required).
 
 Example:
-  python3 Helper_Scripts/relativize_readmem_dat_paths.py \
-    --rtl-dir Model-architectures/phi3-mini-int4-HARDWARE/HLS-Verilog/Verilog-top-module
+    python3 Helper_Scripts/relativize_readmem_dat_paths.py \
+      --rtl-dir Model-architectures/phi3-mini-int4-HARDWARE/HLS-Verilog/Verilog-top-module
 """
 
 from __future__ import annotations

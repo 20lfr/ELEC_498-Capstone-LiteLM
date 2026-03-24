@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
 """
-Rewrite relative .dat paths in $readmemh/$readmemb calls to absolute realpaths.
+Description:
+    Rewrite relative .dat file paths in $readmemh/$readmemb calls to absolute
+    realpaths so RTL can find the data regardless of the working directory.
+
+Usage:
+    python3 fix_readmemh_dat_paths.py --rtl-dir <rtl_dir> [--dat-root <dat_root>]
+
+Args:
+    --rtl-dir   Directory containing generated .v/.sv files to patch (required).
+    --dat-root  Base directory used to resolve .dat files; defaults to --rtl-dir.
 
 Example:
-  python3 fix_readmemh_dat_paths.py \
-    --rtl-dir /home/luka/Scripting/ELEC_498-Capstone-LiteLM/HLS-Verilog/Verilog-top-module/MMU_Top_module_Integration/verilog
+    python3 fix_readmemh_dat_paths.py \
+      --rtl-dir HLS-Verilog/Verilog-top-module/MMU_Top_module_Integration/verilog
 """
 
 from __future__ import annotations

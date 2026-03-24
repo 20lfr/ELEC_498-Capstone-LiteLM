@@ -1,30 +1,106 @@
-# ELEC 498 Capstone - LiteLM
+# ELEC 498 Capstone — LiteLM
 
 ## Project Overview
-**LiteLM** is an FPGA-based hardware accelerator designed to efficiently run inference for Transformer-based Large Language Models (LLMs). The project aims to offload compute-intensive operations—such as Matrix Multiplications (GEMM) and Attention mechanisms—from general-purpose processors to specialized hardware logic, enabling faster and more energy-efficient inference on edge devices.
 
-## Architecture
-The accelerator is built around a custom High-Level Synthesis (HLS) design that processes the Transformer model layer-by-layer.
+**LiteLM** is an FPGA-based hardware accelerator designed to run inference for Transformer-based Large Language Models (LLMs) on edge devices. The project offloads compute-intensive matrix multiplication and attention operations to the FPGA programmable logic (PL), while precision-sensitive operations (layer norm, softmax, requantization) are handled by the ARM processor (PS) in firmware. This split was a key architectural decision — earlier all-hardware approaches suffered severe data loss from performing requantization entirely in fixed-point logic.
 
-## Directory Structure
+**Target board:** Kria KV260 Vision AI Starter Kit
+**Part number (Vitis/Vivado):** `xck26-sfvc784-2lv`
+*(In Vivado you can also select the KV260 board directly from the board selection menu.)*
 
-*   **`Model-architectures/<arch>/HLS-Verilog/`**: Core HLS source code for a given hardware architecture (e.g. Phi-3, GPT-2).
-    *   Current Phi-3 baseline: `Model-architectures/phi3-mini-int4-HARDWARE/HLS-Verilog/`
-    *   `Scheduler_FSM/`: The main control logic and Finite State Machine.
-    *   `ControlMemInterface/`: Interface for control memory.
-    *   `IRQ_Wizard/`: Interrupt handling logic.
-    *   `top.cpp`: The top-level wrapper for the HLS design.
-*   **`SV_testbenches/`**: SystemVerilog testbenches for low-level hardware verification (e.g., `run_head_group_tb.sv`).
-*   **`vitis_simulations/`**: Vitis-based simulation files.
-*   **`vivado_simulations/`**: Vivado-based simulation files.
+---
 
-### Prerequisites
-*   Xilinx Vitis / Vivado (2024.1 or compatible)
+## Repository Layout
 
-### Simulation
-Refer to `Model-architectures/phi3-mini-int4-HARDWARE/HLS-Verilog/README.md` for details on running C-simulations for individual modules.
+```
+ELEC_498-Capstone-LiteLM/
+├── Model-architectures/
+│   ├── gpt2-MatMulMode/       — Active design: GPT-2 INT8 MatMul-mode accelerator
+│   └── legacy-architecture/   — Abandoned prior architectures (see note below)
+├── hardware_overlay/          — FPGA bitstream, device trees, and IP drivers
+├── firmware/                  — ARM PS-side inference engine (Linux, C++)
+├── Helper_Scripts/            — Utility scripts for quantization, overlay generation, and tooling
+├── fpga_Kria_260_Board_specs.md  — KV260 board reference notes
+├── TCL_commands.md            — Useful Vivado/Vitis TCL command reference
+└── Vitis_and_Vivado_Commands.md  — HLS/synthesis workflow command reference
+```
 
-# Part Number for the Kria260 Vison Dev Board: 
-xck26-sfvc784-2lv
-This ID is the part number used on Vitis and Vivado for the Kria260 Vision Dev Board. 
-NOTE: For Vivado, you have the option to just select the Kria260 Vision Dev Board in the board selection menu.
+---
+
+## `./Model-architectures/gpt2-MatMulMode/` — Active Design
+
+The current working accelerator targeting GPT-2 small (124M parameters) with INT8 per-tensor quantization. See [`Model-architectures/gpt2-MatMulMode/README.md`](Model-architectures/gpt2-MatMulMode/README.md) for full detail on every file and subdirectory.
+
+| Subdirectory | Purpose |
+|--------------|---------|
+| `HLS-Verilog/` | HLS C++ hardware modules: Scheduler FSM, Compute Controller, MMU, Control Memory Interface, test data and generated RTL |
+| `logs/` | Captured C-simulation and synthesis run logs |
+| `model/` | Quantized GPT-2 weights, embeddings, DDR memory map, and tokenizer data |
+
+**Firmware** for this design lives at [`/firmware/`](firmware/) — see below.
+
+---
+
+## `./Model-architectures/legacy-architecture/` — Abandoned Architectures
+
+These directories contain earlier hardware designs that were **not viable on the board**.
+
+> **Why they did not work:** The architectures themselves were functionally correct in simulation, but the requantization method used to rescale activations between layers caused an enormous amount of precision loss when implemented entirely in fixed-point hardware. Layer norm, softmax, and requantization are numerically sensitive operations — running them in the PL with INT8/INT16 arithmetic accumulated errors that made model outputs unusable. The solution adopted in the active design was to move these operations to the firmware (ARM PS), keeping only the bulk matrix multiplications in the PL.
+
+| Directory | Description |
+|-----------|-------------|
+| `legacy-architecture/gpt2-endTOend-HARDWARE/` | End-to-end GPT-2 attempt including full firmware stack and hardware overlay. See its [`README.md`](Model-architectures/legacy-architecture/gpt2-endTOend-HARDWARE/README.md). |
+| `legacy-architecture/phi3-mini-int4-HARDWARE/` | Phi-3 Mini INT4 attempt with RoPE support and extended requant calibration. See its [`README.md`](Model-architectures/legacy-architecture/phi3-mini-int4-HARDWARE/README.md). |
+
+---
+
+## `./hardware_overlay/`
+
+FPGA bitstream, device trees, and Xilinx IP drivers needed to load the accelerator onto the KV260.
+
+| Path | Purpose |
+|------|---------|
+| `design_1_wrapper.bit` | Compiled FPGA bitstream (full PL design) |
+| `design_1_wrapper.xsa` | Vivado hardware export used to generate device trees and drivers |
+| `bitstream.bif` | Bootgen bitstream information file |
+| `psu_init.*` | Zynq UltraScale+ PS initialization scripts and headers |
+| `generate_dts.tcl` | TCL script to regenerate the device tree from the XSA |
+| `dts_output/` | Generated device tree files: `system-top.dts`, `pl.dtsi`, `pcw.dtsi`, `zynqmp.dtsi` |
+| `device-tree-xlnx/` | Xilinx device tree binding library (full repo, 80+ IP blocks) |
+| `drivers/transformer_top_v1_0/` | Custom Xilinx IP driver for the transformer top-level module (C + Linux variant) |
+| `drivers/axi_top_v1_0/` | AXI top-level hardware register header |
+| `output/` | Runtime hardware loading scripts |
+
+---
+
+## `./firmware/`
+
+ARM Cortex-A (PS-side) Linux software that controls the accelerator: loads weights into DDR, streams token embeddings to the PL via DMA, reads back the output token, and handles all precision-sensitive operations (layer norm, softmax, requantization) in software.
+
+| Path | Purpose |
+|------|---------|
+| `inference_engine/include/` | Headers: DMA buffer management, PL interface, tokenizer, performance monitor, error handler, type definitions |
+| `inference_engine/src/inference_engine.cpp` | Main inference loop |
+| `inference_engine/src/pl_interface.cpp` | Low-level AXI register and DMA interface to the PL |
+| `linux_boot_files/boot.cmd` | U-Boot boot script |
+| `linux_boot_files/system.dts` | System device tree source |
+| `udmabuf/` | Third-party Linux kernel module for user-space DMA buffer allocation |
+| `dependencies/` | Pre-built AArch64 cross-compilation toolchain and Linux sysroot |
+| `Makefile` | Builds the inference engine binary for ARM64 |
+| `install_dependencies.sh` | Installs build dependencies |
+
+---
+
+## `./Helper_Scripts/`
+
+Utility scripts for quantization, DDR overlay generation, and Vitis/Vivado tooling.
+
+| File | Purpose |
+|------|---------|
+| `quantize_gpt2.py` | Quantizes GPT-2 weights to INT8 and exports calibrated scale factors |
+| `gen_requant_scales.py` | Generates requantization scale headers (`requant_scales_vN.hpp`) from calibration data |
+| `overlay_generator.sh` | Generates the hardware overlay (device tree + bitstream bundle) for the KV260 |
+| `fix_readmemh_dat_paths.py` | Fixes absolute `$readmemh` paths in HLS-generated Verilog to use relative paths |
+| `relativize_readmem_dat_paths.py` | Variant of the above for relocatable simulation setups |
+| `modify_xml.sh` | Patches Vivado IP XML descriptors (e.g., after HLS re-export) |
+| `Vitis_Run_All_Commands.sh` | Batch script to run the full Vitis HLS build flow |

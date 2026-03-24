@@ -1,3 +1,19 @@
+"""
+Description:
+    Quantize the Hugging Face `openai-community/gpt2` weights and tokenizer into
+    fixed-layout int8 binaries (plus scale metadata) for FPGA/embedded loading.
+
+Usage:
+    python3 quantize_gpt2.py --output-dir <dir>
+
+Output files in <dir>:
+    - gpt2_weights_int8.bin : packed model weights
+    - embed_tokens.bin      : int8 token embedding table
+    - pos_embed.bin         : int8 positional embeddings
+    - quant_scales.json     : per-layer/per-tensor scale factors
+    - tokenizer files saved by AutoTokenizer
+"""
+
 import argparse, hashlib, json, os, struct, time
 import numpy as np
 
