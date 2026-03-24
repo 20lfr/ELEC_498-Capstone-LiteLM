@@ -8,6 +8,16 @@
 **Part number (Vitis/Vivado):** `xck26-sfvc784-2lv`
 *(In Vivado you can also select the KV260 board directly from the board selection menu.)*
 
+**KV260 Linux boot reference:** [xilinx.github.io/kria-apps-docs/kv260/linux_boot.html](https://xilinx.github.io/kria-apps-docs/kv260/linux_boot.html)
+
+---
+
+## Vivado Block Design
+
+The image below is the block design from the Vivado software, showing the full PL architecture: HLS accelerator IP, AXI interconnects, DMA controllers, and PS connections.
+
+![Vivado Block Design](Vivado-Block-Design.png)
+
 ---
 
 ## Repository Layout
@@ -38,6 +48,32 @@ The current working accelerator targeting GPT-2 small (124M parameters) with INT
 | `model/` | Quantized GPT-2 weights, embeddings, DDR memory map, and tokenizer data |
 
 **Firmware** for this design lives at [`/firmware/`](firmware/) — see below.
+
+### Vivado Address Map
+
+Address segments from the Vivado block design (`design_1`). Only active (non-excluded) assignments are shown. Source: [`vivado_simulations/edge_gpt/AddressSegments.csv`](vivado_simulations/edge_gpt/AddressSegments.csv).
+
+**PS (`zynq_ultra_ps_e_0/Data`) → PL peripherals** — AXI-Lite control register windows the ARM uses to start/stop the DMA and accelerator:
+
+| Slave Interface | Base Address | Range | Description |
+|----------------|-------------|-------|-------------|
+| `axi_dma_0/S_AXI_LITE/Reg` | `0xA0000000` | 64K | DMA controller control registers |
+| `transformer_top_0/s_axi_control/Reg` | `0xA0010000` | 64K | HLS accelerator control/status registers |
+| `transformer_top_0/s_axi_control_r/Reg` | `0xA0020000` | 64K | HLS accelerator secondary control registers |
+
+**DMA (`axi_dma_0`) → DDR** — both channels mapped to the lower 2 GB DDR:
+
+| Channel | Base Address | Range | Description |
+|---------|-------------|-------|-------------|
+| `Data_MM2S` | `0x00000000` | 2G | Reads token embeddings from DDR → streams to accelerator |
+| `Data_S2MM` | `0x00000000` | 2G | Writes accelerator output token back to DDR |
+
+**Accelerator (`transformer_top_0`) → DDR** — two AXI master ports for direct DDR access:
+
+| Master Port | Base Address | Range | Description |
+|-------------|-------------|-------|-------------|
+| `Data_m_axi_gmem` | `0x800000000` | 2G | Main weight/activation access (upper DDR bank) |
+| `Data_m_axi_kv_gmem` | `0x00000000` | 2G | KV cache access (lower DDR bank) |
 
 ---
 
